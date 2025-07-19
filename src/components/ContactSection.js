@@ -57,7 +57,7 @@ const ContactSection = () => {
                     <div className="md:w-1/2 md:pl-8 flex flex-col items-center justify-center text-center">
                         <h3 className="contact-info-title">Ou fale com a gente!</h3>
                         <i className="fab fa-whatsapp text-gold-600 text-6xl mb-4"></i>
-                        <p className="text-xl font-bold mb-2">(11) 98765-4321</p>
+                        <p className="text-xl font-bold mb-2">(21) 998043354</p>
                         <a href="https://wa.me/5511987654321" className="contact-whatsapp-link text-lg">Enviar mensagem pelo WhatsApp</a>
                     </div>
                     {/* Decida se quer a versão acima (Whatsapp extra) ou só o formulário ocupando tudo */}

@@ -1,28 +1,39 @@
 // src/components/ProductGrid.js
 import React, { useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
+import biquiniLaranja from '../img/1swimswuit.png';
+import biquinipreto from '../img/2.png';
+import biquinivermelho from '../img/3.png';
 
 
-// --- Definições de Dados e Constantes (FORA do componente) ---
+
+
+
 // Essas constantes devem estar no topo do arquivo, fora de qualquer função ou componente.
 const PRODUCTS_PER_LOAD = 6; // Quantos produtos carregar por vez
 
 const ALL_PRODUCTS_DATA = [
-    {
+     {
         id: '1',
         name: 'Biquíni Sol Dourado',
         price: 189.90,
-        image: 'https://images.unsplash.com/photo-1616216447660-f463372c3d9a?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        // AGORA COM VARIAÇÕES DE IMAGEM
+        images: [ // Use um novo campo 'images' para as variações
+            { src: biquinipreto, alt: 'Biquíni Laranja', colorName: 'Laranja' },
+            { src: biquinivermelho, alt: 'Biquíni Roxo', colorName: 'Roxo' },
+        ],
+        // A imagem principal do card pode ser a primeira da lista de variações
+        image: biquinivermelho,
         description: 'Biquíni de alta qualidade com tecido resistente ao cloro e sal, forro interno e alças ajustáveis. Ideal para dias de praia ou piscina.',
         category: 'Biquínis',
         sizes: ['PP', 'P', 'M', 'G', 'GG'],
-        colors: ['#EF4444', '#FACC15', '#3B82F6', 'black']
+        colors: ['black', 'purple'] // Cores para exibição (pode vir do .images)
     },
     {
         id: '2',
         name: 'Biquíni Vermelho Paixão',
         price: 169.90,
-        image: 'https://images.unsplash.com/photo-1579737199026-66f8e7b952a2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        image: biquinivermelho,
         description: 'Um clássico atemporal que exala paixão e estilo. Perfeito para qualquer ocasião na praia.',
         category: 'Biquínis',
         sizes: ['P', 'M', 'G'],
@@ -32,7 +43,7 @@ const ALL_PRODUCTS_DATA = [
         id: '3',
         name: 'Biquíni Tropical',
         price: 199.90,
-        image: 'https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        image: biquinipreto,
         description: 'Estampa vibrante inspirada na flora tropical brasileira. Conforto e beleza para seus dias de sol.',
         category: 'Biquínis',
         sizes: ['P', 'M', 'G'],
@@ -82,7 +93,7 @@ const ALL_PRODUCTS_DATA = [
         id: '8',
         name: 'Maiô Oceano',
         price: 259.90,
-        image: 'https://images.unsplash.com/photo-1594916895315-e21e7d9b4009?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        image: 'biquiniLaranja',
         description: 'Maiô com estampa de oceano, ideal para um mergulho elegante.',
         category: 'Maiôs',
         sizes: ['M', 'G'],

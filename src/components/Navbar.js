@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../index.css'; // Importe o CSS para que as classes sejam aplicadas
 
+import log from '../img/logo2.png'
+
 const Navbar = ({ setIsCartOpen, cart }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
@@ -18,8 +20,9 @@ const Navbar = ({ setIsCartOpen, cart }) => {
     return (
         <nav className="navbar-main"> {/* Substituído: bg-white shadow-md sticky top-0 z-50 */}
             <div className="navbar-content"> {/* Substituído: container mx-auto px-4 py-3 flex justify-between items-center */}
-                <Link to="/" className="navbar-logo-text">Menina Dourada</Link> {/* Substituído: title-font text-2xl font-bold text-gold-600 */}
-
+<Link to="/" className="navbar-logo-link"> {/* <--- New class for potential styling of the link container */}
+                    <img src={log} alt="Menina Dourada Logo" className="navbar-logo-image" /> {/* <--- Use the imported image */}
+                </Link>
                 <div className="navbar-links-desktop"> {/* Substituído: hidden md:flex space-x-8 */}
                     <Link to="/" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Home</Link>
                     <Link to="/shop" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Loja</Link>

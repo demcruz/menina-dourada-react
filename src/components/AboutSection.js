@@ -16,8 +16,8 @@ const AboutSection = () => {
 
                     <div className="about-text-area md:w-1/2 md:pl-8"> {/* Substituído: md:w-1/2 */}
                         <h2 className="section-title text-left">Nossa História</h2> {/* section-title reutilizado, mas alinhado à esquerda */}
-                        <p className="about-text">Menina Dourada nasceu em 2018 da paixão de Camila pela moda praia e pelo desejo de criar peças que valorizassem a beleza da mulher brasileira.</p> {/* Substituído: mb-4 */}
-                        <p className="about-text">Inspirada nos tons dourados do pôr do sol em sua cidade natal, Camila começou a confeccionar biquínis artesanais que rapidamente conquistaram admiradoras.</p> {/* Substituído: mb-4 */}
+                        <p className="about-text">Menina Dourada nasceu em 2018 da paixão da Weryka pela moda praia e pelo desejo de criar peças que valorizassem a beleza da mulher brasileira.</p> {/* Substituído: mb-4 */}
+                        <p className="about-text">Inspirada nos tons dourados do pôr do sol em sua cidade natal, Weryka começou a confeccionar biquínis artesanais que rapidamente conquistaram admiradoras.</p> {/* Substituído: mb-4 */}
                         <p className="about-text">Hoje, somos uma marca reconhecida nacionalmente, mas mantemos o cuidado artesanal e a atenção aos detalhes que nos fizeram crescer.</p> {/* Substituído: mb-6 */}
 
                         <h3 className="about-subtitle">Nossa Missão</h3> {/* Substituído: title-font text-xl font-bold mb-3 */}

@@ -182,7 +182,7 @@ body {
 
 /* Classes Específicas do Seu HTML Original */
 .hero-image {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+    background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url(./img/1.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -374,46 +374,57 @@ body {
 }
 
 
-.checkout-button { /* bg-gold-600 hover:bg-gold-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 w-full mb-4 */
+.checkout-button { /* Botão "Finalizar Compra" */
     background-color: var(--primary-gold);
     color: white;
     font-weight: 700;
-    padding: 0.75rem 2rem; /* py-3 px-8 */
+    padding: 0.75rem 2rem;
     border-radius: 9999px;
     transition: background-color 0.3s ease;
-    width: 100%;
+    width: 100%; /* Garante que ele ocupe 100% da largura do seu container */
     margin-bottom: 1rem; /* mb-4 */
     border: none;
-    text-decoration: none; /* remove sublinhado se for um <a> */
+    text-decoration: none;
+    display: block; /* Garante que o Link se comporte como um bloco para ocupar a largura total */
+    text-align: center; /* Centraliza o texto dentro do botão */
 }
 .checkout-button:hover {
     background-color: var(--hover-gold);
 }
 
-.continue-shopping-area { /* text-center */
-    text-align: center;
+.continue-shopping-area { /* Container para o "ou" e "Continuar comprando" */
+    text-align: center; /* Centraliza o conteúdo (texto "ou" e botão) */
 }
 
-.continue-shopping-text { /* text-sm text-sand-500 */
+.continue-shopping-text { /* O texto "ou" */
     font-size: 0.875rem;
     color: var(--medium-sand);
     margin-bottom: 0.5rem; /* Adicionado para separar do botão */
+    display: block; /* Garante que ele seja um bloco para centralizar corretamente */
 }
 
-.continue-shopping-button { /* text-gold-600 hover:text-gold-700 font-medium mt-2 */
+.continue-shopping-button { /* Botão "Continuar comprando" */
     color: var(--primary-gold);
     transition: color 0.3s ease;
     font-weight: 500;
-    margin-top: 0.5rem; /* mt-2 */
+    margin-top: 0.5rem;
     background: none;
     border: none;
     cursor: pointer;
-    text-decoration: none; /* remove sublinhado se for um <a> */
+    text-decoration: none;
+    display: inline-block; /* Garante que ele possa ser centralizado pelo pai */
 }
 .continue-shopping-button:hover {
     color: var(--hover-gold);
 }
 
+.checkout-action-area {
+    display: flex; /* Transforma o container em flexbox */
+    flex-direction: column; /* Organiza os itens em coluna */
+    align-items: center; /* Centraliza os itens horizontalmente (eixo cruzado) */
+    width: 100%; /* Garante que o container ocupe a largura total disponível */
+    margin-top: 1rem; /* Espaçamento superior, ajuste se necessário */
+}
 
 /* Media Queries para o carrinho lateral */
 @media (min-width: 768px) { /* md breakpoint */
@@ -580,6 +591,14 @@ button {
     font-weight: bold; /* Para o número ser mais visível */
 }
 
+.navbar-main {
+  background-color: #f7f7f7; /* <--- Updated color here */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
 .mobile-menu-toggle-button { /* Equivalente a md:hidden */
     display: block; /* Visível por padrão em mobile */
     font-size: 1.25rem; /* text-xl */
@@ -622,52 +641,69 @@ button {
 
 
 /* --- Estilos para o Hero Section --- */
-.hero-section { /* Equivalente a h-screen flex items-center justify-center text-center relative */
-    height: 100vh; /* h-screen */
-    display: flex; /* flex */
-    align-items: center; /* items-center */
-    justify-content: center; /* justify-center */
-    text-align: center; /* text-center */
-    position: relative; /* relative */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+.hero-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    /* Certifique-se de que o caminho da imagem está correto para sua pasta IMG */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('./img/1.png'); /* <--- Ajuste o linear-gradient para escurecer mais */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.hero-overlay { /* Equivalente a absolute inset-0 bg-white opacity-20 */
+
+
+.navbar-logo-image {
+    height: 50px; /* Ajuste a altura conforme necessário */
+    width: auto; /* Mantém a proporção da imagem */
+    display: block; /* Garante que se comporte como um bloco */
+}
+
+
+.hero-overlay { /* Este overlay pode se tornar redundante se o linear-gradient for forte o suficiente */
+    /* Considerar remover este overlay se o linear-gradient no .hero-section for suficiente */
+    /* Por enquanto, vamos deixá-lo mais transparente ou remover seu efeito */
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: white;
-    opacity: 0.2;
+    background-color: black; /* Mude para preto para um escurecimento mais consistente */
+    opacity: 0.1; /* Reduz a opacidade para que o gradient faça mais efeito */
+    /* Ou, se você quiser remover este overlay:
+       display: none;
+    */
 }
 
 .hero-content { /* Equivalente a relative z-10 px-4 max-w-4xl mx-auto fade-in */
-    position: relative; /* relative */
-    z-index: 10; /* z-10 */
-    padding-left: 1rem; /* px-4 */
-    padding-right: 1rem; /* px-4 */
-    max-width: 56rem; /* max-w-4xl */
-    margin-left: auto; /* mx-auto */
-    margin-right: auto; /* mx-auto */
-    animation: fadeIn 0.8s ease-in; /* fade-in */
+     position: relative;
+    z-index: 10;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeIn 0.8s ease-in;
 }
 
-.hero-title { /* Equivalente a title-font text-4xl md:text-6xl font-bold text-white mb-6 */
-    font-family: 'Playfair Display', serif; /* title-font */
-    font-size: 2.25rem; /* text-4xl */
-    font-weight: 700; /* font-bold */
-    color: white; /* text-white */
-    margin-bottom: 1.5rem; /* mb-6 */
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: white; /* Já é branco */
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* <--- Adiciona sombra ao texto para destaque */
 }
 
-.hero-subtitle { /* Equivalente a text-xl text-white mb-8 */
-    font-size: 1.25rem; /* text-xl */
-    color: white; /* text-white */
-    margin-bottom: 2rem; /* mb-8 */
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: white; /* Já é branco */
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* <--- Adiciona sombra ao texto para destaque */
 }
 
 .hero-button { /* Equivalente a bg-gold-600 hover:bg-gold-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 inline-block */
@@ -689,8 +725,8 @@ button {
 
 /* Media Query para responsividade do Hero Section */
 @media (min-width: 768px) { /* md breakpoint */
-    .hero-title.md\:text-6xl { /* Para aplicar a fontes maiores em telas maiores */
-        font-size: 3.75rem; /* text-6xl */
+    .hero-title.md\:text-6xl {
+        font-size: 3.75rem;
     }
 }
 
@@ -1162,31 +1198,98 @@ button {
     flex-direction: column; /* Padrão mobile */
 }
 
-.modal-product-image-area { /* Área da imagem do produto (md:w-1/2 p-6) */
-    padding: 1.5rem; /* p-6 */
+.modal-product-image-area {
+    padding: 1.5rem;
+    position: relative; /* Para posicionar o ícone de lupa */
 }
 
-.modal-product-image { /* Imagem principal do produto (w-full rounded-lg) */
+
+.modal-main-image-container { /* Novo container para a imagem principal e ícone de lupa */
+    position: relative;
     width: 100%;
-    border-radius: 0.5rem; /* rounded-lg */
+    padding-bottom: 100%; /* Truque para manter a proporção 1:1 */
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background-color: var(--lightest-sand); /* Fundo claro para a área da imagem */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-in;
 }
 
-.modal-thumbnail-grid { /* Grade de thumbnails (grid grid-cols-4 gap-2 mt-4) */
+
+.modal-product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 'contain' para mostrar a imagem inteira sem corte */
+    transition: transform 0.3s ease-out;
+    transform-origin: center center; /* Padrão, mas explícito */
+}
+
+
+.modal-product-image.zoomed {
+    transform: scale(2); /* Nível de zoom */
+    object-fit: cover; /* 'cover' para preencher durante o zoom */
+    cursor: zoom-out;
+}
+
+
+.modal-zoom-icon { /* Estilo do ícone de lupa */
+    position: absolute;
+    top: 0.75rem; /* Posição do ícone */
+    right: 0.75rem; /* Posição do ícone */
+    background-color: rgba(255, 255, 255, 0.8); /* Fundo semi-transparente */
+    border-radius: 9999px; /* Circular */
+    width: 2.5rem; /* Tamanho */
+    height: 2.5rem; /* Tamanho */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--dark-sand);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: none; /* Não interfere com o clique na imagem */
+    opacity: 1; /* Sempre visível */
+    transition: opacity 0.3s ease;
+}
+
+.modal-main-image-container:hover .modal-zoom-icon {
+    opacity: 1; /* Certifica que aparece no hover */
+}
+
+
+/* Thumbnails de Variação */
+.modal-thumbnail-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.5rem; /* gap-2 */
-    margin-top: 1rem; /* mt-4 */
+    grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr)); /* 4.5rem (~72px) para miniaturas */
+    gap: 0.75rem; /* Espaçamento entre thumbnails */
+    margin-top: 1rem;
 }
 
-.modal-thumbnail-item { /* Item individual do thumbnail (border border-sand-200 rounded p-1 cursor-pointer) */
-    border: 1px solid var(--lightest-sand);
+.modal-thumbnail-item {
+    border: 2px solid var(--lightest-sand); /* Borda padrão */
     border-radius: 0.25rem;
-    padding: 0.25rem;
+    padding: 0.25rem; /* Padding interno */
     cursor: pointer;
+    transition: border-color 0.2s ease;
 }
 .modal-thumbnail-item img {
     width: 100%;
-    display: block; /* Remove espaço extra abaixo da imagem */
+    height: auto;
+    display: block;
+    border-radius: 0.125rem; /* Leve arredondamento na imagem interna */
+}
+
+.modal-thumbnail-item:hover {
+    border-color: var(--medium-sand); /* Borda no hover */
+}
+
+.modal-thumbnail-item.selected { /* Thumbnail selecionado */
+    border-color: var(--primary-gold); /* Borda dourada quando selecionado */
+    box-shadow: 0 0 0 2px rgba(255, 192, 10, 0.3); /* Um "anel" sutil */
 }
 
 .modal-product-details-area { /* Área de detalhes do produto (md:w-1/2 p-6) */
@@ -1280,6 +1383,25 @@ button {
 .modal-quantity-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.modal-add-to-cart-button { /* Botão "Adicionar ao Carrinho" */
+    background-color: var(--primary-gold); /* Cor de fundo dourada */
+    color: white; /* Texto branco */
+    font-weight: 700; /* Negrito */
+    padding: 0.75rem 2rem; /* Preenchimento interno (py-3 px-8) */
+    border-radius: 9999px; /* Cantos arredondados (rounded-full) */
+    transition: background-color 0.3s ease; /* Transição suave no hover */
+    width: 100%; /* Largura total */
+    margin-top: 1.5rem; /* Espaçamento superior */
+    border: none; /* Remove borda padrão */
+    cursor: pointer; /* Cursor de clique */
+    text-decoration: none; /* Remove sublinhado se for link (mas é um button) */
+    font-size: 1.125rem; /* Tamanho do texto (text-lg) */
+    display: inline-block; /* Garante que se comporte como um bloco */
+}
+.modal-add-to-cart-button:hover {
+    background-color: var(--hover-gold); /* Cor de hover */
 }
 
 
@@ -1473,19 +1595,24 @@ input:focus, select:focus, textarea:focus {
 }
 */
 
-.contact-submit-button { /* Equivalente a bg-gold-600 hover:bg-gold-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 w-full */
-    background-color: var(--primary-gold);
-    color: white;
-    font-weight: 700;
-    padding: 0.75rem 2rem; /* py-3 px-8 */
-    border-radius: 9999px; /* rounded-full */
-    transition: background-color 0.3s ease;
-    width: 100%; /* w-full */
-    border: none;
-    cursor: pointer;
+.contact-submit-button { /* Botão "Enviar mensagem" */
+    background-color: var(--primary-gold); /* Cor de fundo dourada */
+    color: white; /* Texto branco */
+    font-weight: 700; /* Negrito */
+    padding: 0.75rem 2rem; /* Preenchimento interno (py-3 px-8) */
+    border-radius: 9999px; /* Cantos arredondados (rounded-full) */
+    transition: background-color 0.3s ease; /* Transição suave no hover */
+    width: 100%; /* Largura total */
+    margin-top: 0.5rem; /* Adiciona uma pequena margem superior se necessário */
+    border: none; /* Remove borda padrão */
+    cursor: pointer; /* Cursor de clique */
+    text-decoration: none; /* Remove sublinhado se for link (mas é um button) */
+    font-size: 1.125rem; /* Tamanho do texto (text-lg) */
+    display: inline-block; /* Garante que se comporte como um bloco */
+    text-align: center; /* Centraliza o texto dentro do botão */
 }
 .contact-submit-button:hover {
-    background-color: var(--hover-gold);
+    background-color: var(--hover-gold); /* Cor de hover */
 }
 
 
@@ -1982,3 +2109,5 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ... (restante do seu CSS) ... */
+
+
