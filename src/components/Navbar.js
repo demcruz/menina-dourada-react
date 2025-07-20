@@ -1,7 +1,6 @@
-// src/components/Navbar.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../index.css'; // Importe o CSS para que as classes sejam aplicadas
+import '../index.css'; 
 
 import log from '../img/logo2.png'
 

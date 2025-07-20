@@ -1,7 +1,6 @@
 import React, { useState  } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Importar seus componentes existentes
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import ProductGrid from './components/ProductGrid';
@@ -13,9 +12,8 @@ import FeaturedCollections from './components/FeaturedCollections';
 import NewsletterSection from './components/NewsletterSection';
 import Footer from './components/Footer';
 import ProductModal from './components/ProductModal';
-import CheckoutPage from './pages/CheckoutPage'; // <--- Importe a nova página
+import CheckoutPage from './pages/CheckoutPage'; 
 
-// Restante do seu código (ALL_PRODUCTS_DATA, PRODUCTS_PER_LOAD)
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -27,7 +25,7 @@ function App() {
 
   const addToCart = (productToAdd, quantity = 1, selectedSize = '', selectedColor = '') => {
     setCart(prevCart => {
-      // Lógica para adicionar ao carrinho, talvez considerando tamanho/cor para itens únicos
+     
       const existingItem = prevCart.find(item =>
         item.id === productToAdd.id && item.selectedSize === selectedSize && item.selectedColor === selectedColor
       );
@@ -41,11 +39,11 @@ function App() {
         return [...prevCart, { ...productToAdd, quantity: quantity, selectedSize, selectedColor }];
       }
     });
-    // Após adicionar ao carrinho, talvez abrir a sidebar:
+    
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (itemId) => { // Mudança para remover pelo ID do item no carrinho (considerando size/color)
+  const removeFromCart = (itemId) => { 
     setCart(prevCart => prevCart.filter(item => item.id !== itemId));
   };
 
@@ -60,7 +58,7 @@ function App() {
     });
   };
 
-  // Função para limpar o carrinho (útil após o checkout)
+  
   const emptyCart = () => setCart([]);
 
   const openProductModal = (product) => {
@@ -92,12 +90,12 @@ function App() {
               <TestimonialsSection />
             </>
           } />
-          {/* <--- Adicionando a rota para a página de checkout ---> */}
+          
           <Route path="/checkout" element={
             <CheckoutPage
               cart={cart}
               subtotal={currentCartSubtotal}
-              emptyCart={emptyCart} // Passa a função para esvaziar o carrinho
+              emptyCart={emptyCart} 
             />
           } />
 
@@ -115,8 +113,8 @@ function App() {
           cart={cart}
           removeFromCart={removeFromCart}
           updateCartItemQuantity={updateCartItemQuantity}
-          // Passa uma função para fechar o carrinho e navegar para o checkout
-          onCheckoutClick={() => { toggleCart(); /* Fechar o carrinho */ }}
+        
+          onCheckoutClick={() => { toggleCart();  }}
         />
 
         {selectedProduct && (

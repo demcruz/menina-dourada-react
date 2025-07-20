@@ -1,4 +1,4 @@
-// src/components/FeaturedCollections.js
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -7,20 +7,20 @@ const FeaturedCollections = () => {
     {
       id: 1,
       name: 'Coleção Verão',
-      // Novas URLs para garantir que funcionem
-      image: 'https://picsum.photos/id/1018/1470/800', // Imagem de paisagem mais genérica
+    
+      image: 'https://picsum.photos/id/1018/1470/800', 
       link: '/shop?collection=verao',
     },
     {
       id: 2,
       name: 'Coleção Clássica',
-      image: 'https://picsum.photos/id/1025/1470/800', // Outra imagem de paisagem
+      image: 'https://picsum.photos/id/1025/1470/800', 
       link: '/shop?collection=classica',
     },
     {
       id: 3,
       name: 'Coleção Exclusiva',
-      image: 'https://picsum.photos/id/1039/1470/800', // Mais uma imagem de paisagem
+      image: 'https://picsum.photos/id/1039/1470/800', 
       link: '/shop?collection=exclusiva',
     },
   ];

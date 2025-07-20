@@ -1,4 +1,3 @@
-// src/components/ProductModal.js
 import React, { useState, useEffect } from 'react';
 
 const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
@@ -8,10 +7,10 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
     const [isZoomed, setIsZoomed] = useState(false);
     const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
 
-    // 👉 Função para pegar a variação principal (ou primeira)
+    
     const getMainVariation = (produto) => {
         if (!produto?.variacoes || produto.variacoes.length === 0) return null;
-        return produto.variacoes[0]; // ou lógica com .find(v => v.isPrincipal)
+        return produto.variacoes[0]; 
     };
 
     const variation = getMainVariation(product);

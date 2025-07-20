@@ -1,25 +1,24 @@
-// src/components/ProductGrid.js
-import { useState, useEffect } from 'react';
-import LoadingSpinner from './LoadingSpinner'; // Caminho para o átomo LoadingSpinner
-import { getProducts as fetchProductsFromApi } from '../api/axiosInstance'; // <--- IMPORTAÇÃO DO SEU ARQUIVO axiosInstance.js
 
-const PRODUCTS_PER_PAGE = 6; // Mantém o tamanho da página para a requisição da API
+import { useState, useEffect } from 'react';
+import LoadingSpinner from './LoadingSpinner'; 
+import { getProducts as fetchProductsFromApi } from '../api/axiosInstance'; 
+
+const PRODUCTS_PER_PAGE = 6; 
 
 const ProductGrid = ({ addToCart, openProductModal }) => {
-    const [products, setProducts] = useState([]); // Agora 'products' virá da API
-    const [loading, setLoading] = useState(true); // Começa como true para mostrar loading inicial
+    const [products, setProducts] = useState([]); 
+    const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(0); // Página atual (0-indexed para a API Java)
-    const [totalPages, setTotalPages] = useState(0); // Total de páginas da API
+    const [currentPage, setCurrentPage] = useState(0); 
+    const [totalPages, setTotalPages] = useState(0); 
 
-    // --- Efeito para buscar produtos da API ---
     useEffect(() => {
         const loadProducts = async () => {
             setLoading(true);
             setError(null);
             try {
                 const response = await fetchProductsFromApi(currentPage, PRODUCTS_PER_PAGE);
-                // Sua API Java retorna um objeto com 'content' (array de produtos) e 'totalPages'
+                
                 setProducts(response.content);
                 setTotalPages(response.totalPages);
             } catch (err) {
@@ -31,9 +30,9 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
         };
 
         loadProducts();
-    }, [currentPage]); // Dependência: recarrega produtos quando a página muda
+    }, [currentPage]); 
 
-    // --- Lógica de Paginação ---
+    
     const handlePageChange = (newPage) => {
         if (newPage >= 0 && newPage < totalPages) {
             setCurrentPage(newPage);
@@ -42,17 +41,17 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
 
     const getPrecoPrincipal = (produto) => {
         if (!produto.variacoes || produto.variacoes.length === 0) return null;
-        return produto.variacoes[0].preco; // ou alguma lógica para pegar o principal
+        return produto.variacoes[0].preco; 
     };
 
-    // Verifica se há mais produtos para carregar (baseado no totalPages da API)
+    
 
     return (
         <section id="shop" className="product-grid-section">
             <div className="container px-4">
                 <h2 className="section-title">Nossa Loja</h2>
 
-                {/* Filters (mantidos como estão, a funcionalidade de filtro viria depois, interagindo com a API) */}
+                
                 <div className="product-filters md:flex-row">
                     <div className="filter-group md:mb-0">
                         <span className="filter-label">Filtrar por:</span>
@@ -101,7 +100,7 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                     </div>
                 </div>
 
-                {/* Exibição de Loading, Erro ou Produtos */}
+               
                 {loading ? (
                     <LoadingSpinner />
                 ) : error ? (
@@ -112,12 +111,12 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                     <div className="products-grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {products.map(product => (
                             <div
-                                key={product.id} // Use product.id vindo da API
+                                key={product.id} 
                                 className="product-card"
                                 onClick={() => openProductModal(product)}
                             >
                                 <div className="product-image-wrapper">
-                                    {/* Use product.imageUrl ou product.image da API. Ajuste conforme o nome do campo da sua API */}
+                                    
                                     <img
                                         src={product.variacoes?.[0]?.imagens?.[0]?.url || '/placeholder.jpg'}
                                         alt={product.variacoes?.[0]?.imagens?.[0]?.altText || product.nome}
@@ -143,11 +142,11 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                     </div>
                 )}
 
-                {/* Controles de Paginação (substitui "Ver mais produtos") */}
+                
                 {totalPages > 1 && (
-                    <div className="pagination-controls view-more-products-btn-container"> {/* Reutiliza classe de container */}
+                    <div className="pagination-controls view-more-products-btn-container"> 
                         <button
-                            className="view-more-products-btn" // Reutiliza estilo de botão
+                            className="view-more-products-btn" 
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 0 || loading}
                         >
@@ -155,7 +154,7 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                         </button>
                         <span>Página {currentPage + 1} de {totalPages}</span>
                         <button
-                            className="view-more-products-btn" // Reutiliza estilo de botão
+                            className="view-more-products-btn" 
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages - 1 || loading}
                         >

@@ -1,6 +1,5 @@
-// src/components/CartSidebar.js
 import React from 'react';
-import { Link } from 'react-router-dom'; // <--- Importe Link aqui
+import { Link } from 'react-router-dom'; 
 
 const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQuantity, onCheckoutClick }) => {
     const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -72,8 +71,8 @@ const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQ
                         </div>
                     </div>
 
-                    {/* Botão Finalizar Compra agora é um Link */}
-                    <Link to="/checkout" className="checkout-button" onClick={onCheckoutClick}> {/* Adiciona onClick aqui */}
+
+                    <Link to="/checkout" className="checkout-button" onClick={onCheckoutClick}>
                         Finalizar Compra
                     </Link>
 
