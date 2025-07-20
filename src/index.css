@@ -1,28 +1,28 @@
-/* src/index.css */
 
-/* Import de fontes globais, se você não as tiver no index.html */
-/* Caso as tags <link> estejam no index.html (como no nosso plano), estas linhas não são estritamente necessárias aqui */
-/* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap'); */
 
-/* Variáveis CSS para cores (similar ao que Tailwind faria, mas definido por nós) */
+
+
+
+
+
 :root {
-    --primary-gold: #FFC00A; /* gold-600 */
-    --hover-gold: #E6AC09;   /* gold-700 */
-    --light-sand: #FDF7F0;   /* sand-50 */
-    --lighter-sand: #FAEDDF; /* sand-100 */
-    --lightest-sand: #F5E3CE; /* sand-200 */
-    --medium-sand: #EBD7B6;  /* sand-300 */
-    --dark-sand: #7A6B43;    /* sand-800 */
-    --darker-sand: #52452C;  /* sand-900 */
-    --text-color-default: #333; /* Cor padrão para textos */
-    --red-500: #EF4444; /* Para botão de remover carrinho */
-    --red-600: #DC2626; /* Para cor do produto no modal */
-    --yellow-400: #FACC15; /* Para cor do produto no modal */
-    --blue-500: #3B82F6; /* Para cor do produto no modal */
-    --gray-200: #E5E7EB; /* Cor para "pattern" no modal se a imagem não carregar */
+    --primary-gold: #FFC00A; 
+    --hover-gold: #E6AC09;   
+    --light-sand: #FDF7F0;   
+    --lighter-sand: #FAEDDF; 
+    --lightest-sand: #F5E3CE; 
+    --medium-sand: #EBD7B6;  
+    --dark-sand: #7A6B43;    
+    --darker-sand: #52452C;  
+    --text-color-default: #333; 
+    --red-500: #EF4444; 
+    --red-600: #DC2626; 
+    --yellow-400: #FACC15; 
+    --blue-500: #3B82F6; 
+    --gray-200: #E5E7EB; 
 }
 
-/* Estilos globais para o corpo e fontes */
+
 body {
     font-family: 'Raleway', sans-serif;
     color: var(--text-color-default);
@@ -36,13 +36,13 @@ body {
     font-family: 'Playfair Display', serif;
 }
 
-/* Utilitários de Layout e Espaçamento (Recriando o que Tailwind faz) */
+
 .container {
-    max-width: 1200px; /* max-w-screen-xl (aproximado) */
+    max-width: 1200px; 
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* px-4 */
-    padding-right: 1rem; /* px-4 */
+    padding-left: 1rem; 
+    padding-right: 1rem; 
 }
 
 .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
@@ -70,7 +70,7 @@ body {
 .mr-3 { margin-right: 0.75rem; }
 .mr-4 { margin-right: 1rem; }
 
-/* Flexbox */
+
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
 .flex-grow { flex-grow: 1; }
@@ -84,13 +84,13 @@ body {
 .space-y-2 > *:not([hidden]) ~ *:not([hidden]) { margin-top: 0.5rem; }
 .space-y-4 > *:not([hidden]) ~ *:not([hidden]) { margin-top: 1rem; }
 
-/* Grid */
+
 .grid { display: grid; }
 .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
 .gap-2 { gap: 0.5rem; }
 .gap-8 { gap: 2rem; }
 
-/* Posicionamento */
+
 .relative { position: relative; }
 .absolute { position: absolute; }
 .fixed { position: fixed; }
@@ -103,41 +103,41 @@ body {
 .z-40 { z-index: 40; }
 .z-50 { z-index: 50; }
 
-/* Dimensões */
+
 .h-screen { height: 100vh; }
 .h-full { height: 100%; }
 .w-full { width: 100%; }
-.w-10 { width: 2.5rem; } /* 40px */
-.w-16 { width: 4rem; } /* 64px */
-.w-96 { width: 24rem; } /* 384px */
-.max-w-4xl { max-width: 56rem; } /* 896px */
-.max-w-2xl { max-width: 42rem; } /* 672px */
+.w-10 { width: 2.5rem; } 
+.w-16 { width: 4rem; } 
+.w-96 { width: 24rem; } 
+.max-w-4xl { max-width: 56rem; } 
+.max-w-2xl { max-width: 42rem; } 
 .max-h-screen { max-height: 100vh; }
 
-/* Tipografia */
+
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-left { text-align: left; }
-.text-xs { font-size: 0.75rem; } /* 12px */
-.text-sm { font-size: 0.875rem; } /* 14px */
-.text-base { font-size: 1rem; } /* 16px */
-.text-lg { font-size: 1.125rem; } /* 18px */
-.text-xl { font-size: 1.25rem; } /* 20px */
-.text-2xl { font-size: 1.5rem; } /* 24px */
-.text-3xl { font-size: 1.875rem; } /* 30px */
-.text-4xl { font-size: 2.25rem; } /* 36px */
-.text-6xl { font-size: 3.75rem; } /* 60px */
+.text-xs { font-size: 0.75rem; } 
+.text-sm { font-size: 0.875rem; } 
+.text-base { font-size: 1rem; } 
+.text-lg { font-size: 1.125rem; } 
+.text-xl { font-size: 1.25rem; } 
+.text-2xl { font-size: 1.5rem; } 
+.text-3xl { font-size: 1.875rem; } 
+.text-4xl { font-size: 2.25rem; } 
+.text-6xl { font-size: 3.75rem; } 
 .font-bold { font-weight: 700; }
 .font-medium { font-weight: 500; }
 .italic { font-style: italic; }
 
-/* Cores de texto e fundo */
+
 .text-white { color: white; }
 .text-gold-600 { color: var(--primary-gold); }
 .hover\:text-gold-600:hover { color: var(--primary-gold); }
 .hover\:text-gold-700:hover { color: var(--hover-gold); }
 .text-sand-800 { color: var(--dark-sand); }
-.text-sand-500 { color: var(--medium-sand); } /* Ajustar se necessário, usei um 'sand' intermediário */
+.text-sand-500 { color: var(--medium-sand); } 
 .text-red-500 { color: var(--red-500); }
 
 .bg-white { background-color: white; }
@@ -147,12 +147,12 @@ body {
 .bg-sand-100 { background-color: var(--lighter-sand); }
 .bg-sand-800 { background-color: var(--dark-sand); }
 .hover\:bg-sand-900:hover { background-color: var(--darker-sand); }
-.bg-sand-200 { background-color: var(--lightest-sand); } /* Usado para botões sociais no footer */
-.bg-black { background-color: black; } /* Para overlay e cores de produto */
+.bg-sand-200 { background-color: var(--lightest-sand); } 
+.bg-black { background-color: black; } 
 .bg-opacity-50 { opacity: 0.5; }
 .bg-opacity-75 { opacity: 0.75; }
 
-/* Bordas e Sombras */
+
 .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
 .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
 .hover\:shadow-xl:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
@@ -162,11 +162,11 @@ body {
 .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
 .border-sand-200 { border-color: var(--sand-200); }
 .border-sand-300 { border-color: var(--medium-sand); }
-.border-sand-700 { border-color: var(--sand-700); } /* Para linha do footer */
+.border-sand-700 { border-color: var(--sand-700); } 
 
-/* Outros */
+
 .block { display: block; }
-.hidden { display: none; } /* Será controlado por JS/React para mobile menu etc. */
+.hidden { display: none; } 
 .inline-block { display: inline-block; }
 .overflow-hidden { overflow: hidden; }
 .overflow-y-auto { overflow-y: auto; }
@@ -180,7 +180,7 @@ body {
 .duration-300 { transition-duration: 300ms; }
 .cursor-pointer { cursor: pointer; }
 
-/* Classes Específicas do Seu HTML Original */
+
 .hero-image {
     background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url(./img/1.png);
     background-size: cover;
@@ -205,205 +205,203 @@ body {
     to { opacity: 1; }
 }
 
-/* src/index.css */
 
-/* ... (seu código existente, incluindo as variáveis :root) ... */
 
-/* --- Estilos para o Shopping Cart Sidebar --- */
-.cart-sidebar { /* Container principal da sidebar do carrinho */
+
+
+
+.cart-sidebar { 
     position: fixed;
     top: 0;
     right: 0;
-    height: 100vh; /* h-full */
-    width: 100%; /* w-full por padrão em mobile */
-    background-color: white; /* bg-white */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-lg */
+    height: 100vh; 
+    width: 100%; 
+    background-color: white; 
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
     z-index: 50;
-    overflow-y: auto; /* overflow-y-auto */
-    transition: transform 0.3s ease; /* transition duration-300 */
+    overflow-y: auto; 
+    transition: transform 0.3s ease; 
 }
 
-.cart-open { /* Classe para mostrar o carrinho */
+.cart-open { 
     transform: translateX(0);
 }
 
-.cart-closed { /* Classe para esconder o carrinho */
+.cart-closed { 
     transform: translateX(100%);
 }
 
-.cart-overlay { /* Overlay escuro do carrinho */
+.cart-overlay { 
     position: fixed;
-    inset: 0; /* top-0 right-0 bottom-0 left-0 */
-    background-color: rgba(0, 0, 0, 0.5); /* bg-black bg-opacity-50 */
+    inset: 0; 
+    background-color: rgba(0, 0, 0, 0.5); 
     z-index: 40;
 }
 
-.cart-content-padding { /* p-6 */
-    padding: 1.5rem; /* p-6 */
+.cart-content-padding { 
+    padding: 1.5rem; 
 }
 
-.cart-header { /* flex justify-between items-center mb-6 */
+.cart-header { 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem; /* mb-6 */
+    margin-bottom: 1.5rem; 
 }
 
-.cart-title { /* title-font text-xl font-bold */
+.cart-title { 
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem; /* text-xl */
-    font-weight: 700; /* font-bold */
+    font-size: 1.25rem; 
+    font-weight: 700; 
     color: var(--text-color-default);
 }
 
-.close-cart-button { /* text-sand-500 hover:text-sand-800 */
+.close-cart-button { 
     color: var(--medium-sand);
     transition: color 0.3s ease;
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 1.25rem; /* text-xl para o ícone */
+    font-size: 1.25rem; 
 }
 .close-cart-button:hover {
     color: var(--dark-sand);
 }
 
-.cart-items-list { /* space-y-4 mb-6 */
-    margin-bottom: 1.5rem; /* mb-6 */
-    /* space-y-4 aplicado via margin nos itens */
+.cart-items-list { 
+    margin-bottom: 1.5rem; 
+    
 }
 .cart-items-list > div {
-    margin-bottom: 1rem; /* space-y-4 */
+    margin-bottom: 1rem; 
 }
 .cart-items-list > div:last-child {
     margin-bottom: 0;
 }
 
 
-.empty-cart-message { /* text-center py-8 */
+.empty-cart-message { 
     text-align: center;
-    padding-top: 2rem; /* py-8 */
-    padding-bottom: 2rem; /* py-8 */
+    padding-top: 2rem; 
+    padding-bottom: 2rem; 
     color: var(--text-color-default);
 }
 
-.cart-item { /* flex justify-between items-center border-b border-sand-200 pb-4 */
+.cart-item { 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--lightest-sand); /* border-b border-sand-200 */
-    padding-bottom: 1rem; /* pb-4 */
+    border-bottom: 1px solid var(--lightest-sand); 
+    padding-bottom: 1rem; 
 }
 
-.cart-item-details {
-    /* Sem classes flex específicas, layout padrão de bloco */
-}
 
-.cart-item-name { /* font-medium */
+
+.cart-item-name { 
     font-weight: 500;
     color: var(--text-color-default);
 }
 
-.cart-item-quantity-control { /* flex items-center mt-1 */
+.cart-item-quantity-control { 
     display: flex;
     align-items: center;
-    margin-top: 0.25rem; /* mt-1 */
+    margin-top: 0.25rem; 
 }
 
-.quantity-button { /* text-xs px-2 py-1 border rounded */
-    font-size: 0.75rem; /* text-xs */
-    padding: 0.25rem 0.5rem; /* px-2 py-1 */
-    border: 1px solid var(--lightest-sand); /* border */
-    border-radius: 0.25rem; /* rounded */
+.quantity-button { 
+    font-size: 0.75rem; 
+    padding: 0.25rem 0.5rem; 
+    border: 1px solid var(--lightest-sand); 
+    border-radius: 0.25rem; 
     background-color: white;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 .quantity-button:hover {
-    background-color: var(--lighter-sand); /* hover:bg-sand-100 */
+    background-color: var(--lighter-sand); 
 }
 
-.quantity-display { /* mx-2 */
-    margin-left: 0.5rem; /* mx-2 */
-    margin-right: 0.5rem; /* mx-2 */
+.quantity-display { 
+    margin-left: 0.5rem; 
+    margin-right: 0.5rem; 
     color: var(--text-color-default);
 }
 
-.cart-item-price-remove { /* text-right */
+.cart-item-price-remove { 
     text-align: right;
 }
 
-.cart-item-price { /* font-medium */
+.cart-item-price { 
     font-weight: 500;
     color: var(--text-color-default);
 }
 
-.remove-item-button { /* text-xs text-red-500 mt-1 */
-    font-size: 0.75rem; /* text-xs */
+.remove-item-button { 
+    font-size: 0.75rem; 
     color: var(--red-500);
-    margin-top: 0.25rem; /* mt-1 */
+    margin-top: 0.25rem; 
     background: none;
     border: none;
     cursor: pointer;
-    text-decoration: none; /* Remove sublinhado padrão */
+    text-decoration: none; 
     transition: color 0.2s ease;
 }
 .remove-item-button:hover {
-    color: var(--red-600); /* Um vermelho um pouco mais escuro no hover */
+    color: var(--red-600); 
 }
 
-.cart-summary { /* border-t border-sand-200 pt-4 mb-6 */
+.cart-summary { 
     border-top: 1px solid var(--lightest-sand);
-    padding-top: 1rem; /* pt-4 */
-    margin-bottom: 1.5rem; /* mb-6 */
+    padding-top: 1rem; 
+    margin-bottom: 1.5rem; 
 }
 
-.cart-summary-row { /* flex justify-between mb-2 */
+.cart-summary-row { 
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem; /* mb-2 */
+    margin-bottom: 0.5rem; 
     color: var(--text-color-default);
 }
 
-.cart-total-row { /* flex justify-between font-bold text-lg */
+.cart-total-row { 
     display: flex;
     justify-content: space-between;
-    font-weight: 700; /* font-bold */
-    font-size: 1.125rem; /* text-lg */
+    font-weight: 700; 
+    font-size: 1.125rem; 
     color: var(--text-color-default);
 }
 
 
-.checkout-button { /* Botão "Finalizar Compra" */
+.checkout-button { 
     background-color: var(--primary-gold);
     color: white;
     font-weight: 700;
     padding: 0.75rem 2rem;
     border-radius: 9999px;
     transition: background-color 0.3s ease;
-    width: 100%; /* Garante que ele ocupe 100% da largura do seu container */
-    margin-bottom: 1rem; /* mb-4 */
+    width: 100%; 
+    margin-bottom: 1rem; 
     border: none;
     text-decoration: none;
-    display: block; /* Garante que o Link se comporte como um bloco para ocupar a largura total */
-    text-align: center; /* Centraliza o texto dentro do botão */
+    display: block; 
+    text-align: center; 
 }
 .checkout-button:hover {
     background-color: var(--hover-gold);
 }
 
-.continue-shopping-area { /* Container para o "ou" e "Continuar comprando" */
-    text-align: center; /* Centraliza o conteúdo (texto "ou" e botão) */
+.continue-shopping-area { 
+    text-align: center; 
 }
 
-.continue-shopping-text { /* O texto "ou" */
+.continue-shopping-text { 
     font-size: 0.875rem;
     color: var(--medium-sand);
-    margin-bottom: 0.5rem; /* Adicionado para separar do botão */
-    display: block; /* Garante que ele seja um bloco para centralizar corretamente */
+    margin-bottom: 0.5rem; 
+    display: block; 
 }
 
-.continue-shopping-button { /* Botão "Continuar comprando" */
+.continue-shopping-button { 
     color: var(--primary-gold);
     transition: color 0.3s ease;
     font-weight: 500;
@@ -412,50 +410,50 @@ body {
     border: none;
     cursor: pointer;
     text-decoration: none;
-    display: inline-block; /* Garante que ele possa ser centralizado pelo pai */
+    display: inline-block; 
 }
 .continue-shopping-button:hover {
     color: var(--hover-gold);
 }
 
 .checkout-action-area {
-    display: flex; /* Transforma o container em flexbox */
-    flex-direction: column; /* Organiza os itens em coluna */
-    align-items: center; /* Centraliza os itens horizontalmente (eixo cruzado) */
-    width: 100%; /* Garante que o container ocupe a largura total disponível */
-    margin-top: 1rem; /* Espaçamento superior, ajuste se necessário */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    width: 100%; 
+    margin-top: 1rem; 
 }
 
-/* Media Queries para o carrinho lateral */
-@media (min-width: 768px) { /* md breakpoint */
-    .cart-sidebar.md\:w-96 { /* Largura em desktop */
-        width: 24rem; /* w-96 */
+
+@media (min-width: 768px) { 
+    .cart-sidebar.md\:w-96 { 
+        width: 24rem; 
     }
 }
 
-/* Estilos para Formulários e Botões (personalizados) */
+
 input[type="text"],
 input[type="email"],
 input[type="number"],
 select,
 textarea {
-    border: 1px solid var(--medium-sand); /* border-sand-300 */
-    border-radius: 0.25rem; /* rounded */
-    padding: 0.5rem 0.75rem; /* px-3 py-2 */
+    border: 1px solid var(--medium-sand); 
+    border-radius: 0.25rem; 
+    padding: 0.5rem 0.75rem; 
     width: 100%;
-    box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+    box-sizing: border-box; 
 }
 
 input:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--primary-gold); /* A cor da borda muda no focus */
-    box-shadow: 0 0 0 2px rgba(255, 192, 10, 0.3); /* Um "ring" suave no focus */
+    border-color: var(--primary-gold); 
+    box-shadow: 0 0 0 2px rgba(255, 192, 10, 0.3); 
 }
 
 button {
-  /* Estilo base para botões, pode ser sobrescrito por classes específicas */
+  
   cursor: pointer;
   border: none;
   background: none;
@@ -463,23 +461,23 @@ button {
   font-family: inherit;
 }
 
-/* Estilos de Cores para o Modal de Produto */
-/* Estas classes precisam ser adicionadas para as bolinhas de cor no modal */
+
+
 .bg-red-600 { background-color: var(--red-600); }
 .bg-yellow-400 { background-color: var(--yellow-400); }
 .bg-blue-500 { background-color: var(--blue-500); }
 .bg-black { background-color: black; }
-.bg-gray-200 { background-color: var(--gray-200); } /* Para cor "pattern" se não houver imagem */
+.bg-gray-200 { background-color: var(--gray-200); } 
 
 
-/* Media Queries para Responsividade (Replicando breakpoints do Tailwind) */
 
-/* sm (640px) - Não usado no seu HTML, mas boa prática para futuro */
+
+
 @media (min-width: 640px) {
     .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* md (768px) */
+
 @media (min-width: 768px) {
     .md\:flex { display: flex; }
     .md\:hidden { display: none; }
@@ -491,135 +489,135 @@ button {
     .md\:flex-row { flex-direction: row; }
 }
 
-/* lg (1024px) */
+
 @media (min-width: 1024px) {
     .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* xl (1280px) */
+
 @media (min-width: 1280px) {
     .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 
 
-/* --- Estilos para a Navbar --- */
-.navbar-main { /* Equivalente a bg-white shadow-md sticky top-0 z-50 */
+
+.navbar-main { 
   background-color: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
   position: sticky;
   top: 0;
-  z-index: 50; /* z-50 */
+  z-index: 50; 
 }
 
-.navbar-content { /* Equivalente a container mx-auto px-4 py-3 flex justify-between items-center */
-    max-width: 1200px; /* container */
-    margin-left: auto; /* mx-auto */
-    margin-right: auto; /* mx-auto */
-    padding-left: 1rem; /* px-4 */
-    padding-right: 1rem; /* px-4 */
-    padding-top: 0.75rem; /* py-3 */
-    padding-bottom: 0.75rem; /* py-3 */
-    display: flex; /* flex */
-    justify-content: space-between; /* justify-between */
-    align-items: center; /* items-center */
+.navbar-content { 
+    max-width: 1200px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    padding-left: 1rem; 
+    padding-right: 1rem; 
+    padding-top: 0.75rem; 
+    padding-bottom: 0.75rem; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
 }
 
-.navbar-logo-text { /* Equivalente a title-font text-2xl font-bold text-gold-600 */
-    font-family: 'Playfair Display', serif; /* title-font */
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 700; /* font-bold */
-    color: var(--primary-gold); /* text-gold-600 */
-    text-decoration: none; /* Remova sublinhado padrão */
+.navbar-logo-text { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.5rem; 
+    font-weight: 700; 
+    color: var(--primary-gold); 
+    text-decoration: none; 
 }
 
-.navbar-links-desktop { /* Equivalente a hidden md:flex space-x-8 */
-    display: none; /* hidden por padrão */
-    /* space-x-8 será aplicado via margin nos links filhos */
+.navbar-links-desktop { 
+    display: none; 
+    
 }
 
 .navbar-links-desktop a {
-    margin-right: 2rem; /* space-x-8, aplique à direita de cada link */
+    margin-right: 2rem; 
     text-decoration: none;
-    color: var(--text-color-default); /* Cor padrão */
-    transition: color 0.3s ease; /* transition */
+    color: var(--text-color-default); 
+    transition: color 0.3s ease; 
 }
 .navbar-links-desktop a:last-child {
-    margin-right: 0; /* Remove margin do último item para não adicionar espaço desnecessário */
+    margin-right: 0; 
 }
-.navbar-links-desktop a:hover { /* hover:text-gold-600 */
+.navbar-links-desktop a:hover { 
     color: var(--primary-gold);
 }
 
-.navbar-actions { /* Equivalente a flex items-center space-x-4 */
-    display: flex; /* flex */
-    align-items: center; /* items-center */
-    /* space-x-4 será aplicado via margin */
+.navbar-actions { 
+    display: flex; 
+    align-items: center; 
+    
 }
 .navbar-actions > *:not(:first-child) {
-    margin-left: 1rem; /* space-x-4 */
+    margin-left: 1rem; 
 }
 
 
-.cart-button-icon-container { /* Equivalente a relative */
+.cart-button-icon-container { 
     position: relative;
 }
 
-.cart-icon { /* Equivalente a fas fa-shopping-bag text-xl hover:text-gold-600 transition */
-    font-size: 1.25rem; /* text-xl */
-    color: var(--text-color-default); /* Cor padrão */
-    transition: color 0.3s ease; /* transition */
+.cart-icon { 
+    font-size: 1.25rem; 
+    color: var(--text-color-default); 
+    transition: color 0.3s ease; 
 }
 .cart-icon:hover {
-    color: var(--primary-gold); /* hover:text-gold-600 */
+    color: var(--primary-gold); 
 }
 
-.cart-count-badge { /* Equivalente a absolute -top-2 -right-2 bg-gold-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center */
+.cart-count-badge { 
     position: absolute;
-    top: -0.5rem; /* -top-2 */
-    right: -0.5rem; /* -right-2 */
-    background-color: var(--primary-gold); /* bg-gold-600 */
-    color: white; /* text-white */
-    font-size: 0.75rem; /* text-xs */
-    border-radius: 9999px; /* rounded-full */
-    height: 1.25rem; /* h-5 */
-    width: 1.25rem; /* w-5 */
-    display: flex; /* flex */
-    align-items: center; /* items-center */
-    justify-content: center; /* justify-center */
-    line-height: 1; /* Para centralizar o número pequeno */
-    font-weight: bold; /* Para o número ser mais visível */
+    top: -0.5rem; 
+    right: -0.5rem; 
+    background-color: var(--primary-gold); 
+    color: white; 
+    font-size: 0.75rem; 
+    border-radius: 9999px; 
+    height: 1.25rem; 
+    width: 1.25rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    line-height: 1; 
+    font-weight: bold; 
 }
 
 .navbar-main {
-  background-color: #f7f7f7; /* <--- Updated color here */
+  background-color: #f7f7f7; 
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   position: sticky;
   top: 0;
   z-index: 50;
 }
 
-.mobile-menu-toggle-button { /* Equivalente a md:hidden */
-    display: block; /* Visível por padrão em mobile */
-    font-size: 1.25rem; /* text-xl */
+.mobile-menu-toggle-button { 
+    display: block; 
+    font-size: 1.25rem; 
     background: none;
     border: none;
     cursor: pointer;
 }
 
-/* Menu Mobile (Controlado por estado React) */
-.mobile-menu-panel { /* Equivalente a bg-white py-2 px-4 shadow-lg */
+
+.mobile-menu-panel { 
     background-color: white;
-    padding-top: 0.5rem; /* py-2 */
-    padding-bottom: 0.5rem; /* py-2 */
-    padding-left: 1rem; /* px-4 */
-    padding-right: 1rem; /* px-4 */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+    padding-top: 0.5rem; 
+    padding-bottom: 0.5rem; 
+    padding-left: 1rem; 
+    padding-right: 1rem; 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
 }
-.mobile-menu-panel a { /* Equivalente a block py-2 hover:text-gold-600 transition */
+.mobile-menu-panel a { 
     display: block;
-    padding-top: 0.5rem; /* py-2 */
-    padding-bottom: 0.5rem; /* py-2 */
+    padding-top: 0.5rem; 
+    padding-bottom: 0.5rem; 
     text-decoration: none;
     color: var(--text-color-default);
     transition: color 0.3s ease;
@@ -628,19 +626,19 @@ button {
     color: var(--primary-gold);
 }
 
-/* --- Media Queries (Para Responsividade) --- */
 
-@media (min-width: 768px) { /* md breakpoint */
+
+@media (min-width: 768px) { 
     .mobile-menu-toggle-button {
-        display: none; /* md:hidden - esconde o botão de menu em telas maiores */
+        display: none; 
     }
     .navbar-links-desktop {
-        display: flex; /* md:flex - mostra os links em telas maiores */
+        display: flex; 
     }
 }
 
 
-/* --- Estilos para o Hero Section --- */
+
 .hero-section {
     height: 100vh;
     display: flex;
@@ -648,8 +646,8 @@ button {
     justify-content: center;
     text-align: center;
     position: relative;
-    /* Certifique-se de que o caminho da imagem está correto para sua pasta IMG */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('./img/1.png'); /* <--- Ajuste o linear-gradient para escurecer mais */
+    
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('./img/1.png'); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -658,28 +656,26 @@ button {
 
 
 .navbar-logo-image {
-    height: 50px; /* Ajuste a altura conforme necessário */
-    width: auto; /* Mantém a proporção da imagem */
-    display: block; /* Garante que se comporte como um bloco */
+    height: 50px; 
+    width: auto; 
+    display: block; 
 }
 
 
-.hero-overlay { /* Este overlay pode se tornar redundante se o linear-gradient for forte o suficiente */
-    /* Considerar remover este overlay se o linear-gradient no .hero-section for suficiente */
-    /* Por enquanto, vamos deixá-lo mais transparente ou remover seu efeito */
+.hero-overlay { 
+    
+    
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: black; /* Mude para preto para um escurecimento mais consistente */
-    opacity: 0.1; /* Reduz a opacidade para que o gradient faça mais efeito */
-    /* Ou, se você quiser remover este overlay:
-       display: none;
-    */
+    background-color: black; 
+    opacity: 0.1; 
+    
 }
 
-.hero-content { /* Equivalente a relative z-10 px-4 max-w-4xl mx-auto fade-in */
+.hero-content { 
      position: relative;
     z-index: 10;
     padding-left: 1rem;
@@ -694,260 +690,260 @@ button {
     font-family: 'Playfair Display', serif;
     font-size: 2.25rem;
     font-weight: 700;
-    color: white; /* Já é branco */
+    color: white; 
     margin-bottom: 1.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* <--- Adiciona sombra ao texto para destaque */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); 
 }
 
 .hero-subtitle {
     font-size: 1.25rem;
-    color: white; /* Já é branco */
+    color: white; 
     margin-bottom: 2rem;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* <--- Adiciona sombra ao texto para destaque */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); 
 }
 
-.hero-button { /* Equivalente a bg-gold-600 hover:bg-gold-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 inline-block */
-    background-color: var(--primary-gold); /* bg-gold-600 */
-    color: white; /* text-white */
-    font-weight: 700; /* font-bold */
-    padding-top: 0.75rem; /* py-3 */
-    padding-bottom: 0.75rem; /* py-3 */
-    padding-left: 2rem; /* px-8 (adaptado para o tamanho original) */
-    padding-right: 2rem; /* px-8 (adaptado para o tamanho original) */
-    border-radius: 9999px; /* rounded-full */
-    transition: background-color 0.3s ease; /* transition duration-300 */
-    display: inline-block; /* inline-block */
-    text-decoration: none; /* remove sublinhado do link */
+.hero-button { 
+    background-color: var(--primary-gold); 
+    color: white; 
+    font-weight: 700; 
+    padding-top: 0.75rem; 
+    padding-bottom: 0.75rem; 
+    padding-left: 2rem; 
+    padding-right: 2rem; 
+    border-radius: 9999px; 
+    transition: background-color 0.3s ease; 
+    display: inline-block; 
+    text-decoration: none; 
 }
-.hero-button:hover { /* hover:bg-gold-700 */
+.hero-button:hover { 
     background-color: var(--hover-gold);
 }
 
-/* Media Query para responsividade do Hero Section */
-@media (min-width: 768px) { /* md breakpoint */
+
+@media (min-width: 768px) { 
     .hero-title.md\:text-6xl {
         font-size: 3.75rem;
     }
 }
 
 
-/* --- Estilos para a Seção Featured Collections --- */
-.featured-collections-section { /* Equivalente a py-16 bg-sand-50 */
-    padding-top: 4rem; /* py-16 */
-    padding-bottom: 4rem; /* py-16 */
-    background-color: var(--light-sand); /* bg-sand-50 */
+
+.featured-collections-section { 
+    padding-top: 4rem; 
+    padding-bottom: 4rem; 
+    background-color: var(--light-sand); 
 }
 
-.section-title { /* Equivalente a title-font text-4xl font-bold text-sand-800 text-center mb-12 */
-    font-family: 'Playfair Display', serif; /* title-font */
-    font-size: 2.25rem; /* text-4xl */
-    font-weight: 700; /* font-bold */
-    color: var(--dark-sand); /* text-sand-800 */
-    text-align: center; /* text-center */
-    margin-bottom: 3rem; /* mb-12 */
+.section-title { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 2.25rem; 
+    font-weight: 700; 
+    color: var(--dark-sand); 
+    text-align: center; 
+    margin-bottom: 3rem; 
 }
 
-.collections-grid { /* Equivalente a grid grid-cols-1 md:grid-cols-3 gap-8 */
-    display: grid; /* grid */
-    grid-template-columns: repeat(1, minmax(0, 1fr)); /* grid-cols-1 por padrão (mobile) */
-    gap: 2rem; /* gap-8 */
+.collections-grid { 
+    display: grid; 
+    grid-template-columns: repeat(1, minmax(0, 1fr)); 
+    gap: 2rem; 
 }
 
-.collection-card { /* Equivalente a relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer */
-    position: relative; /* relative */
-    overflow: hidden; /* overflow-hidden */
-    border-radius: 0.5rem; /* rounded-lg */
-    background-color: white; /* <--- ADICIONE ESTA LINHA */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-    transition: box-shadow 0.3s ease; /* transition duration-300 */
+.collection-card { 
+    position: relative; 
+    overflow: hidden; 
+    border-radius: 0.5rem; 
+    background-color: white; 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+    transition: box-shadow 0.3s ease; 
     cursor: pointer;
-    display: block; /* <--- ADICIONE ESTA LINHA: Garante que o Link ocupe o espaço e se comporte como um bloco */
-    text-decoration: none; /* <--- ADICIONE ESTA LINHA: Remove o sublinhado azul padrão do link */
-    color: inherit; /* <--- ADICIONE ESTA LINHA: Garante que a cor do texto seja herdada, não o azul padrão do link */
+    display: block; 
+    text-decoration: none; 
+    color: inherit; 
 }
 
-.collection-card:hover { /* hover:shadow-xl */
+.collection-card:hover { 
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.collection-image { /* Equivalente a w-full h-full object-cover transition duration-300 */
-    width: 100%; /* w-full */
-    height: 100%; /* h-full */
-    object-fit: cover; /* object-cover */
-    transition: transform 0.3s ease; /* transition duration-300 */
+.collection-image { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform 0.3s ease; 
 }
 
-.collection-card:hover .collection-image { /* Efeito de zoom na imagem ao passar o mouse */
+.collection-card:hover .collection-image { 
     transform: scale(1.05);
 }
 
-.collection-overlay { /* Equivalente a absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300 */
+.collection-overlay { 
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     background-color: black;
-    opacity: 0.5; /* bg-opacity-50 */
+    opacity: 0.5; 
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0; /* opacity-0 por padrão */
-    transition: opacity 0.3s ease; /* transition duration-300 */
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
 }
 
-.collection-card:hover .collection-overlay { /* hover:opacity-100 */
+.collection-card:hover .collection-overlay { 
     opacity: 1;
 }
 
-.collection-title-overlay { /* Equivalente a text-white text-3xl font-bold title-font */
-    color: white; /* text-white */
-    font-size: 1.875rem; /* text-3xl */
-    font-weight: 700; /* font-bold */
-    font-family: 'Playfair Display', serif; /* title-font */
+.collection-title-overlay { 
+    color: white; 
+    font-size: 1.875rem; 
+    font-weight: 700; 
+    font-family: 'Playfair Display', serif; 
 }
 
-/* Media Queries para responsividade da grade de coleções */
-@media (min-width: 768px) { /* md breakpoint */
-    .collections-grid.md\:grid-cols-3 { /* Para aplicar 3 colunas em telas médias e maiores */
+
+@media (min-width: 768px) { 
+    .collections-grid.md\:grid-cols-3 { 
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
 
-/* --- Estilos para a Seção Testimonials --- */
-.testimonials-section { /* Equivalente a py-16 bg-sand-100 */
-    padding-top: 4rem; /* py-16 */
-    padding-bottom: 4rem; /* py-16 */
-    background-color: var(--lighter-sand); /* bg-sand-100 */
+
+.testimonials-section { 
+    padding-top: 4rem; 
+    padding-bottom: 4rem; 
+    background-color: var(--lighter-sand); 
 }
 
-/* section-title já está definido acima e será reutilizado */
 
-.testimonials-grid { /* Equivalente a grid grid-cols-1 md:grid-cols-3 gap-8 */
+
+.testimonials-grid { 
     display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr)); /* mobile default */
-    gap: 2rem; /* gap-8 */
+    grid-template-columns: repeat(1, minmax(0, 1fr)); 
+    gap: 2rem; 
 }
 
-.testimonial-card { /* Equivalente a bg-white p-6 rounded-lg shadow-md */
-    background-color: white; /* bg-white */
-    padding: 1.5rem; /* p-6 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+.testimonial-card { 
+    background-color: white; 
+    padding: 1.5rem; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
 }
 
-.testimonial-stars { /* Equivalente a flex items-center mb-4 */
+.testimonial-stars { 
     display: flex;
     align-items: center;
-    margin-bottom: 1rem; /* mb-4 */
+    margin-bottom: 1rem; 
 }
-.testimonial-stars .fas.fa-star, .testimonial-stars .fas.fa-star-half-alt { /* text-gold-600 text-2xl mr-2 */
-    color: var(--primary-gold); /* text-gold-600 */
-    font-size: 1.5rem; /* text-2xl */
-    margin-right: 0.5rem; /* mr-2, ajuste para o espaço entre as estrelas */
+.testimonial-stars .fas.fa-star, .testimonial-stars .fas.fa-star-half-alt { 
+    color: var(--primary-gold); 
+    font-size: 1.5rem; 
+    margin-right: 0.5rem; 
 }
-/* Removendo mr-2 do último item, similar ao space-x do Tailwind */
+
 .testimonial-stars .fas:last-child {
     margin-right: 0;
 }
 
 
-.testimonial-text { /* Equivalente a mb-4 italic */
-    margin-bottom: 1rem; /* mb-4 */
-    font-style: italic; /* italic */
-    color: var(--text-color-default); /* Garante que o texto principal tenha a cor padrão */
+.testimonial-text { 
+    margin-bottom: 1rem; 
+    font-style: italic; 
+    color: var(--text-color-default); 
 }
 
-.testimonial-author-info { /* Equivalente a flex items-center */
+.testimonial-author-info { 
     display: flex;
     align-items: center;
 }
 
-.author-image { /* Equivalente a w-10 h-10 rounded-full mr-3 */
-    width: 2.5rem; /* w-10 */
-    height: 2.5rem; /* h-10 */
-    border-radius: 9999px; /* rounded-full */
-    margin-right: 0.75rem; /* mr-3 */
-    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorção */
+.author-image { 
+    width: 2.5rem; 
+    height: 2.5rem; 
+    border-radius: 9999px; 
+    margin-right: 0.75rem; 
+    object-fit: cover; 
 }
 
-.author-name { /* Equivalente a font-medium */
-    font-weight: 500; /* font-medium */
+.author-name { 
+    font-weight: 500; 
     color: var(--text-color-default);
 }
 
-.author-location { /* Equivalente a text-sm text-sand-500 */
-    font-size: 0.875rem; /* text-sm */
-    color: var(--medium-sand); /* text-sand-500 */
+.author-location { 
+    font-size: 0.875rem; 
+    color: var(--medium-sand); 
 }
 
-/* Media Queries para responsividade da grade de depoimentos */
-@media (min-width: 768px) { /* md breakpoint */
-    .testimonials-grid.md\:grid-cols-3 { /* Para aplicar 3 colunas em telas médias e maiores */
+
+@media (min-width: 768px) { 
+    .testimonials-grid.md\:grid-cols-3 { 
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-/* --- Estilos para a Seção Nossa Loja (ProductGrid) --- */
-.product-grid-section { /* Equivalente a py-16 bg-white */
-    padding-top: 4rem; /* py-16 */
-    padding-bottom: 4rem; /* py-16 */
-    background-color: white; /* bg-white */
+
+.product-grid-section { 
+    padding-top: 4rem; 
+    padding-bottom: 4rem; 
+    background-color: white; 
 }
 
-/* section-title já está definido e será reutilizado */
-/* Filtros - REVISÃO */
+
+
 .product-filters {
-    margin-bottom: 2rem; /* mb-8 */
+    margin-bottom: 2rem; 
     display: flex;
-    flex-direction: column; /* flex-col por padrão (mobile) */
+    flex-direction: column; 
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem; /* Garante que os filtros tenham padding nas laterais em telas pequenas */
+    padding: 0 1rem; 
 }
 
 .filter-group {
-    margin-bottom: 1rem; /* mb-4 */
-    display: flex; /* Para alinhar os selects horizontalmente */
-    flex-wrap: wrap; /* Permite que os selects quebrem a linha em telas pequenas */
-    justify-content: center; /* Centraliza o grupo de filtros em mobile */
+    margin-bottom: 1rem; 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
     align-items: center;
 }
 
 .filter-label {
-    margin-right: 0.5rem; /* mr-2 */
+    margin-right: 0.5rem; 
     white-space: nowrap;
     flex-shrink: 0;
-    font-weight: 500; /* font-medium */
-    color: var(--text-color-default); /* Garante a cor do texto */
+    font-weight: 500; 
+    color: var(--text-color-default); 
 }
 
 .filter-select-wrapper {
-    margin-right: 0.5rem; /* Espaçamento entre os selects */
-    margin-bottom: 0.5rem; /* Espaçamento vertical entre selects em mobile, quando quebram a linha */
-    flex-grow: 1; /* Permite que os selects ocupem o espaço disponível */
-    min-width: 120px; /* Garante um tamanho mínimo para o select */
+    margin-right: 0.5rem; 
+    margin-bottom: 0.5rem; 
+    flex-grow: 1; 
+    min-width: 120px; 
 }
 .filter-group .filter-select-wrapper:last-child {
-    margin-right: 0; /* Remove margem do último item do grupo */
+    margin-right: 0; 
 }
 
-.filter-select { /* ESTILIZAÇÃO DO SELECT - REVISAR COM ATENÇÃO */
-    border: 1px solid var(--medium-sand); /* border border-sand-300 */
-    border-radius: 0.5rem; /* rounded-lg, para ficar mais arredondado */
-    padding: 0.6rem 1rem; /* px-4 py-3, para mais preenchimento */
-    width: 100%; /* w-full */
-    box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
-    background-color: white; /* Fundo branco para os selects */
-    color: var(--text-color-default); /* Cor do texto */
-    appearance: none; /* Remove a estilização padrão do navegador para setas */
+.filter-select { 
+    border: 1px solid var(--medium-sand); 
+    border-radius: 0.5rem; 
+    padding: 0.6rem 1rem; 
+    width: 100%; 
+    box-sizing: border-box; 
+    background-color: white; 
+    color: var(--text-color-default); 
+    appearance: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E"); /* Seta customizada */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E"); 
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
-    background-size: 1.5em 1.5em; /* Tamanho da seta */
+    background-size: 1.5em 1.5em; 
     cursor: pointer;
 }
 
@@ -958,138 +954,138 @@ button {
 }
 
 
-/* Cards de Produtos */
-.products-grid { /* Equivalente a grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 */
+
+.products-grid { 
     display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr)); /* grid-cols-1 por padrão (mobile) */
-    gap: 2rem; /* gap-8 */
+    grid-template-columns: repeat(1, minmax(0, 1fr)); 
+    gap: 2rem; 
 }
 
-.product-card { /* Equivalente a bg-sand-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300 */
-    background-color: var(--light-sand); /* bg-sand-50 */
-    border-radius: 0.5rem; /* rounded-lg */
-    overflow: hidden; /* overflow-hidden */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
-    transition: box-shadow 0.3s ease; /* transition duration-300 */
-    display: block; /* Para garantir que o card seja um bloco */
-    text-decoration: none; /* Remover sublinhado de link */
-    color: inherit; /* Herdando cor do texto */
+.product-card { 
+    background-color: var(--light-sand); 
+    border-radius: 0.5rem; 
+    overflow: hidden; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+    transition: box-shadow 0.3s ease; 
+    display: block; 
+    text-decoration: none; 
+    color: inherit; 
 }
 
-.product-card:hover { /* hover:shadow-lg */
+.product-card:hover { 
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-.product-image-wrapper { /* Equivalente a h-64 overflow-hidden */
-    height: 16rem; /* h-64 */
+.product-image-wrapper { 
+    height: 16rem; 
     overflow: hidden;
 }
 
-.product-image { /* Equivalente a w-full h-full object-cover product-image */
-    width: 100%; /* w-full */
-    height: 100%; /* h-full */
-    object-fit: cover; /* object-cover */
-    transition: transform 0.3s ease; /* transition duration-300 */
+.product-image { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform 0.3s ease; 
 }
 
-.product-card:hover .product-image { /* Efeito de zoom na imagem ao passar o mouse */
+.product-card:hover .product-image { 
     transform: scale(1.05);
 }
 
-.product-info { /* Equivalente a p-4 */
-    padding: 1rem; /* p-4 */
+.product-info { 
+    padding: 1rem; 
 }
 
-.product-name { /* Equivalente a title-font text-lg font-bold mb-1 */
-    font-family: 'Playfair Display', serif; /* title-font */
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 700; /* font-bold */
-    margin-bottom: 0.25rem; /* mb-1 */
-    color: var(--text-color-default); /* Garante cor correta */
+.product-name { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.125rem; 
+    font-weight: 700; 
+    margin-bottom: 0.25rem; 
+    color: var(--text-color-default); 
 }
 
-.product-category { /* Equivalente a text-sm text-sand-500 mb-2 */
-    font-size: 0.875rem; /* text-sm */
-    color: var(--medium-sand); /* text-sand-500 */
-    margin-bottom: 0.5rem; /* mb-2 */
+.product-category { 
+    font-size: 0.875rem; 
+    color: var(--medium-sand); 
+    margin-bottom: 0.5rem; 
 }
 
-.product-price-add { /* Equivalente a flex justify-between items-center */
+.product-price-add { 
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.product-price { /* Equivalente a font-bold text-lg */
-    font-weight: 700; /* font-bold */
-    font-size: 1.125rem; /* text-lg */
-    color: var(--text-color-default); /* Garante cor correta */
+.product-price { 
+    font-weight: 700; 
+    font-size: 1.125rem; 
+    color: var(--text-color-default); 
 }
 
-.add-to-cart-btn { /* Equivalente a bg-gold-600 hover:bg-gold-700 text-white px-3 py-1 rounded-full text-sm transition duration-300 */
-    background-color: var(--primary-gold); /* bg-gold-600 */
-    color: white; /* text-white */
-    padding-left: 0.75rem; /* px-3 */
-    padding-right: 0.75rem; /* px-3 */
-    padding-top: 0.25rem; /* py-1 */
-    padding-bottom: 0.25rem; /* py-1 */
-    border-radius: 9999px; /* rounded-full */
-    font-size: 0.875rem; /* text-sm */
-    transition: background-color 0.3s ease; /* transition duration-300 */
+.add-to-cart-btn { 
+    background-color: var(--primary-gold); 
+    color: white; 
+    padding-left: 0.75rem; 
+    padding-right: 0.75rem; 
+    padding-top: 0.25rem; 
+    padding-bottom: 0.25rem; 
+    border-radius: 9999px; 
+    font-size: 0.875rem; 
+    transition: background-color 0.3s ease; 
 }
-.add-to-cart-btn:hover { /* hover:bg-gold-700 */
+.add-to-cart-btn:hover { 
     background-color: var(--hover-gold);
 }
 
-.view-more-products-btn-container { /* Equivalente a text-center mt-12 */
+.view-more-products-btn-container { 
     text-align: center;
-    margin-top: 3rem; /* mt-12 */
+    margin-top: 3rem; 
 }
 
-.view-more-products-btn { /* Equivalente a bg-gold-600 hover:bg-gold-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 inline-block */
-    background-color: var(--primary-gold); /* bg-gold-600 */
-    color: white; /* text-white */
-    font-weight: 700; /* font-bold */
-    padding-top: 0.75rem; /* py-3 */
-    padding-bottom: 0.75rem; /* py-3 */
-    padding-left: 2rem; /* px-8 */
-    padding-right: 2rem; /* px-8 */
-    border-radius: 9999px; /* rounded-full */
-    transition: background-color 0.3s ease; /* transition duration-300 */
-    display: inline-block; /* inline-block */
-    text-decoration: none; /* Remove sublinhado */
+.view-more-products-btn { 
+    background-color: var(--primary-gold); 
+    color: white; 
+    font-weight: 700; 
+    padding-top: 0.75rem; 
+    padding-bottom: 0.75rem; 
+    padding-left: 2rem; 
+    padding-right: 2rem; 
+    border-radius: 9999px; 
+    transition: background-color 0.3s ease; 
+    display: inline-block; 
+    text-decoration: none; 
 }
-.view-more-products-btn:hover { /* hover:bg-gold-700 */
+.view-more-products-btn:hover { 
     background-color: var(--hover-gold);
 }
 
 
-/* Media Queries para responsividade da grade de produtos */
-@media (min-width: 768px) { /* md breakpoint */
-    .product-filters.md\:flex-row { /* Flex em linha em telas maiores */
+
+@media (min-width: 768px) { 
+    .product-filters.md\:flex-row { 
         flex-direction: row;
     }
-    .filter-group.md\:mb-0 { /* Remove margin inferior em telas maiores */
+    .filter-group.md\:mb-0 { 
         margin-bottom: 0;
     }
-    .products-grid.md\:grid-cols-3 { /* 3 colunas em telas maiores */
+    .products-grid.md\:grid-cols-3 { 
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-@media (min-width: 640px) { /* sm breakpoint, para 2 colunas */
+@media (min-width: 640px) { 
     .products-grid.sm\:grid-cols-2 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
-@media (min-width: 1024px) { /* lg breakpoint, para 3 colunas (pode ser o mesmo que md ou ajuste) */
+@media (min-width: 1024px) { 
     .products-grid.lg\:grid-cols-3 {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-@media (min-width: 1280px) { /* xl breakpoint, para 4 colunas */
+@media (min-width: 1280px) { 
     .products-grid.xl\:grid-cols-4 {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
@@ -1097,17 +1093,17 @@ button {
 
 
 
-/* --- Estilos para Loading Spinner --- */
+
 .loading-spinner-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2rem 0; /* Espaçamento para o spinner */
+    padding: 2rem 0; 
 }
 
 .spinner {
     border: 4px solid rgba(0, 0, 0, 0.1);
-    border-top: 4px solid var(--primary-gold); /* Cor do spinner */
+    border-top: 4px solid var(--primary-gold); 
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -1120,97 +1116,97 @@ button {
 }
 
 
-/* --- Estilos para o Product Modal --- */
-#product-modal { /* Container principal do modal e overlay */
-    position: fixed; /* fixo na tela */
+
+#product-modal { 
+    position: fixed; 
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.75); /* Fundo preto semi-transparente (bg-black bg-opacity-75) */
-    z-index: 50; /* z-50, para ficar acima de todo o resto */
-    display: flex; /* flex, para centralizar o conteúdo */
-    align-items: center; /* items-center, centraliza verticalmente */
-    justify-content: center; /* justify-center, centraliza horizontalmente */
-    padding: 1rem; /* p-4, padding interno para o conteúdo não colar nas bordas da tela */
+    background-color: rgba(0, 0, 0, 0.75); 
+    z-index: 50; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 1rem; 
 
-    /* Transição e visibilidade (controlado por classe .is-open) */
+    
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; /* Adicionada transição para o transform */
-    pointer-events: none; /* Não permite cliques quando invisível */
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; 
+    pointer-events: none; 
 }
 
-#product-modal.is-open { /* Classe adicionada por React quando o modal está aberto */
+#product-modal.is-open { 
     opacity: 1;
     visibility: visible;
-    pointer-events: auto; /* Permite cliques quando visível */
+    pointer-events: auto; 
 }
 
-.modal-content-wrapper { /* O conteúdo do modal em si (o card branco) */
-    background-color: white; /* bg-white */
-    border-radius: 0.5rem; /* rounded-lg */
-    max-width: 56rem; /* max-w-4xl, largura máxima */
-    width: 100%; /* w-full, ocupa a largura total até o max-width */
-    max-height: 90vh; /* Ajuste para não ocupar 100% da altura da tela, permitindo scroll */
-    overflow-y: auto; /* overflow-y-auto, permite scroll se o conteúdo for muito grande */
-    position: relative; /* relative, para o botão de fechar absoluto */
+.modal-content-wrapper { 
+    background-color: white; 
+    border-radius: 0.5rem; 
+    max-width: 56rem; 
+    width: 100%; 
+    max-height: 90vh; 
+    overflow-y: auto; 
+    position: relative; 
 
-    /* Adicionada transição de escala para um efeito mais suave ao abrir/fechar */
+    
     transform: scale(0.95);
     transition: transform 0.3s ease;
 }
-/* Efeito de escala ao abrir */
+
 #product-modal.is-open .modal-content-wrapper {
     transform: scale(1);
 }
 
-.modal-close-button { /* Botão 'X' de fechar */
+.modal-close-button { 
     position: absolute;
-    top: 1rem; /* top-4 */
-    right: 1rem; /* right-4 */
-    background-color: var(--dark-sand); /* Mude para uma cor mais visível, por exemplo, o tom mais escuro de areia */
-    border-radius: 9999px; /* rounded-full */
-    padding: 0.5rem; /* p-2 */
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); /* shadow-lg */
+    top: 1rem; 
+    right: 1rem; 
+    background-color: var(--dark-sand); 
+    border-radius: 9999px; 
+    padding: 0.5rem; 
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); 
     z-index: 10;
     cursor: pointer;
-    display: flex; /* Para centralizar o ícone */
+    display: flex; 
     align-items: center;
     justify-content: center;
-    width: 2.5rem; /* w-10 */
-    height: 2.5rem; /* h-10 */
+    width: 2.5rem; 
+    height: 2.5rem; 
     border: none;
-    transition: background-color 0.2s ease, transform 0.2s ease; /* Adicionada transição */
+    transition: background-color 0.2s ease, transform 0.2s ease; 
 }
 
 .modal-close-button:hover {
-    background-color: var(--darker-sand); /* Um tom ainda mais escuro no hover */
-    transform: scale(1.1); /* Um pequeno efeito ao passar o mouse */
+    background-color: var(--darker-sand); 
+    transform: scale(1.1); 
 }
 .modal-close-button i {
-    color: white; /* Cor do ícone para contrastar com o novo background */
-    font-size: 1.25rem; /* text-xl */
+    color: white; 
+    font-size: 1.25rem; 
 }
 
-.modal-product-layout { /* Flexbox para layout da imagem e detalhes (flex flex-col md:flex-row) */
+.modal-product-layout { 
     display: flex;
-    flex-direction: column; /* Padrão mobile */
+    flex-direction: column; 
 }
 
 .modal-product-image-area {
     padding: 1.5rem;
-    position: relative; /* Para posicionar o ícone de lupa */
+    position: relative; 
 }
 
 
-.modal-main-image-container { /* Novo container para a imagem principal e ícone de lupa */
+.modal-main-image-container { 
     position: relative;
     width: 100%;
-    padding-bottom: 100%; /* Truque para manter a proporção 1:1 */
+    padding-bottom: 100%; 
     overflow: hidden;
     border-radius: 0.5rem;
-    background-color: var(--lightest-sand); /* Fundo claro para a área da imagem */
+    background-color: var(--lightest-sand); 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1224,55 +1220,55 @@ button {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* 'contain' para mostrar a imagem inteira sem corte */
+    object-fit: contain; 
     transition: transform 0.3s ease-out;
-    transform-origin: center center; /* Padrão, mas explícito */
+    transform-origin: center center; 
 }
 
 
 .modal-product-image.zoomed {
-    transform: scale(2); /* Nível de zoom */
-    object-fit: cover; /* 'cover' para preencher durante o zoom */
+    transform: scale(2); 
+    object-fit: cover; 
     cursor: zoom-out;
 }
 
 
-.modal-zoom-icon { /* Estilo do ícone de lupa */
+.modal-zoom-icon { 
     position: absolute;
-    top: 0.75rem; /* Posição do ícone */
-    right: 0.75rem; /* Posição do ícone */
-    background-color: rgba(255, 255, 255, 0.8); /* Fundo semi-transparente */
-    border-radius: 9999px; /* Circular */
-    width: 2.5rem; /* Tamanho */
-    height: 2.5rem; /* Tamanho */
+    top: 0.75rem; 
+    right: 0.75rem; 
+    background-color: rgba(255, 255, 255, 0.8); 
+    border-radius: 9999px; 
+    width: 2.5rem; 
+    height: 2.5rem; 
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
     color: var(--dark-sand);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    pointer-events: none; /* Não interfere com o clique na imagem */
-    opacity: 1; /* Sempre visível */
+    pointer-events: none; 
+    opacity: 1; 
     transition: opacity 0.3s ease;
 }
 
 .modal-main-image-container:hover .modal-zoom-icon {
-    opacity: 1; /* Certifica que aparece no hover */
+    opacity: 1; 
 }
 
 
-/* Thumbnails de Variação */
+
 .modal-thumbnail-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr)); /* 4.5rem (~72px) para miniaturas */
-    gap: 0.75rem; /* Espaçamento entre thumbnails */
+    grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr)); 
+    gap: 0.75rem; 
     margin-top: 1rem;
 }
 
 .modal-thumbnail-item {
-    border: 2px solid var(--lightest-sand); /* Borda padrão */
+    border: 2px solid var(--lightest-sand); 
     border-radius: 0.25rem;
-    padding: 0.25rem; /* Padding interno */
+    padding: 0.25rem; 
     cursor: pointer;
     transition: border-color 0.2s ease;
 }
@@ -1280,62 +1276,62 @@ button {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 0.125rem; /* Leve arredondamento na imagem interna */
+    border-radius: 0.125rem; 
 }
 
 .modal-thumbnail-item:hover {
-    border-color: var(--medium-sand); /* Borda no hover */
+    border-color: var(--medium-sand); 
 }
 
-.modal-thumbnail-item.selected { /* Thumbnail selecionado */
-    border-color: var(--primary-gold); /* Borda dourada quando selecionado */
-    box-shadow: 0 0 0 2px rgba(255, 192, 10, 0.3); /* Um "anel" sutil */
+.modal-thumbnail-item.selected { 
+    border-color: var(--primary-gold); 
+    box-shadow: 0 0 0 2px rgba(255, 192, 10, 0.3); 
 }
 
-.modal-product-details-area { /* Área de detalhes do produto (md:w-1/2 p-6) */
-    padding: 1.5rem; /* p-6 */
+.modal-product-details-area { 
+    padding: 1.5rem; 
 }
 
-/* ... (Estilos para modal-product-name, modal-product-price, modal-section-title, etc. devem estar corretos) ... */
 
-/* Estilos para as bolinhas de cor no modal */
+
+
 .modal-color-options {
     display: flex;
-    align-items: center; /* Alinha verticalmente as bolinhas */
+    align-items: center; 
 }
 .modal-color-options button:not(:first-child) {
-    margin-left: 0.5rem; /* space-x-2 */
+    margin-left: 0.5rem; 
 }
 .modal-color-swatch {
-    width: 2rem; /* w-8 */
-    height: 2rem; /* h-8 */
-    border-radius: 9999px; /* rounded-full */
-    border: 2px solid white; /* border-2 border-white */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* shadow-md para a bolinha */
+    width: 2rem; 
+    height: 2rem; 
+    border-radius: 9999px; 
+    border: 2px solid white; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
     cursor: pointer;
     transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .modal-color-swatch.selected {
-    border-color: var(--primary-gold); /* border-gold-600 */
-    transform: scale(1.1); /* Efeito de seleção */
+    border-color: var(--primary-gold); 
+    transform: scale(1.1); 
 }
 
-/* Estilos para a seleção de tamanho no modal */
+
 .modal-size-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr)); /* grid-cols-5 gap-2, auto-fit para melhor flexibilidade */
-    gap: 0.5rem; /* gap-2 */
+    grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr)); 
+    gap: 0.5rem; 
 }
 .modal-size-button {
     border: 1px solid var(--medium-sand);
-    padding: 0.5rem 0.75rem; /* py-2 px-3 para um pouco mais de preenchimento */
+    padding: 0.5rem 0.75rem; 
     border-radius: 0.25rem;
     transition: background-color 0.3s ease, color 0.3s ease;
     text-align: center;
     background-color: white;
     color: var(--text-color-default);
     cursor: pointer;
-    white-space: nowrap; /* Evita que o texto "PP" quebre */
+    white-space: nowrap; 
 }
 .modal-size-button:hover {
     background-color: var(--primary-gold);
@@ -1346,22 +1342,22 @@ button {
     color: white;
 }
 
-/* Estilos para o controle de quantidade no modal */
+
 .modal-quantity-control {
     display: flex;
     align-items: center;
 }
 .modal-quantity-button {
     border: 1px solid var(--medium-sand);
-    width: 2.5rem; /* w-10 */
-    height: 2.5rem; /* h-10 */
+    width: 2.5rem; 
+    height: 2.5rem; 
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: white;
     transition: background-color 0.3s ease;
     cursor: pointer;
-    font-size: 1.25rem; /* text-xl para os sinais */
+    font-size: 1.25rem; 
 }
 .modal-quantity-button:hover {
     background-color: var(--lighter-sand);
@@ -1371,62 +1367,63 @@ button {
 .modal-quantity-input {
     border-top: 1px solid var(--medium-sand);
     border-bottom: 1px solid var(--medium-sand);
-    border-left: 0; /* Remove a borda entre o input e os botões */
-    border-right: 0; /* Remove a borda entre o input e os botões */
-    width: 4rem; /* w-16 */
-    height: 2.5rem; /* h-10 */
+    border-left: 0; 
+    border-right: 0; 
+    width: 4rem; 
+    height: 2.5rem; 
     text-align: center;
-    -moz-appearance: textfield; /* Remove setas em Firefox */
+    appearance: textfield;
+    -moz-appearance: textfield; 
 }
-/* Remove setas em Chrome/Safari */
+
 .modal-quantity-input::-webkit-outer-spin-button,
 .modal-quantity-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-.modal-add-to-cart-button { /* Botão "Adicionar ao Carrinho" */
-    background-color: var(--primary-gold); /* Cor de fundo dourada */
-    color: white; /* Texto branco */
-    font-weight: 700; /* Negrito */
-    padding: 0.75rem 2rem; /* Preenchimento interno (py-3 px-8) */
-    border-radius: 9999px; /* Cantos arredondados (rounded-full) */
-    transition: background-color 0.3s ease; /* Transição suave no hover */
-    width: 100%; /* Largura total */
-    margin-top: 1.5rem; /* Espaçamento superior */
-    border: none; /* Remove borda padrão */
-    cursor: pointer; /* Cursor de clique */
-    text-decoration: none; /* Remove sublinhado se for link (mas é um button) */
-    font-size: 1.125rem; /* Tamanho do texto (text-lg) */
-    display: inline-block; /* Garante que se comporte como um bloco */
+.modal-add-to-cart-button { 
+    background-color: var(--primary-gold); 
+    color: white; 
+    font-weight: 700; 
+    padding: 0.75rem 2rem; 
+    border-radius: 9999px; 
+    transition: background-color 0.3s ease; 
+    width: 100%; 
+    margin-top: 1.5rem; 
+    border: none; 
+    cursor: pointer; 
+    text-decoration: none; 
+    font-size: 1.125rem; 
+    display: inline-block; 
 }
 .modal-add-to-cart-button:hover {
-    background-color: var(--hover-gold); /* Cor de hover */
+    background-color: var(--hover-gold); 
 }
 
 
-/* Tabela de Medidas no modal */
+
 .modal-table-container {
     overflow-x: auto;
 }
 .modal-table {
     width: 100%;
-    font-size: 0.875rem; /* text-sm */
+    font-size: 0.875rem; 
     border-collapse: collapse;
-    margin-top: 1rem; /* Um pouco de espaço da descrição */
+    margin-top: 1rem; 
 }
 .modal-table th, .modal-table td {
-    padding: 0.75rem 0.75rem; /* py-3 px-3 para mais espaço na tabela */
+    padding: 0.75rem 0.75rem; 
     text-align: left;
-    border: 1px solid var(--sand-200); /* Adiciona bordas para visualização clara da tabela */
+    border: 1px solid var(--sand-200); 
 }
 .modal-table thead tr {
     background-color: var(--lighter-sand);
 }
 
 
-/* Media Queries para Modal */
-@media (min-width: 768px) { /* md breakpoint */
+
+@media (min-width: 768px) { 
     .modal-product-layout.md\:flex-row {
         flex-direction: row;
     }
@@ -1436,154 +1433,150 @@ button {
     .modal-product-details-area.md\:w-1\/2 {
         width: 50%;
     }
-    .modal-product-image-area { /* Ajustes para desktop */
-        padding-right: 1.5rem; /* Espaçamento entre as colunas */
+    .modal-product-image-area { 
+        padding-right: 1.5rem; 
     }
-    .modal-product-details-area { /* Ajustes para desktop */
-        padding-left: 1.5rem; /* Espaçamento entre as colunas */
+    .modal-product-details-area { 
+        padding-left: 1.5rem; 
     }
 }
 
 
-/* --- Estilos para a Seção About (Sobre Nós) --- */
-.about-section { /* Equivalente a py-16 bg-sand-100 */
-    padding-top: 4rem; /* py-16 */
-    padding-bottom: 4rem; /* py-16 */
-    background-color: var(--lighter-sand); /* bg-sand-100 */
+
+.about-section { 
+    padding-top: 4rem; 
+    padding-bottom: 4rem; 
+    background-color: var(--lighter-sand); 
 }
 
-/* section-title já está definido e será reutilizado */
 
-.about-content-wrapper { /* Equivalente a flex flex-col md:flex-row items-center */
+
+.about-content-wrapper { 
     display: flex;
-    flex-direction: column; /* flex-col por padrão (mobile) */
-    align-items: center; /* items-center */
+    flex-direction: column; 
+    align-items: center; 
 }
 
-.about-image-area { /* Equivalente a md:w-1/2 mb-8 md:mb-0 md:pr-8 */
-    margin-bottom: 2rem; /* mb-8 (mobile) */
+.about-image-area { 
+    margin-bottom: 2rem; 
 }
 
-.about-image { /* Equivalente a rounded-lg shadow-lg w-full */
-    width: 100%; /* w-full */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-    display: block; /* Para garantir que não haja espaço extra abaixo da imagem */
-    height: auto; /* Garante que a proporção da imagem seja mantida */
+.about-image { 
+    width: 100%; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+    display: block; 
+    height: auto; 
 }
 
-.about-text-area { /* Equivalente a md:w-1/2 */
-    /* Este elemento será flexível em desktop */
-}
 
-.about-text { /* Estilo geral para parágrafos da seção about */
-    margin-bottom: 1rem; /* mb-4 (para cada parágrafo) */
+
+.about-text { 
+    margin-bottom: 1rem; 
     color: var(--text-color-default);
 }
-.about-text:last-of-type { /* Último parágrafo antes dos valores */
-    margin-bottom: 1.5rem; /* mb-6 */
+.about-text:last-of-type { 
+    margin-bottom: 1.5rem; 
 }
 
-.about-subtitle { /* Equivalente a title-font text-xl font-bold mb-3 */
-    font-family: 'Playfair Display', serif; /* title-font */
-    font-size: 1.25rem; /* text-xl */
-    font-weight: 700; /* font-bold */
-    margin-bottom: 0.75rem; /* mb-3 */
+.about-subtitle { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.25rem; 
+    font-weight: 700; 
+    margin-bottom: 0.75rem; 
     color: var(--text-color-default);
 }
 
 
-.about-values-grid { /* Equivalente a flex space-x-4 */
+.about-values-grid { 
     display: flex;
-    flex-direction: column; /* mobile: valores um abaixo do outro */
-    gap: 1rem; /* espaçamento entre eles */
+    flex-direction: column; 
+    gap: 1rem; 
 }
 
-.value-card { /* Equivalente a bg-white p-4 rounded-lg shadow-md text-center flex-1 */
+.value-card { 
     background-color: white;
-    padding: 1rem; /* p-4 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+    padding: 1rem; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
     text-align: center;
-    flex: 1; /* flex-1 para distribuir o espaço igualmente em flex containers */
+    flex: 1; 
 }
 
-.value-icon { /* Equivalente a text-gold-600 text-3xl mb-2 */
-    font-size: 1.875rem; /* text-3xl */
-    color: var(--primary-gold); /* text-gold-600 */
-    margin-bottom: 0.5rem; /* mb-2 */
+.value-icon { 
+    font-size: 1.875rem; 
+    color: var(--primary-gold); 
+    margin-bottom: 0.5rem; 
 }
 
-.value-title { /* Equivalente a font-bold */
+.value-title { 
     font-weight: 700;
     color: var(--text-color-default);
-    margin-bottom: 0.25rem; /* Adicionado um pequeno espaçamento */
+    margin-bottom: 0.25rem; 
 }
 
-.value-description { /* Equivalente a text-sm */
-    font-size: 0.875rem; /* text-sm */
+.value-description { 
+    font-size: 0.875rem; 
     color: var(--text-color-default);
 }
 
 
-/* Media Queries para responsividade da seção About */
-@media (min-width: 768px) { /* md breakpoint */
-    .about-content-wrapper.md\:flex-row { /* Layout em linha em desktop */
+
+@media (min-width: 768px) { 
+    .about-content-wrapper.md\:flex-row { 
         flex-direction: row;
-        align-items: flex-start; /* Alinha no topo as colunas */
+        align-items: flex-start; 
     }
-    .about-image-area.md\:w-1\/2 { /* Metade da largura para imagem */
+    .about-image-area.md\:w-1\/2 { 
         width: 50%;
-        margin-bottom: 0; /* Remove margem inferior em desktop */
-        padding-right: 2rem; /* md:pr-8, espaçamento entre as colunas */
+        margin-bottom: 0; 
+        padding-right: 2rem; 
     }
-    .about-text-area.md\:w-1\/2 { /* Metade da largura para texto */
+    .about-text-area.md\:w-1\/2 { 
         width: 50%;
     }
-    .about-text-area.md\:pl-8 { /* md:pl-8, espaçamento entre as colunas */
+    .about-text-area.md\:pl-8 { 
         padding-left: 2rem;
     }
-    .about-values-grid.md\:space-x-4 { /* Valores em linha em desktop */
+    .about-values-grid.md\:space-x-4 { 
         flex-direction: row;
-        gap: 1rem; /* Espaçamento entre os cards de valores */
+        gap: 1rem; 
     }
 }
 
 
 
-/* --- Estilos para a Seção Contact (Entre em Contato) --- */
-.contact-section { /* Equivalente a py-16 bg-white */
-    padding-top: 4rem; /* py-16 */
-    padding-bottom: 4rem; /* py-16 */
-    background-color: white; /* bg-white */
+
+.contact-section { 
+    padding-top: 4rem; 
+    padding-bottom: 4rem; 
+    background-color: white; 
 }
 
-/* section-title já está definido e será reutilizado */
 
-.contact-content-wrapper { /* Equivalente a flex flex-col md:flex-row */
+
+.contact-content-wrapper { 
     display: flex;
-    flex-direction: column; /* flex-col por padrão (mobile) */
+    flex-direction: column; 
 }
 
-.contact-form-area { /* Equivalente a md:w-1/2 mb-8 md:mb-0 md:pr-8 */
-    margin-bottom: 2rem; /* mb-8 (mobile) */
+.contact-form-area { 
+    margin-bottom: 2rem; 
 }
 
-.contact-form { /* Equivalente a space-y-4 */
-    /* space-y-4 será aplicado via margem nos elementos filhos */
-}
+
 .contact-form > div {
-    margin-bottom: 1rem; /* space-y-4 */
+    margin-bottom: 1rem; 
 }
 .contact-form > div:last-child {
-    margin-bottom: 0; /* Remove margem do último item antes do botão */
+    margin-bottom: 0; 
 }
 
 
-.form-field-label { /* Equivalente a block mb-1 */
+.form-field-label { 
     display: block;
-    margin-bottom: 0.25rem; /* mb-1 */
-    font-weight: 500; /* Para tornar o label um pouco mais forte */
+    margin-bottom: 0.25rem; 
+    font-weight: 500; 
     color: var(--text-color-default);
 }
 
@@ -1595,68 +1588,66 @@ input:focus, select:focus, textarea:focus {
 }
 */
 
-.contact-submit-button { /* Botão "Enviar mensagem" */
-    background-color: var(--primary-gold); /* Cor de fundo dourada */
-    color: white; /* Texto branco */
-    font-weight: 700; /* Negrito */
-    padding: 0.75rem 2rem; /* Preenchimento interno (py-3 px-8) */
-    border-radius: 9999px; /* Cantos arredondados (rounded-full) */
-    transition: background-color 0.3s ease; /* Transição suave no hover */
-    width: 100%; /* Largura total */
-    margin-top: 0.5rem; /* Adiciona uma pequena margem superior se necessário */
-    border: none; /* Remove borda padrão */
-    cursor: pointer; /* Cursor de clique */
-    text-decoration: none; /* Remove sublinhado se for link (mas é um button) */
-    font-size: 1.125rem; /* Tamanho do texto (text-lg) */
-    display: inline-block; /* Garante que se comporte como um bloco */
-    text-align: center; /* Centraliza o texto dentro do botão */
+.contact-submit-button { 
+    background-color: var(--primary-gold); 
+    color: white; 
+    font-weight: 700; 
+    padding: 0.75rem 2rem; 
+    border-radius: 9999px; 
+    transition: background-color 0.3s ease; 
+    width: 100%; 
+    margin-top: 0.5rem; 
+    border: none; 
+    cursor: pointer; 
+    text-decoration: none; 
+    font-size: 1.125rem; 
+    display: inline-block; 
+    text-align: center; 
 }
 .contact-submit-button:hover {
-    background-color: var(--hover-gold); /* Cor de hover */
+    background-color: var(--hover-gold); 
 }
 
 
-.contact-info-area { /* Equivalente a md:w-1/2 md:pl-8 */
-    background-color: var(--light-sand); /* bg-sand-50 */
-    padding: 1.5rem; /* p-6 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
-    height: 100%; /* Garante que o card ocupe a altura disponível */
+.contact-info-area { 
+    background-color: var(--light-sand); 
+    padding: 1.5rem; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+    height: 100%; 
 }
 
-.contact-info-title { /* Equivalente a title-font text-xl font-bold mb-4 */
+.contact-info-title { 
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem; /* text-xl */
+    font-size: 1.25rem; 
     font-weight: 700;
-    margin-bottom: 1rem; /* mb-4 */
+    margin-bottom: 1rem; 
     color: var(--text-color-default);
 }
 
-.contact-info-item-list { /* Equivalente a space-y-4 */
-    /* space-y-4 será aplicado via margem nos elementos filhos */
-}
+
 .contact-info-item-list > div {
-    margin-bottom: 1rem; /* space-y-4 */
+    margin-bottom: 1rem; 
 }
 .contact-info-item-list > div:last-child {
     margin-bottom: 0;
 }
 
 
-.contact-info-item { /* Equivalente a flex items-start */
+.contact-info-item { 
     display: flex;
-    align-items: flex-start; /* items-start */
+    align-items: flex-start; 
 }
 
-.contact-info-icon { /* Equivalente a text-gold-600 text-xl mt-1 mr-4 */
+.contact-info-icon { 
     color: var(--primary-gold);
-    font-size: 1.25rem; /* text-xl */
-    margin-top: 0.25rem; /* mt-1 */
-    margin-right: 1rem; /* mr-4 */
-    flex-shrink: 0; /* Impede que o ícone encolha */
+    font-size: 1.25rem; 
+    margin-top: 0.25rem; 
+    margin-right: 1rem; 
+    flex-shrink: 0; 
 }
 
-.contact-info-heading { /* Equivalente a font-bold */
+.contact-info-heading { 
     font-weight: 700;
     color: var(--text-color-default);
 }
@@ -1665,270 +1656,268 @@ input:focus, select:focus, textarea:focus {
     color: var(--text-color-default);
 }
 
-.contact-whatsapp-link { /* Equivalente a text-gold-600 hover:underline inline-block mt-1 */
+.contact-whatsapp-link { 
     color: var(--primary-gold);
     text-decoration: none;
     display: inline-block;
-    margin-top: 0.25rem; /* mt-1 */
+    margin-top: 0.25rem; 
     transition: text-decoration 0.2s ease;
 }
 .contact-whatsapp-link:hover {
     text-decoration: underline;
 }
 
-.social-media-title { /* Equivalente a font-bold mb-3 */
+.social-media-title { 
     font-weight: 700;
-    margin-bottom: 0.75rem; /* mb-3 */
+    margin-bottom: 0.75rem; 
     color: var(--text-color-default);
-    margin-top: 2rem; /* mt-8 para espaçamento do bloco anterior */
+    margin-top: 2rem; 
 }
 
-.social-icons-list { /* Equivalente a flex space-x-4 */
+.social-icons-list { 
     display: flex;
-    /* space-x-4 será aplicado via margem nos elementos filhos */
+    
 }
 .social-icons-list > a:not(:first-child) {
-    margin-left: 1rem; /* space-x-4 */
+    margin-left: 1rem; 
 }
 
 
-.social-icon-button { /* Equivalente a bg-sand-200 hover:bg-gold-600 hover:text-white text-sand-700 w-10 h-10 rounded-full flex items-center justify-center transition duration-300 */
-    background-color: var(--lightest-sand); /* bg-sand-200 */
-    color: var(--sand-700); /* text-sand-700 */
-    width: 2.5rem; /* w-10 */
-    height: 2.5rem; /* h-10 */
-    border-radius: 9999px; /* rounded-full */
+.social-icon-button { 
+    background-color: var(--lightest-sand); 
+    color: var(--sand-700); 
+    width: 2.5rem; 
+    height: 2.5rem; 
+    border-radius: 9999px; 
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease, color 0.3s ease;
-    text-decoration: none; /* Remove sublinhado padrão */
-    font-size: 1.25rem; /* Tamanho do ícone */
+    text-decoration: none; 
+    font-size: 1.25rem; 
 }
 .social-icon-button:hover {
-    background-color: var(--primary-gold); /* hover:bg-gold-600 */
-    color: white; /* hover:text-white */
+    background-color: var(--primary-gold); 
+    color: white; 
 }
 
 
-/* Media Queries para responsividade da seção Contact */
-@media (min-width: 768px) { /* md breakpoint */
+
+@media (min-width: 768px) { 
     .contact-content-wrapper.md\:flex-row {
         flex-direction: row;
-        align-items: flex-start; /* Alinha o conteúdo no topo das colunas */
+        align-items: flex-start; 
     }
     .contact-form-area.md\:w-1\/2 {
         width: 50%;
-        margin-bottom: 0; /* Remove margin inferior em desktop */
-        padding-right: 2rem; /* md:pr-8, espaçamento entre as colunas */
+        margin-bottom: 0; 
+        padding-right: 2rem; 
     }
     .contact-info-area.md\:w-1\/2 {
         width: 50%;
-        padding-left: 2rem; /* md:pl-8, espaçamento entre as colunas */
+        padding-left: 2rem; 
     }
 }
 
 
 
-/* --- Estilos para o Footer --- */
-.site-footer { /* Equivalente a bg-sand-800 text-white py-8 */
-    background-color: var(--dark-sand); /* bg-sand-800 */
-    color: white; /* text-white */
-    padding-top: 2rem; /* py-8 */
-    padding-bottom: 2rem; /* py-8 */
+
+.site-footer { 
+    background-color: var(--dark-sand); 
+    color: white; 
+    padding-top: 2rem; 
+    padding-bottom: 2rem; 
 }
 
-.footer-grid { /* Equivalente a grid grid-cols-1 md:grid-cols-4 gap-8 */
+.footer-grid { 
     display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr)); /* mobile default */
-    gap: 2rem; /* gap-8 */
+    grid-template-columns: repeat(1, minmax(0, 1fr)); 
+    gap: 2rem; 
 }
 
-.footer-section-title { /* Equivalente a title-font text-xl font-bold mb-4 */
+.footer-section-title { 
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem; /* text-xl */
-    font-weight: 700; /* font-bold */
-    margin-bottom: 1rem; /* mb-4 */
+    font-size: 1.25rem; 
+    font-weight: 700; 
+    margin-bottom: 1rem; 
 }
 
 .footer-paragraph {
-    font-size: 0.875rem; /* text-sm, se necessário */
-    line-height: 1.5; /* Para melhor leitura */
-    color: rgba(255, 255, 255, 0.8); /* Cor mais suave para o texto */
+    font-size: 0.875rem; 
+    line-height: 1.5; 
+    color: rgba(255, 255, 255, 0.8); 
 }
 
-.footer-list-title { /* Equivalente a font-bold mb-4 */
+.footer-list-title { 
     font-weight: 700;
-    margin-bottom: 1rem; /* mb-4 */
-    font-size: 1rem; /* Ajuste o tamanho da fonte se necessário */
+    margin-bottom: 1rem; 
+    font-size: 1rem; 
 }
 
-.footer-link-list { /* Equivalente a space-y-2 */
-    /* space-y-2 aplicado via margin nos LIs */
-}
+
 .footer-link-list li {
-    margin-bottom: 0.5rem; /* space-y-2 */
+    margin-bottom: 0.5rem; 
 }
 .footer-link-list li:last-child {
     margin-bottom: 0;
 }
-.footer-link-list a { /* Equivalente a hover:text-gold-400 transition */
-    color: white; /* Default para os links do footer */
+.footer-link-list a { 
+    color: white; 
     text-decoration: none;
     transition: color 0.3s ease;
 }
 .footer-link-list a:hover {
-    color: #FFD76A; /* Cor de hover, similar a gold-400 */
+    color: #FFD76A; 
 }
 
-.footer-payment-icons { /* Equivalente a grid grid-cols-3 gap-2 mb-4 */
+.footer-payment-icons { 
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr)); /* grid-cols-3 */
-    gap: 0.5rem; /* gap-2 */
-    margin-bottom: 1rem; /* mb-4 */
+    grid-template-columns: repeat(3, minmax(0, 1fr)); 
+    gap: 0.5rem; 
+    margin-bottom: 1rem; 
 }
 
-.payment-icon-item { /* Equivalente a bg-white text-sand-800 p-2 rounded flex items-center justify-center */
+.payment-icon-item { 
     background-color: white;
-    color: var(--dark-sand); /* text-sand-800 */
-    padding: 0.5rem; /* p-2 */
-    border-radius: 0.25rem; /* rounded */
+    color: var(--dark-sand); 
+    padding: 0.5rem; 
+    border-radius: 0.25rem; 
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .payment-icon-item i {
-    font-size: 1.5rem; /* text-2xl */
+    font-size: 1.5rem; 
 }
 
-.footer-copyright { /* Equivalente a border-t border-sand-700 mt-8 pt-6 text-center text-sm */
+.footer-copyright { 
     border-top: 1px solid var(--sand-700);
-    margin-top: 2rem; /* mt-8 */
-    padding-top: 1.5rem; /* pt-6 */
+    margin-top: 2rem; 
+    padding-top: 1.5rem; 
     text-align: center;
-    font-size: 0.875rem; /* text-sm */
-    color: rgba(255, 255, 255, 0.7); /* Cor um pouco mais clara para copyright */
+    font-size: 0.875rem; 
+    color: rgba(255, 255, 255, 0.7); 
 }
 
-/* --- Ajustes para Contact Section (após mover itens) --- */
-/* Remover ou ajustar a regra social-media-title se ela estiver sozinha */
-/* Remover ou ajustar a regra social-icons-list se ela estiver sozinha */
 
-/* Social icons no footer (reutilizando social-icon-button, mas sem o .bg-sand-200 padrão) */
-.footer-social-icons-list { /* Equivalente a flex space-x-4 */
+
+
+
+
+.footer-social-icons-list { 
     display: flex;
-    margin-top: 1rem; /* Espaçamento após informações de contato */
+    margin-top: 1rem; 
 }
 .footer-social-icons-list > a:not(:first-child) {
-    margin-left: 1rem; /* space-x-4 */
+    margin-left: 1rem; 
 }
-/* O social-icon-button já está definido para cores e hover */
 
 
-/* Media Queries para responsividade do Footer */
-@media (min-width: 768px) { /* md breakpoint */
-    .footer-grid.md\:grid-cols-4 { /* 4 colunas em telas maiores */
+
+
+@media (min-width: 768px) { 
+    .footer-grid.md\:grid-cols-4 { 
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }
 
 
-/* --- Estilos para a Seção Newsletter --- */
-.newsletter-section { /* Equivalente a py-12 bg-gold-600 text-white */
-    padding-top: 3rem; /* py-12 */
-    padding-bottom: 3rem; /* py-12 */
-    background-color: var(--primary-gold); /* bg-gold-600 */
-    color: white; /* text-white */
-    text-align: center; /* text-center */
+
+.newsletter-section { 
+    padding-top: 3rem; 
+    padding-bottom: 3rem; 
+    background-color: var(--primary-gold); 
+    color: white; 
+    text-align: center; 
 }
 
-.newsletter-title { /* Equivalente a title-font text-3xl font-bold mb-4 */
+.newsletter-title { 
     font-family: 'Playfair Display', serif;
-    font-size: 1.875rem; /* text-3xl */
+    font-size: 1.875rem; 
     font-weight: 700;
-    margin-bottom: 1rem; /* mb-4 */
+    margin-bottom: 1rem; 
 }
 
-.newsletter-subtitle { /* Equivalente a mb-6 max-w-2xl mx-auto */
-    margin-bottom: 1.5rem; /* mb-6 */
-    max-width: 42rem; /* max-w-2xl */
-    margin-left: auto; /* mx-auto */
-    margin-right: auto; /* mx-auto */
-    line-height: 1.5; /* Para melhor leitura */
+.newsletter-subtitle { 
+    margin-bottom: 1.5rem; 
+    max-width: 42rem; 
+    margin-left: auto; 
+    margin-right: auto; 
+    line-height: 1.5; 
 }
 
-.newsletter-form { /* Equivalente a max-w-md mx-auto flex */
-    max-width: 28rem; /* max-w-md */
+.newsletter-form { 
+    max-width: 28rem; 
     margin-left: auto;
     margin-right: auto;
-    display: flex; /* flex */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Adiciona uma sombra sutil ao formulário */
-    border-radius: 0.5rem; /* rounded-lg */
-    overflow: hidden; /* Para garantir que o input e o botão fiquem com os cantos arredondados juntos */
+    display: flex; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+    border-radius: 0.5rem; 
+    overflow: hidden; 
 }
 
-.newsletter-input { /* Equivalente a flex-grow px-4 py-3 rounded-l focus:outline-none text-sand-800 */
-    flex-grow: 1; /* flex-grow */
-    padding: 0.75rem 1rem; /* px-4 py-3 */
-    border-top-left-radius: 0.5rem; /* rounded-l (ajustado para ser completo no canto) */
-    border-bottom-left-radius: 0.5rem; /* rounded-l (ajustado para ser completo no canto) */
-    border: none; /* remove borda padrão */
-    outline: none; /* focus:outline-none */
-    color: var(--dark-sand); /* text-sand-800 */
-    background-color: white; /* Garante fundo branco */
+.newsletter-input { 
+    flex-grow: 1; 
+    padding: 0.75rem 1rem; 
+    border-top-left-radius: 0.5rem; 
+    border-bottom-left-radius: 0.5rem; 
+    border: none; 
+    outline: none; 
+    color: var(--dark-sand); 
+    background-color: white; 
 }
 
 .newsletter-input:focus {
-    box-shadow: 0 0 0 2px var(--dark-sand); /* Anel de foco customizado, como o focus:ring-2 no Tailwind */
+    box-shadow: 0 0 0 2px var(--dark-sand); 
 }
 
-.newsletter-button { /* Equivalente a bg-sand-800 hover:bg-sand-900 px-6 py-3 rounded-r transition duration-300 */
-    background-color: var(--dark-sand); /* bg-sand-800 */
+.newsletter-button { 
+    background-color: var(--dark-sand); 
     color: white;
-    padding: 0.75rem 1.5rem; /* px-6 py-3 */
-    border-top-right-radius: 0.5rem; /* rounded-r (ajustado para ser completo no canto) */
-    border-bottom-right-radius: 0.5rem; /* rounded-r (ajustado para ser completo no canto) */
+    padding: 0.75rem 1.5rem; 
+    border-top-right-radius: 0.5rem; 
+    border-bottom-right-radius: 0.5rem; 
     transition: background-color 0.3s ease;
     border: none;
     cursor: pointer;
-    font-weight: 700; /* font-bold */
+    font-weight: 700; 
 }
 .newsletter-button:hover {
-    background-color: var(--darker-sand); /* hover:bg-sand-900 */
+    background-color: var(--darker-sand); 
 }
 
-/* Media Queries (se a seção tiver layout diferente em mobile/desktop, o que não parece ser o caso agora) */
 
 
-/* --- Estilos para a Página de Checkout (Finalizar Compra) --- */
+
+
 .checkout-page-container {
-    background-color: var(--light-sand); /* Cor de fundo da página */
-    min-height: calc(100vh - 100px); /* Ajuste min-height para não ficar muito curto, 100px é um exemplo da altura do footer/navbar */
+    background-color: var(--light-sand); 
+    min-height: calc(100vh - 100px); 
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
 
-.checkout-title { /* Reutiliza section-title, mas pode ajustar se precisar */
-    margin-bottom: 2rem; /* Espaçamento abaixo do título principal */
+.checkout-title { 
+    margin-bottom: 2rem; 
 }
 
-.checkout-layout-grid { /* Layout principal da página de checkout */
+.checkout-layout-grid { 
     display: flex;
-    flex-direction: column; /* Em mobile, as seções ficam em coluna */
-    gap: 2rem; /* Espaçamento entre as seções */
+    flex-direction: column; 
+    gap: 2rem; 
 }
 
-.checkout-section-right-column { /* Para agrupar pagamento e resumo em desktop */
+.checkout-section-right-column { 
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-.checkout-section { /* Estilo base para cada bloco de informação (entrega, pagamento, resumo) */
+.checkout-section { 
     background-color: white;
-    padding: 1.5rem; /* p-6 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+    padding: 1.5rem; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
 }
 
 .checkout-section-heading {
@@ -1937,40 +1926,38 @@ input:focus, select:focus, textarea:focus {
     font-weight: 700;
     color: var(--dark-sand);
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--lightest-sand); /* Linha divisória */
+    border-bottom: 1px solid var(--lightest-sand); 
     padding-bottom: 0.75rem;
 }
 
-.checkout-form-section { /* Container de formulários dentro do checkout */
+.checkout-form-section { 
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* Espaçamento entre os campos */
+    gap: 1rem; 
 }
 
-.form-group {
-    /* Padrão para grupos de formulário, já pode estar implicado pelo .checkout-form-section gap */
-}
 
-/* form-field-label, w-full, input/select/textarea já definidos globalmente */
+
+
 
 .payment-options {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem; /* Espaçamento entre as opções de pagamento */
+    gap: 0.75rem; 
     margin-bottom: 1rem;
 }
 
 .payment-option-card {
     display: flex;
     align-items: center;
-    background-color: var(--light-sand); /* Fundo sutil */
+    background-color: var(--light-sand); 
     padding: 0.75rem 1rem;
     border-radius: 0.375rem;
     cursor: pointer;
     font-weight: 500;
     color: var(--text-color-default);
     transition: background-color 0.2s ease, border-color 0.2s ease;
-    border: 1px solid transparent; /* Bordas transparentes */
+    border: 1px solid transparent; 
 }
 .payment-option-card:hover {
     background-color: var(--lighter-sand);
@@ -1978,15 +1965,15 @@ input:focus, select:focus, textarea:focus {
 }
 .payment-option-card input[type="radio"] {
     margin-right: 0.5rem;
-    width: auto; /* Anula o w-full do input global */
+    width: auto; 
 }
 
-.summary-items { /* Lista de itens no resumo do pedido */
+.summary-items { 
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin-bottom: 1rem;
-    max-height: 200px; /* Altura máxima para scroll se muitos itens */
+    max-height: 200px; 
     overflow-y: auto;
 }
 
@@ -1994,7 +1981,7 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px dashed var(--lightest-sand); /* Borda tracejada */
+    border-bottom: 1px dashed var(--lightest-sand); 
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
 }
@@ -2035,7 +2022,7 @@ input:focus, select:focus, textarea:focus {
 .summary-item-price {
     font-weight: 700;
     color: var(--text-color-default);
-    white-space: nowrap; /* Não quebra a linha do preço */
+    white-space: nowrap; 
 }
 
 .summary-totals {
@@ -2060,7 +2047,7 @@ input:focus, select:focus, textarea:focus {
     color: var(--primary-gold);
 }
 
-.place-order-button { /* Botão "Confirmar Pedido" */
+.place-order-button { 
     background-color: var(--primary-gold);
     color: white;
     font-weight: 700;
@@ -2092,19 +2079,19 @@ input:focus, select:focus, textarea:focus {
 }
 
 
-/* Media Queries para a página de Checkout */
-@media (min-width: 768px) { /* md breakpoint */
+
+@media (min-width: 768px) { 
     .checkout-layout-grid.md\:flex-row {
-        flex-direction: row; /* Colunas lado a lado */
-        align-items: flex-start; /* Alinha no topo */
+        flex-direction: row; 
+        align-items: flex-start; 
     }
-    .checkout-shipping-details { /* Coluna da esquerda */
-        flex: 1; /* Ocupa o espaço disponível */
-        margin-right: 1rem; /* Espaçamento entre as colunas */
+    .checkout-shipping-details { 
+        flex: 1; 
+        margin-right: 1rem; 
     }
-    .checkout-section-right-column { /* Coluna da direita (pagamento + resumo) */
-        flex: 1; /* Ocupa o espaço disponível */
-        margin-left: 1rem; /* Espaçamento entre as colunas */
+    .checkout-section-right-column { 
+        flex: 1; 
+        margin-left: 1rem; 
     }
 }
 
