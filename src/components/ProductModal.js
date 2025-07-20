@@ -4,33 +4,35 @@ import React, { useState, useEffect } from 'react';
 const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
     const [quantity, setQuantity] = useState(1);
     const [selectedSize, setSelectedSize] = useState('');
-    // Usaremos `selectedImageIndex` para controlar qual imagem de variação está ativa.
-    const [selectedImageIndex, setSelectedImageIndex] = useState(0); // Começa com a primeira imagem
-    const [isZoomed, setIsZoomed] = useState(false); // Estado para o zoom
-    const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 }); // Posição do mouse para o zoom
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [isZoomed, setIsZoomed] = useState(false);
+    const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
 
-    // useEffect para resetar estados e definir a imagem inicial quando o modal abre ou o produto muda
+    // 👉 Função para pegar a variação principal (ou primeira)
+    const getMainVariation = (produto) => {
+        if (!produto?.variacoes || produto.variacoes.length === 0) return null;
+        return produto.variacoes[0]; // ou lógica com .find(v => v.isPrincipal)
+    };
+
+    const variation = getMainVariation(product);
+    const preco = variation?.preco;
+    const imagem = variation?.imagens?.[selectedImageIndex]?.url;
+    const altText = variation?.imagens?.[selectedImageIndex]?.altText || product?.nome;
+    const imagens = variation?.imagens || [];
+
     useEffect(() => {
-        if (isOpen && product) {
-            setQuantity(1);
-            setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : '');
-            // Seleciona a primeira imagem como padrão ou a primeira imagem da variação
-            setSelectedImageIndex(0);
-            setIsZoomed(false); // Garante que o zoom esteja desativado ao abrir
-        }
-    }, [isOpen, product]);
+    if (isOpen && product) {
+        setQuantity(1);
+        setSelectedSize(variation?.tamanho || '');
+        setSelectedImageIndex(0);
+        setIsZoomed(false);
+    }
+}, [isOpen, product, variation?.tamanho]);
 
-    // Se o modal não estiver aberto ou não houver produto, não renderize nada
     if (!isOpen || !product) return null;
 
-    // Determina a imagem principal a ser exibida
-    // Se houver `product.images` (variações), usa a imagem selecionada, senão usa `product.image`
-    const currentMainImage = product.images && product.images.length > 0
-                             ? product.images[selectedImageIndex].src
-                             : product.image;
-
     const handleAddToCart = () => {
-        addToCart(product, quantity, selectedSize, product.images?.[selectedImageIndex]?.colorName || 'N/A');
+        addToCart(product, quantity, selectedSize, variation?.cor || 'N/A');
         onClose();
     };
 
@@ -40,9 +42,8 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
         }
     };
 
-    // --- Funções para a Lógica do Zoom ---
     const handleImageClick = () => {
-        setIsZoomed(prev => !prev); // Alterna o estado de zoom
+        setIsZoomed(prev => !prev);
     };
 
     const handleImageMouseMove = (e) => {
@@ -53,7 +54,6 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
             setZoomPosition({ x, y });
         }
     };
-    // --- Fim das Funções para a Lógica do Zoom ---
 
     return (
         <div id="product-modal" className={isOpen ? 'is-open' : ''} onClick={handleOverlayClick}>
@@ -63,79 +63,54 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                 </button>
 
                 <div className="modal-product-layout md:flex-row">
-                    {/* Área da Imagem Principal e Thumbnails */}
                     <div className="modal-product-image-area md:w-1/2">
-                        {/* Imagem Principal com Lógica de Zoom e Lupa */}
                         <div
-                            className="modal-main-image-container" // Novo container para a imagem principal
+                            className="modal-main-image-container"
                             onClick={handleImageClick}
                             onMouseMove={handleImageMouseMove}
-                            onMouseLeave={() => setIsZoomed(false)} // Desativa zoom ao sair
+                            onMouseLeave={() => setIsZoomed(false)}
                         >
                             <img
                                 id="modal-product-image"
-                                src={currentMainImage} // Usa a imagem selecionada
-                                alt={product.name}
+                                src={imagem || '/placeholder.jpg'}
+                                alt={altText}
                                 className={`modal-product-image ${isZoomed ? 'zoomed' : ''}`}
                                 style={isZoomed ? { transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` } : {}}
                             />
-                            <div className="modal-zoom-icon"> {/* Ícone de Lupa */}
+                            <div className="modal-zoom-icon">
                                 <i className="fas fa-search-plus"></i>
                             </div>
                         </div>
 
-                        {/* Thumbnails de Variação (se existirem) */}
-                        {product.images && product.images.length > 1 && (
+                        {imagens.length > 1 && (
                             <div className="modal-thumbnail-grid">
-                                {product.images.map((img, index) => (
+                                {imagens.map((img, index) => (
                                     <div
                                         key={index}
                                         className={`modal-thumbnail-item ${index === selectedImageIndex ? 'selected' : ''}`}
                                         onClick={() => setSelectedImageIndex(index)}
                                     >
-                                        <img src={img.src} alt={img.alt} />
+                                        <img src={img.url} alt={img.altText || `Variação ${index + 1}`} />
                                     </div>
                                 ))}
                             </div>
                         )}
                     </div>
 
-                    {/* Área de Detalhes do Produto (restante do modal) */}
                     <div className="modal-product-details-area md:w-1/2">
-                        <h2 id="modal-product-name" className="modal-product-name">{product.name}</h2>
-                        <p id="modal-product-price" className="modal-product-price">R$ {product.price.toFixed(2).replace('.', ',')}</p>
+                        <h2 id="modal-product-name" className="modal-product-name">{product.nome}</h2>
+                        <p>Preço: R$ {preco ? preco.toFixed(2).replace('.', ',') : '—'}</p>
 
-                        {/* Cores disponíveis (usando as cores do ProductGrid para simplificar, mas idealmente viriam do `product.images` ou `product.colors` do dado) */}
-                        {product.colors && product.colors.length > 0 && (
-                            <div className="mb-6">
-                                <h3 className="modal-section-title">Cores disponíveis</h3>
-                                <div className="modal-color-options">
-                                    {product.colors.map((color, index) => ( // Usando o index para cores também
-                                        <button
-                                            key={index}
-                                            className={`modal-color-swatch ${index === selectedImageIndex ? 'selected' : ''}`} /* Seleciona a bolinha de cor baseada na imagem ativa */
-                                            // Você pode ajustar o style para usar `color.hex` ou `color.name` se o seu `product.colors` tiver mais detalhes
-                                            style={color === 'pattern' ? {backgroundImage: `url(${product.image})`, backgroundSize: 'cover'} : {backgroundColor: color}}
-                                            onClick={() => setSelectedImageIndex(index)} /* Ao clicar na cor, muda a imagem */
-                                        ></button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {product.sizes && product.sizes.length > 0 && (
+                        {variation?.tamanho && (
                             <div className="mb-6">
                                 <h3 className="modal-section-title">Tamanho</h3>
                                 <div className="modal-size-grid">
-                                    {product.sizes.map(size => (
-                                        <button
-                                            key={size}
-                                            className={`modal-size-button ${selectedSize === size ? 'selected' : ''}`}
-                                            onClick={() => setSelectedSize(size)}
-                                        >
-                                            {size}
-                                        </button>
-                                    ))}
+                                    <button
+                                        className={`modal-size-button selected`}
+                                        onClick={() => setSelectedSize(variation.tamanho)}
+                                    >
+                                        {variation.tamanho}
+                                    </button>
                                 </div>
                             </div>
                         )}
@@ -146,9 +121,7 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                                 <button
                                     className="modal-quantity-button rounded-l"
                                     onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                                >
-                                    -
-                                </button>
+                                >-</button>
                                 <input
                                     type="number"
                                     value={quantity}
@@ -159,9 +132,7 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                                 <button
                                     className="modal-quantity-button rounded-r"
                                     onClick={() => setQuantity(prev => prev + 1)}
-                                >
-                                    +
-                                </button>
+                                >+</button>
                             </div>
                         </div>
 
@@ -175,7 +146,9 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
 
                         <div className="modal-description-separator">
                             <h3 className="modal-section-title">Descrição</h3>
-                            <p id="modal-product-description" className="modal-product-description">{product.description}</p>
+                            <p id="modal-product-description" className="modal-product-description">
+                                {product.descricao}
+                            </p>
 
                             <h3 className="modal-section-title">Tabela de Medidas</h3>
                             <div className="modal-table-container">
@@ -184,12 +157,12 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                                         <tr className="bg-sand-100">
                                             <th>Tamanho</th><th>Busto (cm)</th><th>Cintura (cm)</th><th>Quadril (cm)</th>
                                         </tr>
-                                </thead>
+                                    </thead>
                                     <tbody>
-                                        <tr className="border-b"><td>PP</td><td>78-82</td><td>60-64</td><td>86-90</td></tr>
-                                        <tr className="border-b"><td>P</td><td>82-86</td><td>64-68</td><td>90-94</td></tr>
-                                        <tr className="border-b"><td>M</td><td>86-90</td><td>68-72</td><td>94-98</td></tr>
-                                        <tr className="border-b"><td>G</td><td>90-94</td><td>72-76</td><td>98-102</td></tr>
+                                        <tr><td>PP</td><td>78-82</td><td>60-64</td><td>86-90</td></tr>
+                                        <tr><td>P</td><td>82-86</td><td>64-68</td><td>90-94</td></tr>
+                                        <tr><td>M</td><td>86-90</td><td>68-72</td><td>94-98</td></tr>
+                                        <tr><td>G</td><td>90-94</td><td>72-76</td><td>98-102</td></tr>
                                         <tr><td>GG</td><td>94-98</td><td>76-80</td><td>102-106</td></tr>
                                     </tbody>
                                 </table>

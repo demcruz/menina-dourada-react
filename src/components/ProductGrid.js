@@ -1,138 +1,58 @@
 // src/components/ProductGrid.js
-import React, { useState } from 'react';
-import LoadingSpinner from './LoadingSpinner';
-import biquiniLaranja from '../img/1swimswuit.png';
-import biquinipreto from '../img/2.png';
-import biquinivermelho from '../img/3.png';
+import { useState, useEffect } from 'react';
+import LoadingSpinner from './LoadingSpinner'; // Caminho para o átomo LoadingSpinner
+import { getProducts as fetchProductsFromApi } from '../api/axiosInstance'; // <--- IMPORTAÇÃO DO SEU ARQUIVO axiosInstance.js
 
-
-
-
-
-// Essas constantes devem estar no topo do arquivo, fora de qualquer função ou componente.
-const PRODUCTS_PER_LOAD = 6; // Quantos produtos carregar por vez
-
-const ALL_PRODUCTS_DATA = [
-     {
-        id: '1',
-        name: 'Biquíni Sol Dourado',
-        price: 189.90,
-        // AGORA COM VARIAÇÕES DE IMAGEM
-        images: [ // Use um novo campo 'images' para as variações
-            { src: biquinipreto, alt: 'Biquíni Laranja', colorName: 'Laranja' },
-            { src: biquinivermelho, alt: 'Biquíni Roxo', colorName: 'Roxo' },
-        ],
-        // A imagem principal do card pode ser a primeira da lista de variações
-        image: biquinivermelho,
-        description: 'Biquíni de alta qualidade com tecido resistente ao cloro e sal, forro interno e alças ajustáveis. Ideal para dias de praia ou piscina.',
-        category: 'Biquínis',
-        sizes: ['PP', 'P', 'M', 'G', 'GG'],
-        colors: ['black', 'purple'] // Cores para exibição (pode vir do .images)
-    },
-    {
-        id: '2',
-        name: 'Biquíni Vermelho Paixão',
-        price: 169.90,
-        image: biquinivermelho,
-        description: 'Um clássico atemporal que exala paixão e estilo. Perfeito para qualquer ocasião na praia.',
-        category: 'Biquínis',
-        sizes: ['P', 'M', 'G'],
-        colors: ['#DC2626']
-    },
-    {
-        id: '3',
-        name: 'Biquíni Tropical',
-        price: 199.90,
-        image: biquinipreto,
-        description: 'Estampa vibrante inspirada na flora tropical brasileira. Conforto e beleza para seus dias de sol.',
-        category: 'Biquínis',
-        sizes: ['P', 'M', 'G'],
-        colors: ['#000000']
-    },
-    {
-        id: '4',
-        name: 'Maiô Elegance',
-        price: 249.90,
-        image: 'https://images.unsplash.com/photo-1594916895315-e21e7d9b4009?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        description: 'Elegância e sofisticação em um maiô que modela o corpo. Ideal para quem busca um visual clássico.',
-        category: 'Maiôs',
-        sizes: ['M', 'G', 'GG'],
-        colors: ['black']
-    },
-    {
-        id: '5',
-        name: 'Biquíni Pureza',
-        price: 179.90,
-        image: 'https://images.unsplash.com/photo-1621376884615-5a7a7a13d2a7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        description: 'Simplicidade e beleza em um biquíni branco que realça seu bronzeado.',
-        category: 'Biquínis',
-        sizes: ['PP', 'P', 'M', 'G'],
-        colors: ['white']
-    },
-    {
-        id: '6',
-        name: 'Canga Tropical',
-        price: 129.90,
-        image: 'https://images.unsplash.com/photo-1588665793441-2b10a2f9b87b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        description: 'Canga leve e versátil com estampa tropical, perfeita para complementar seu look praia.',
-        category: 'Acessórios',
-        sizes: ['Único'],
-        colors: ['#000000']
-    },
-    {
-        id: '7',
-        name: 'Biquíni Verão Vibrante',
-        price: 199.90,
-        image: 'https://images.unsplash.com/photo-1616216447660-f463372c3d9a?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        description: 'Cores vibrantes para um verão inesquecível. Conforto e estilo.',
-        category: 'Biquínis',
-        sizes: ['P', 'M'],
-        colors: ['orange']
-    },
-    {
-        id: '8',
-        name: 'Maiô Oceano',
-        price: 259.90,
-        image: 'biquiniLaranja',
-        description: 'Maiô com estampa de oceano, ideal para um mergulho elegante.',
-        category: 'Maiôs',
-        sizes: ['M', 'G'],
-        colors: ['blue']
-    },
-    {
-        id: '9',
-        name: 'Saída de Praia Aurora',
-        price: 149.90,
-        image: 'https://images.unsplash.com/photo-1588665793441-2b10a2f9b87b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        description: 'Saída de praia leve e transparente, para um look sofisticado pós-praia.',
-        category: 'Acessórios',
-        sizes: ['Único'],
-        colors: ['pink']
-    }
-];
+const PRODUCTS_PER_PAGE = 6; // Mantém o tamanho da página para a requisição da API
 
 const ProductGrid = ({ addToCart, openProductModal }) => {
-    const [productsToShow, setProductsToShow] = useState(PRODUCTS_PER_LOAD);
-    const [loadingMore, setLoadingMore] = useState(false);
+    const [products, setProducts] = useState([]); // Agora 'products' virá da API
+    const [loading, setLoading] = useState(true); // Começa como true para mostrar loading inicial
+    const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(0); // Página atual (0-indexed para a API Java)
+    const [totalPages, setTotalPages] = useState(0); // Total de páginas da API
 
-    const displayedProducts = ALL_PRODUCTS_DATA.slice(0, productsToShow);
-    const hasMoreProducts = productsToShow < ALL_PRODUCTS_DATA.length;
+    // --- Efeito para buscar produtos da API ---
+    useEffect(() => {
+        const loadProducts = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await fetchProductsFromApi(currentPage, PRODUCTS_PER_PAGE);
+                // Sua API Java retorna um objeto com 'content' (array de produtos) e 'totalPages'
+                setProducts(response.content);
+                setTotalPages(response.totalPages);
+            } catch (err) {
+                setError(err.message || 'Erro ao carregar produtos do servidor.');
+                console.error('Erro ao buscar produtos:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const handleLoadMore = () => {
-        setLoadingMore(true);
-        // Simula um delay de carregamento (como se estivesse buscando da API)
-        setTimeout(() => {
-            setProductsToShow(prev => prev + PRODUCTS_PER_LOAD);
-            setLoadingMore(false);
-        }, 800); // 800ms de delay
+        loadProducts();
+    }, [currentPage]); // Dependência: recarrega produtos quando a página muda
+
+    // --- Lógica de Paginação ---
+    const handlePageChange = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+        }
     };
+
+    const getPrecoPrincipal = (produto) => {
+        if (!produto.variacoes || produto.variacoes.length === 0) return null;
+        return produto.variacoes[0].preco; // ou alguma lógica para pegar o principal
+    };
+
+    // Verifica se há mais produtos para carregar (baseado no totalPages da API)
 
     return (
         <section id="shop" className="product-grid-section">
             <div className="container px-4">
                 <h2 className="section-title">Nossa Loja</h2>
 
-                {/* Filters */}
+                {/* Filters (mantidos como estão, a funcionalidade de filtro viria depois, interagindo com a API) */}
                 <div className="product-filters md:flex-row">
                     <div className="filter-group md:mb-0">
                         <span className="filter-label">Filtrar por:</span>
@@ -168,7 +88,7 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                         </div>
                     </div>
 
-                    <div> {/* Div para o grupo de ordenar por */}
+                    <div>
                         <span className="filter-label">Ordenar por:</span>
                         <div className="filter-select-wrapper">
                             <select className="filter-select">
@@ -181,49 +101,68 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                     </div>
                 </div>
 
-                {/* Products Grid */}
-                <div className="products-grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {displayedProducts.map(product => (
-                        <div
-                            key={product.id}
-                            className="product-card"
-                            onClick={() => openProductModal(product)}
-                        >
-                            <div className="product-image-wrapper">
-                                <img src={product.image} alt={product.name} className="product-image" />
-                            </div>
-                            <div className="product-info">
-                                <h3 className="product-name">{product.name}</h3>
-                                <p className="product-category">{product.category}</p>
-                                <div className="product-price-add">
-                                    <span className="product-price">R$ {product.price.toFixed(2).replace('.', ',')}</span>
-                                    <button
-                                        className="add-to-cart-btn"
-                                        onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                                    >
-                                        Adicionar
-                                    </button>
+                {/* Exibição de Loading, Erro ou Produtos */}
+                {loading ? (
+                    <LoadingSpinner />
+                ) : error ? (
+                    <p className="error-message text-center">{error}</p>
+                ) : products.length === 0 ? (
+                    <p className="text-center">Nenhum produto encontrado.</p>
+                ) : (
+                    <div className="products-grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {products.map(product => (
+                            <div
+                                key={product.id} // Use product.id vindo da API
+                                className="product-card"
+                                onClick={() => openProductModal(product)}
+                            >
+                                <div className="product-image-wrapper">
+                                    {/* Use product.imageUrl ou product.image da API. Ajuste conforme o nome do campo da sua API */}
+                                    <img
+                                        src={product.variacoes?.[0]?.imagens?.[0]?.url || '/placeholder.jpg'}
+                                        alt={product.variacoes?.[0]?.imagens?.[0]?.altText || product.nome}
+                                        className="product-image"
+                                    />                                </div>
+                                <div className="product-info">
+                                    <h3 className="product-name">{product.nome || product.name}</h3>
+                                    <p className="product-category">{product.categoria || product.category}</p>
+                                    <div className="product-price-add">
+                                        <span className="product-price">
+                                            R$ {getPrecoPrincipal(product)?.toFixed(2).replace('.', ',') ?? '—'}
+                                        </span>
+                                        <button
+                                            className="add-to-cart-btn"
+                                            onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                                        >
+                                            Adicionar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
-                {/* Loading Spinner e Botão "Ver Mais Produtos" */}
-                <div className="view-more-products-btn-container">
-                    {loadingMore ? (
-                        <LoadingSpinner />
-                    ) : (
-                        hasMoreProducts && (
-                            <button
-                                className="view-more-products-btn"
-                                onClick={handleLoadMore}
-                            >
-                                Ver mais produtos
-                            </button>
-                        )
-                    )}
-                </div>
+                {/* Controles de Paginação (substitui "Ver mais produtos") */}
+                {totalPages > 1 && (
+                    <div className="pagination-controls view-more-products-btn-container"> {/* Reutiliza classe de container */}
+                        <button
+                            className="view-more-products-btn" // Reutiliza estilo de botão
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 0 || loading}
+                        >
+                            Anterior
+                        </button>
+                        <span>Página {currentPage + 1} de {totalPages}</span>
+                        <button
+                            className="view-more-products-btn" // Reutiliza estilo de botão
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages - 1 || loading}
+                        >
+                            Próxima
+                        </button>
+                    </div>
+                )}
             </div>
         </section>
     );
