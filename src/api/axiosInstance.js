@@ -1,24 +1,15 @@
 import axios from 'axios';
 
-// Use a variável de ambiente para a URL base da API.
-// Isso garante que a URL mude automaticamente entre desenvolvimento (localhost) e produção (servidor).
-// Se você usa Vite: import.meta.env.VITE_API_BASE_URL
-// Se você usa Create React App: process.env.REACT_APP_API_BASE_URL
-// Certifique-se de que no seu arquivo .env você tem:
-// VITE_API_BASE_URL=http://18.228.9.73:9090/api
-// OU
+
 const API_BASE_URL_ENV= 'http://18.228.9.73:9090/api'
-//const  = import.meta.env.VITE_API_BASE_URL;
 console.log(import.meta.env)
 
-// Crie uma instância do Axios com a URL base configurada.
-// Isso evita repetir a URL em cada requisição e permite configurar cabeçalhos padrão, timeouts, etc.
+
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL_ENV, // A URL base será 'http://18.228.9.73:9090/api'
-  timeout: 10000, // Tempo limite de 10 segundos
+  baseURL: API_BASE_URL_ENV, 
+  timeout: 10000, 
   headers: {
     'Content-Type': 'application/json',
-    // Adicione outros cabeçalhos padrão aqui, como Authorization, se necessário
   },
 });
 
