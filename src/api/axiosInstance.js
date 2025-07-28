@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+//HML
+const API_BASE_URL_ENV = '/api';
 
-// const API_BASE_URL_ENV = '/api';
-const API_BASE_URL_ENV = 'http://localhost:9090/api/'
+//LOCAL
+//const API_BASE_URL_ENV = 'http://localhost:9090/api/'
 console.log(import.meta.env)
 
 
