@@ -1,0 +1,320 @@
+/* src/components/ProductModal.css */
+
+/* Estilos para o overlay do modal (fundo escuro) */
+#product-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Garante que o modal fique acima de outros elementos */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    /* REMOVIDO: overflow-y: auto; do overlay, para que o scroll seja apenas no conteúdo */
+}
+
+#product-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilos para o wrapper do conteúdo do modal */
+.modal-content-wrapper {
+    background-color: white;
+    border-radius: 12px; /* Cantos mais suaves */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Sombra mais proeminente */
+    width: 90%; /* Largura padrão do modal */
+    max-width: 1000px; /* Largura máxima para telas grandes */
+    position: relative;
+    padding: 1.5rem; /* <<<< REDUZIDO O PADDING INTERNO para ganhar espaço */
+    box-sizing: border-box;
+    max-height: 95vh; /* <<<< AUMENTADO A ALTURA MÁXIMA para o modal ocupar mais da tela */
+    overflow-y: auto; /* Adiciona scroll interno SE o conteúdo exceder (apenas aqui) */
+    transform: translateY(20px); /* Pequeno efeito de entrada */
+    transition: transform 0.3s ease;
+}
+
+#product-modal.is-open .modal-content-wrapper {
+    transform: translateY(0); /* Reseta o efeito de entrada quando aberto */
+}
+
+/* Botão de fechar do modal */
+.modal-close-button {
+    position: absolute;
+    top: 10px; /* <<<< AJUSTADO A POSIÇÃO para mais próximo da borda */
+    right: 10px; /* <<<< AJUSTADO A POSIÇÃO */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-close-button:hover {
+    color: #333;
+}
+
+/* Layout principal do produto dentro do modal (imagem e detalhes) */
+.modal-product-layout {
+    display: flex;
+    flex-direction: column; /* Coluna por padrão em telas pequenas */
+    gap: 1.5rem; /* <<<< REDUZIDO O ESPAÇAMENTO ENTRE AS SEÇÕES */
+}
+
+@media (min-width: 768px) { /* md:flex-row */
+    .modal-product-layout {
+        flex-direction: row; /* Linha em telas médias e maiores */
+    }
+    .modal-product-image-area {
+        flex: 1; /* Ocupa metade do espaço */
+        max-width: 50%; /* md:w-1/2 */
+    }
+    .modal-product-details-area {
+        flex: 1; /* Ocupa metade do espaço */
+        max-width: 50%; /* md:w-1/2 */
+        padding-left: 1.5rem; /* <<<< AJUSTADO ESPAÇAMENTO à esquerda */
+    }
+}
+
+/* Área da imagem principal */
+.modal-product-image-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-main-image-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Proporção 1:1 para a imagem principal (quadrado) */
+    overflow: hidden;
+    cursor: zoom-in;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-main-image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.modal-main-image-container img.zoomed {
+    transform: scale(2); /* Efeito de zoom */
+    cursor: zoom-out;
+}
+
+.modal-zoom-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    pointer-events: none; /* Garante que o clique passe para a imagem */
+}
+
+/* Grid de miniaturas */
+.modal-thumbnail-grid {
+    display: flex;
+    gap: 0.5rem; /* <<<< REDUZIDO O ESPAÇAMENTO ENTRE MINIATURAS */
+    margin-top: 0.75rem; /* <<<< REDUZIDO A MARGEM SUPERIOR */
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.modal-thumbnail-item {
+    width: 55px; /* <<<< LIGEIRAMENTE REDUZIDO O TAMANHO DA MINIATURA */
+    height: 55px; /* <<<< LIGEIRAMENTE REDUZIDO O TAMANHO DA MINIATURA */
+    overflow: hidden;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.modal-thumbnail-item:hover {
+    transform: translateY(-3px);
+}
+
+.modal-thumbnail-item.selected {
+    border-color: #007bff; /* Borda azul para a miniatura selecionada */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.modal-thumbnail-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Área de detalhes do produto */
+/* REMOVIDO: padding-left: 1rem; daqui, pois foi movido para .modal-product-details-area no media query */
+
+.modal-product-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.modal-product-details-area p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 1rem; /* <<<< REDUZIDO ESPAÇAMENTO ABAIXO DO PREÇO */
+}
+
+/* Títulos de seção (Tamanho, Quantidade, Descrição) */
+.modal-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.5rem; /* <<<< REDUZIDO ESPAÇAMENTO ABAIXO DO TÍTULO DE SEÇÃO */
+    border-bottom: 1px solid #eee; /* Separador sutil */
+    padding-bottom: 0.4rem; /* <<<< REDUZIDO PADDING ABAIXO DO TÍTULO DE SEÇÃO */
+}
+
+/* Grid de variações (Tamanho e Cor) */
+.modal-variation-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem; /* <<<< REDUZIDO ESPAÇAMENTO ENTRE BOTÕES DE VARIAÇÃO */
+    margin-bottom: 1rem; /* <<<< REDUZIDO ESPAÇAMENTO ABAIXO DO GRID */
+}
+
+.modal-variation-button {
+    background-color: #f0f0f0;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.5rem 1rem; /* <<<< REDUZIDO PADDING DO BOTÃO DE VARIAÇÃO */
+    font-size: 0.9rem; /* <<<< LIGEIRAMENTE REDUZIDO O TAMANHO DA FONTE */
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.modal-variation-button:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+.modal-variation-button.selected {
+    background-color: #007bff; /* Azul para selecionado */
+    color: white;
+    border-color: #007bff;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+}
+
+/* Controle de quantidade */
+.modal-quantity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: fit-content; /* Ajusta a largura ao conteúdo */
+    margin-bottom: 1rem; /* <<<< REDUZIDO ESPAÇAMENTO ABAIXO DO CONTROLE DE QUANTIDADE */
+}
+
+.modal-quantity-button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 0.6rem 0.8rem; /* <<<< REDUZIDO PADDING DO BOTÃO DE QUANTIDADE */
+    font-size: 1rem; /* <<<< LIGEIRAMENTE REDUZIDO O TAMANHO DA FONTE */
+    color: #555;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.modal-quantity-button:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-quantity-input {
+    width: 50px; /* <<<< LIGEIRAMENTE REDUZIDO A LARGURA DO INPUT DE QUANTIDADE */
+    text-align: center;
+    border: none;
+    font-size: 1rem;
+    color: #333;
+    -moz-appearance: textfield; /* Remove setas em Firefox */
+}
+
+.modal-quantity-input::-webkit-outer-spin-button,
+.modal-quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Remove setas em Chrome/Safari */
+    margin: 0;
+}
+
+/* Botão Adicionar ao Carrinho */
+.modal-add-to-cart-button {
+    background-color: #ffc107; /* Amarelo vibrante */
+    color: #333;
+    padding: 0.8rem 1.5rem; /* <<<< REDUZIDO PADDING DO BOTÃO ADD AO CARRINHO */
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem; /* <<<< LIGEIRAMENTE REDUZIDO O TAMANHO DA FONTE */
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%; /* Ocupa toda a largura disponível */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+    margin-bottom: 1.5rem; /* <<<< REDUZIDO ESPAÇAMENTO ABAIXO DO BOTÃO */
+}
+
+.modal-add-to-cart-button:hover {
+    background-color: #e0a800; /* Amarelo mais escuro no hover */
+    transform: translateY(-3px);
+}
+
+/* Descrição do produto */
+.modal-product-description {
+    font-size: 0.95rem; /* <<<< LIGEIRAMENTE REDUZIDO O TAMANHO DA FONTE */
+    color: #444;
+    line-height: 1.5; /* <<<< AJUSTADO ALTURA DA LINHA */
+    margin-bottom: 1rem; /* <<<< REDUZIDO ESPAÇAMENTO ABAIXO DA DESCRIÇÃO */
+}
+
+/* Tabela de medidas */
+.modal-table-container {
+    overflow-x: auto; /* Permite scroll horizontal em telas pequenas */
+    margin-top: 0.75rem; /* <<<< REDUZIDO MARGEM SUPERIOR */
+}
+
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem; /* <<<< LIGEIRAMENTE REDUZIDO O TAMANHO DA FONTE */
+    color: #555;
+}
+
+.modal-table th, .modal-table td {
+    border: 1px solid #eee;
+    padding: 0.6rem; /* <<<< REDUZIDO PADDING DA TABELA */
+    text-align: center;
+}
+
+.modal-table thead th {
+    background-color: #f5f5f5; /* Cor de fundo para o cabeçalho da tabela */
+    font-weight: 600;
+    color: #333;
+}
+
+.modal-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Fundo zebrado para linhas alternadas */
+}

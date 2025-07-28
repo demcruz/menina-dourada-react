@@ -1,16 +1,16 @@
 
 import { useState, useEffect } from 'react';
-import LoadingSpinner from './LoadingSpinner'; 
-import { getProducts as fetchProductsFromApi } from '../api/axiosInstance'; 
+import LoadingSpinner from './LoadingSpinner';
+import { getProducts as fetchProductsFromApi } from '../api/axiosInstance';
 
-const PRODUCTS_PER_PAGE = 6; 
+const PRODUCTS_PER_PAGE = 6;
 
 const ProductGrid = ({ addToCart, openProductModal }) => {
-    const [products, setProducts] = useState([]); 
-    const [loading, setLoading] = useState(true); 
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(0); 
-    const [totalPages, setTotalPages] = useState(0); 
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -18,7 +18,7 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
             setError(null);
             try {
                 const response = await fetchProductsFromApi(currentPage, PRODUCTS_PER_PAGE);
-                
+
                 setProducts(response.content);
                 setTotalPages(response.totalPages);
             } catch (err) {
@@ -30,9 +30,9 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
         };
 
         loadProducts();
-    }, [currentPage]); 
+    }, [currentPage]);
 
-    
+
     const handlePageChange = (newPage) => {
         if (newPage >= 0 && newPage < totalPages) {
             setCurrentPage(newPage);
@@ -41,17 +41,17 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
 
     const getPrecoPrincipal = (produto) => {
         if (!produto.variacoes || produto.variacoes.length === 0) return null;
-        return produto.variacoes[0].preco; 
+        return produto.variacoes[0].preco;
     };
 
-    
+
 
     return (
         <section id="shop" className="product-grid-section">
             <div className="container px-4">
                 <h2 className="section-title">Nossa Loja</h2>
 
-                
+
                 <div className="product-filters md:flex-row">
                     <div className="filter-group md:mb-0">
                         <span className="filter-label">Filtrar por:</span>
@@ -100,7 +100,7 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                     </div>
                 </div>
 
-               
+
                 {loading ? (
                     <LoadingSpinner />
                 ) : error ? (
@@ -111,12 +111,12 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                     <div className="products-grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {products.map(product => (
                             <div
-                                key={product.id} 
+                                key={product.id}
                                 className="product-card"
                                 onClick={() => openProductModal(product)}
                             >
                                 <div className="product-image-wrapper">
-                                    
+
                                     <img
                                         src={product.variacoes?.[0]?.imagens?.[0]?.url || '/placeholder.jpg'}
                                         alt={product.variacoes?.[0]?.imagens?.[0]?.altText || product.nome}
@@ -131,7 +131,15 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                                         </span>
                                         <button
                                             className="add-to-cart-btn"
-                                            onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                // Pegue o preço principal da variação (ou do produto)
+                                                const preco = product.variacoes?.[0]?.preco ?? product.price ?? 0;
+                                                addToCart({
+                                                    ...product,
+                                                    price: preco // <-- GARANTA QUE ESTE CAMPO VAI JUNTO!
+                                                });
+                                            }}
                                         >
                                             Adicionar
                                         </button>
@@ -142,11 +150,11 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                     </div>
                 )}
 
-                
+
                 {totalPages > 1 && (
-                    <div className="pagination-controls view-more-products-btn-container"> 
+                    <div className="pagination-controls view-more-products-btn-container">
                         <button
-                            className="view-more-products-btn" 
+                            className="view-more-products-btn"
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 0 || loading}
                         >
@@ -154,7 +162,7 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                         </button>
                         <span>Página {currentPage + 1} de {totalPages}</span>
                         <button
-                            className="view-more-products-btn" 
+                            className="view-more-products-btn"
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages - 1 || loading}
                         >

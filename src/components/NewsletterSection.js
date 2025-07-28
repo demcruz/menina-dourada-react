@@ -1,31 +1,16 @@
 import React from 'react';
+// CORREÇÃO AQUI: O caminho agora é './NewsletterForm/NewsletterForm'
+import NewsletterForm from './NewsletterForm'; // <<<< Caminho corrigido
 
 const NewsletterSection = () => {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        console.log('Newsletter subscribed!');
-        alert('Obrigado por assinar nossa newsletter!');
-        e.target.reset(); 
-    };
-
     return (
-        <section className="newsletter-section"> 
+        <section className="newsletter-section">
             <div className="container mx-auto px-4">
-                <h2 className="newsletter-title">Receba ofertas exclusivas</h2> 
-                <p className="newsletter-subtitle">Assine nossa newsletter e seja a primeira a saber sobre lançamentos, promoções e novidades.</p> 
+                
 
-                <form className="newsletter-form" onSubmit={handleSubmit}> 
-                    <input
-                        type="email"
-                        placeholder="Seu melhor e-mail"
-                        className="newsletter-input" 
-                        required
-                    />
-                    <button type="submit" className="newsletter-button"> 
-                        Assinar
-                    </button>
-                </form>
+                {/* Substitui o formulário existente pelo nosso novo componente */}
+                <NewsletterForm />
+
             </div>
         </section>
     );

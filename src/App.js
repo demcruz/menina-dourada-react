@@ -1,4 +1,4 @@
-import React, { useState  } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
@@ -12,7 +12,14 @@ import FeaturedCollections from './components/FeaturedCollections';
 import NewsletterSection from './components/NewsletterSection';
 import Footer from './components/Footer';
 import ProductModal from './components/ProductModal';
-import CheckoutPage from './pages/CheckoutPage'; 
+import CheckoutPage from './pages/CheckoutPage';
+
+
+
+// <<<< IMPORTAR AS NOVAS PÁGINAS DE STATUS DO PEDIDO >>>>
+import OrderSuccessPage from './pages/OrderSuccessPage';
+import OrderPendingPage from './pages/OrderPendingPage';
+import OrderFailurePage from './pages/OrderFailurePage';
 
 
 function App() {
@@ -25,7 +32,7 @@ function App() {
 
   const addToCart = (productToAdd, quantity = 1, selectedSize = '', selectedColor = '') => {
     setCart(prevCart => {
-     
+
       const existingItem = prevCart.find(item =>
         item.id === productToAdd.id && item.selectedSize === selectedSize && item.selectedColor === selectedColor
       );
@@ -39,26 +46,26 @@ function App() {
         return [...prevCart, { ...productToAdd, quantity: quantity, selectedSize, selectedColor }];
       }
     });
-    
+
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (itemId) => { 
+  const removeFromCart = (itemId) => {
     setCart(prevCart => prevCart.filter(item => item.id !== itemId));
   };
 
   const updateCartItemQuantity = (itemId, newQuantity) => {
     setCart(prevCart => {
-        if (newQuantity <= 0) {
-            return prevCart.filter(item => item.id !== itemId);
-        }
-        return prevCart.map(item =>
-            item.id === itemId ? { ...item, quantity: newQuantity } : item
-        );
+      if (newQuantity <= 0) {
+        return prevCart.filter(item => item.id !== itemId);
+      }
+      return prevCart.map(item =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+      );
     });
   };
 
-  
+
   const emptyCart = () => setCart([]);
 
   const openProductModal = (product) => {
@@ -82,20 +89,20 @@ function App() {
           <Route path="/" element={
             <>
               <HeroSection />
-              <FeaturedCollections />
+              {/* <FeaturedCollections /> */}
               <ProductGrid addToCart={addToCart} openProductModal={openProductModal} />
               <AboutSection />
-              <ContactSection />
               <NewsletterSection />
-              <TestimonialsSection />
+              <ContactSection />
+              {/* <TestimonialsSection /> */}
             </>
           } />
-          
+
           <Route path="/checkout" element={
             <CheckoutPage
               cart={cart}
               subtotal={currentCartSubtotal}
-              emptyCart={emptyCart} 
+              emptyCart={emptyCart}
             />
           } />
 
@@ -103,9 +110,14 @@ function App() {
           <Route path="/about" element={<AboutSection />} />
           <Route path="/contact" element={<ContactSection />} />
           <Route path="*" element={<div>404: Not Found</div>} />
-        </Routes>
+          <Route path="/checkout/success" element={<OrderSuccessPage />} />
+          <Route path="/checkout/pending" element={<OrderPendingPage />} />
+          <Route path="/checkout/rejected" element={<OrderFailurePage />} />
 
+        </Routes>
         <Footer />
+
+
 
         <CartSidebar
           isOpen={isCartOpen}
@@ -113,8 +125,8 @@ function App() {
           cart={cart}
           removeFromCart={removeFromCart}
           updateCartItemQuantity={updateCartItemQuantity}
-        
-          onCheckoutClick={() => { toggleCart();  }}
+
+          onCheckoutClick={() => { toggleCart(); }}
         />
 
         {selectedProduct && (

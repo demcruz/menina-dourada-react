@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 
-const API_BASE_URL_ENV = '/api';
+// const API_BASE_URL_ENV = '/api';
+const API_BASE_URL_ENV = 'http://localhost:9090/api/'
 console.log(import.meta.env)
 
 
@@ -12,6 +13,17 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+export const createPaymentPreference = async (paymentData) => {
+  try {
+    const response = await axiosInstance.post('/payments/create-preference', paymentData);
+    return response.data; // Retorna a resposta da preferência (PreferenceResponseDTO)
+  } catch (error) {
+    console.error('Erro ao criar preferência de pagamento:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
 
 // Função para buscar todos os produtos com paginação
 export const getProducts = async (page = 0, size = 10) => {
@@ -24,6 +36,17 @@ export const getProducts = async (page = 0, size = 10) => {
   } catch (error) {
     console.error('Erro ao buscar produtos:', error.response ? error.response.data : error.message);
     throw error;
+  }
+};
+
+// Função para inscrever um e-mail na newsletter
+export const subscribeToNewsletter = async (email) => {
+  try {
+    const response = await axiosInstance.post('/newsletter/subscribe', { email });
+    return response.data; // Retorna a resposta da API (ex: { message: "E-mail inscrito com sucesso!" })
+  } catch (error) {
+    console.error('Erro ao inscrever e-mail na newsletter:', error.response?.data || error.message);
+    throw error; // Propaga o erro para ser tratado pelo componente que chamou
   }
 };
 
