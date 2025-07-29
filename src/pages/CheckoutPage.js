@@ -14,18 +14,9 @@ const CheckoutPage = ({ cart }) => {
         zipCode: ''
     });
 
-    const [paymentMethod, setPaymentMethod] = useState('creditCard');
-    const [creditCardInfo, setCreditCardInfo] = useState({
-        cardNumber: '',
-        cardHolderName: '',
-        expiryDate: '',
-        cvv: ''
-    });
-
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
-    const [paymentResult, setPaymentResult] = useState(null);
 
     // Calcula o subtotal do carrinho (usando fallback para preço da variação)
     const subtotal = cart.reduce((total, item) => {
@@ -44,17 +35,11 @@ const CheckoutPage = ({ cart }) => {
         setDeliveryInfo(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleCreditCardInfoChange = (e) => {
-        const { name, value } = e.target;
-        setCreditCardInfo(prev => ({ ...prev, [name]: value }));
-    };
-
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
         setSuccessMessage(null);
-        setPaymentResult(null);
 
         if (!Object.values(deliveryInfo).every(field => field.trim() !== '')) {
             setError('Por favor, preencha todas as informações de entrega.');
@@ -80,12 +65,12 @@ const CheckoutPage = ({ cart }) => {
 
         try {
             const response = await createPaymentPreference(paymentRequestDTO);
-            setSuccessMessage('Pedido e Preferência de Pagamento criados com sucesso!');
-            setPaymentResult(response);
-            window.location.href = response.initPoint;
+            setSuccessMessage('Pedido criado! Você será redirecionado para o Mercado Pago para finalizar o pagamento.');
+            setTimeout(() => {
+                window.location.href = response.initPoint;
+            }, 2000); // Dá tempo para o usuário ler a mensagem
         } catch (err) {
-            console.error("Erro ao finalizar compra:", err.response?.data || err.message || err);
-            setError(err.response?.data?.message || 'Falha ao processar o pagamento. Tente novamente.');
+            setError('Falha ao processar o pagamento. Tente novamente.');
         } finally {
             setIsLoading(false);
         }
@@ -126,85 +111,51 @@ const CheckoutPage = ({ cart }) => {
                 </div>
 
                 <div className="checkout-section-right-column flex-1">
-                    {/* 2. Forma de Pagamento */}
+                    {/* Mensagem amigável sobre o redirecionamento */}
                     <div className="checkout-section">
-                        <h2 className="checkout-section-heading">2. Forma de Pagamento</h2>
-                        <div className="payment-options">
-                            <label className="payment-option-card">
-                                <input type="radio" name="paymentMethod" value="creditCard" checked={paymentMethod === 'creditCard'} onChange={(e) => setPaymentMethod(e.target.value)} />
-                                Cartão de Crédito
-                            </label>
-                            <label className="payment-option-card">
-                                <input type="radio" name="paymentMethod" value="boleto" checked={paymentMethod === 'boleto'} onChange={(e) => setPaymentMethod(e.target.value)} />
-                                Boleto Bancário
-                            </label>
-                            <label className="payment-option-card">
-                                <input type="radio" name="paymentMethod" value="pix" checked={paymentMethod === 'pix'} onChange={(e) => setPaymentMethod(e.target.value)} />
-                                Pix
-                            </label>
+                        <div className="payment-redirect-message" style={{ background: '#fffbe6', border: '1px solid #ffe58f', padding: 16, borderRadius: 8, marginBottom: 24 }}>
+                            <strong>Atenção:</strong> Após confirmar o pedido, você será redirecionado para o Mercado Pago para finalizar o pagamento com total segurança.
                         </div>
-
-                        {paymentMethod === 'creditCard' && (
-                            <div className="credit-card-form-fields">
-                                <label className="form-field-label">Número do Cartão</label>
-                                <input type="text" name="cardNumber" value={creditCardInfo.cardNumber} onChange={handleCreditCardInfoChange} required={paymentMethod === 'creditCard'} />
-
-                                <label className="form-field-label">Nome no Cartão</label>
-                                <input type="text" name="cardHolderName" value={creditCardInfo.cardHolderName} onChange={handleCreditCardInfoChange} required={paymentMethod === 'creditCard'} />
-
-                                <div className="flex gap-4">
-                                    <div className="flex-1">
-                                        <label className="form-field-label">Validade (MM/AA)</label>
-                                        <input type="text" name="expiryDate" value={creditCardInfo.expiryDate} onChange={handleCreditCardInfoChange} placeholder="MM/AA" required={paymentMethod === 'creditCard'} />
-                                    </div>
-                                    <div className="flex-1">
-                                        <label className="form-field-label">CVV</label>
-                                        <input type="text" name="cvv" value={creditCardInfo.cvv} onChange={handleCreditCardInfoChange} required={paymentMethod === 'creditCard'} />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
                     </div>
 
                     {/* 3. Resumo do Pedido */}
                     <div className="checkout-section">
                         <h2 className="checkout-section-heading">3. Resumo do Pedido</h2>
                         <div className="summary-items">
-    {cart.map(item => {
-        const price = parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0;
-        // Busca imagem do produto, da variação ou placeholder
-        const imageUrl =
-            item.image ||
-            item.imagens?.[0]?.url ||
-            item.variacoes?.[0]?.imagens?.[0]?.url ||
-            'https://via.placeholder.com/64x64?text=Sem+Imagem';
+                            {cart.map(item => {
+                                const price = parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0;
+                                const imageUrl =
+                                    item.image ||
+                                    item.imagens?.[0]?.url ||
+                                    item.variacoes?.[0]?.imagens?.[0]?.url ||
+                                    'https://via.placeholder.com/64x64?text=Sem+Imagem';
 
-        return (
-            <div key={item.cartItemId || item.id} className="summary-item" style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
-                <img
-                    src={imageUrl}
-                    alt={item.name}
-                    className="summary-item-image"
-                    style={{
-                        width: 48,
-                        height: 48,
-                        objectFit: 'cover',
-                        borderRadius: 8,
-                        marginRight: 12,
-                        border: '1px solid #eee'
-                    }}
-                />
-                <div className="summary-item-details" style={{ flex: 1 }}>
-                    <span className="summary-item-name" style={{ fontWeight: 500 }}>{item.name}</span>
-                    <span className="summary-item-qty" style={{ color: '#bfa14a', marginLeft: 8 }}>Qtd: {item.quantity}</span>
-                </div>
-                <span className="summary-item-price" style={{ fontWeight: 600 }}>
-                    R$ {formatCurrency(price * item.quantity)}
-                </span>
-            </div>
-        );
-    })}
-</div>
+                                return (
+                                    <div key={item.cartItemId || item.id} className="summary-item" style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                                        <img
+                                            src={imageUrl}
+                                            alt={item.name}
+                                            className="summary-item-image"
+                                            style={{
+                                                width: 48,
+                                                height: 48,
+                                                objectFit: 'cover',
+                                                borderRadius: 8,
+                                                marginRight: 12,
+                                                border: '1px solid #eee'
+                                            }}
+                                        />
+                                        <div className="summary-item-details" style={{ flex: 1 }}>
+                                            <span className="summary-item-name" style={{ fontWeight: 500 }}>{item.name}</span>
+                                            <span className="summary-item-qty" style={{ color: '#bfa14a', marginLeft: 8 }}>Qtd: {item.quantity}</span>
+                                        </div>
+                                        <span className="summary-item-price" style={{ fontWeight: 600 }}>
+                                            R$ {formatCurrency(price * item.quantity)}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
                         <div className="summary-totals">
                             <div className="summary-total-row">
                                 <span>Subtotal</span>
@@ -227,14 +178,6 @@ const CheckoutPage = ({ cart }) => {
 
                     {successMessage && <p className="success-message">{successMessage}</p>}
                     {error && <p className="error-message">{error}</p>}
-
-                    {paymentResult && (
-                        <div className="payment-result-area">
-                            <h3 className="modal-section-title">Detalhes do Pagamento</h3>
-                            {/* ...exibição dos detalhes do pagamento... */}
-                            <button onClick={() => setPaymentResult(null)} className="clear-payment-result-button">Limpar Resultado</button>
-                        </div>
-                    )}
 
                     <div className="back-to-cart-link-container">
                         <Link to="/cart" className="back-to-cart-link">

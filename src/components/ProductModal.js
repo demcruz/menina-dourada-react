@@ -41,14 +41,20 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
     const altText = currentVariation?.imagens?.[selectedImageIndex]?.altText || product?.nome;
     const imagens = currentVariation?.imagens || []; // Imagens da variação selecionada
 
-    const handleAddToCart = () => {
-        if (!currentVariation) {
-            alert('Por favor, selecione uma variação do produto.');
-            return;
-        }
-        addToCart(product, quantity, currentVariation.tamanho, currentVariation.cor);
-        onClose();
+   const handleAddToCart = () => {
+    if (!currentVariation) {
+        alert('Por favor, selecione uma variação do produto.');
+        return;
+    }
+
+    const productWithPrice = {
+        ...product,
+        price: currentVariation.preco, // <- garante que o preço é incluído
     };
+
+    addToCart(productWithPrice, quantity, currentVariation.tamanho, currentVariation.cor);
+    onClose();
+};
 
     const handleOverlayClick = (e) => {
         if (e.target.id === 'product-modal') {

@@ -1,0 +1,188 @@
+.footer-uiux {
+  background: #8a7a4b;
+  color: #fffbe6;
+  padding: 48px 0 0 0;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.footer-social a,
+.footer-payment-icons i {
+    font-size: 2rem;
+    margin-right: 16px;
+    color: #ffe58f;
+    transition: color 0.2s;
+}
+.footer-social a:hover,
+.footer-payment-icons i:hover {
+    color: #fffbe6;
+}
+
+.footer-content h3 {
+    font-size: 1.2rem;
+    color: #fffbe6;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+}
+
+.footer-links a {
+    color: #fffbe6;
+    text-decoration: none;
+    margin-bottom: 8px;
+    display: block;
+    transition: color 0.2s;
+}
+.footer-links a:hover {
+    color: #ffe58f;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
+.footer-brand {
+  flex: 1 1 220px;
+}
+.footer-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fffbe6;
+}
+
+.footer-contact a {
+    color: #ffe58f;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.footer-contact a:hover {
+    color: #fffbe6;
+    text-decoration: underline;
+}
+.footer-description {
+  font-size: 1rem;
+  color: #f5e9c6;
+}
+.footer-links, .footer-contact, .footer-help, .footer-payments {
+  flex: 1 1 180px;
+  min-width: 180px;
+}
+.footer-links h3,
+.footer-contact h3,
+.footer-help h3,
+.footer-payments h3 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #ffe58f;
+  font-weight: 600;
+}
+.footer-links ul,
+.footer-help ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-links li,
+.footer-help li {
+  margin-bottom: 8px;
+}
+.footer-links a,
+.footer-help a {
+  color: #fffbe6;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover,
+.footer-help a:hover {
+  color: #ffe58f;
+}
+.footer-contact ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-contact li {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+.footer-icon {
+  margin-right: 8px;
+  color: #ffe58f;
+  font-size: 1.2em;
+}
+.footer-social {
+  margin-top: 12px;
+}
+.footer-social a {
+  color: #ffe58f;
+  font-size: 1.5em;
+  margin-right: 12px;
+  transition: color 0.2s;
+}
+.footer-social a:hover {
+  color: #fffbe6;
+}
+.footer-payments {
+  text-align: left;
+}
+.footer-payment-icons {
+  display: flex;
+  gap: 12px;
+  font-size: 2em;
+  margin-bottom: 8px;
+  color: #ffe58f;
+}
+.footer-secure {
+  font-size: 0.95em;
+  color: #fffbe6;
+}
+.footer-bottom {
+  text-align: center;
+  padding: 24px 0 12px 0;
+  font-size: 0.95em;
+  color: #f5e9c6;
+  background: #7a6a3b;
+  margin-top: 32px;
+  border-top: 1px solid #ffe58f;
+}
+
+
+@media (max-width: 900px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 32px;
+        text-align: center;
+        align-items: center;
+    }
+    .footer-brand, .footer-links, .footer-contact, .footer-help, .footer-payments {
+        min-width: unset;
+        margin-bottom: 24px;
+    }
+}
+
+
+.footer-contact li {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Permite quebra de linha se necessário */
+}
+
+.footer-contact a {
+  word-break: break-all; /* Quebra o e-mail se for muito longo */
+  margin-right: 8px;     /* Espaço entre o e-mail e o próximo item */
+}
+
+
+.footer-contact ul {
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+}

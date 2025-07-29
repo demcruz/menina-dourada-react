@@ -1631,64 +1631,6 @@ textarea:focus {
 
 
 
-.site-footer {
-    background-color: var(--dark-sand);
-    color: white;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 2rem;
-}
-
-.footer-section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.footer-paragraph {
-    font-size: 0.875rem;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.footer-list-title {
-    font-weight: 700;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-}
-
-
-.footer-link-list li {
-    margin-bottom: 0.5rem;
-}
-
-.footer-link-list li:last-child {
-    margin-bottom: 0;
-}
-
-.footer-link-list a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-link-list a:hover {
-    color: #FFD76A;
-}
-
-.footer-payment-icons {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
 .payment-icon-item {
     background-color: white;
     color: var(--dark-sand);
@@ -1702,39 +1644,6 @@ textarea:focus {
 .payment-icon-item i {
     font-size: 1.5rem;
 }
-
-.footer-copyright {
-    border-top: 1px solid var(--sand-700);
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    text-align: center;
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-
-
-
-
-
-.footer-social-icons-list {
-    display: flex;
-    margin-top: 1rem;
-}
-
-.footer-social-icons-list>a:not(:first-child) {
-    margin-left: 1rem;
-}
-
-
-
-
-@media (min-width: 768px) {
-    .footer-grid.md\:grid-cols-4 {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-}
-
 
 .checkout-page-container {
     background-color: var(--light-sand);
