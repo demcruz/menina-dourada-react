@@ -111,7 +111,7 @@ function App() {
           <Route path="/contact" element={<ContactSection />} />
           <Route path="*" element={<div>404: Not Found</div>} />
           <Route path="/checkout/success" element={<OrderSuccessPage />} />
-          <Route path="/checkout/pending" element={<OrderPendingPage />} />
+          <Route path="/checkout/failure" element={<OrderPendingPage />} />
           <Route path="/checkout/rejected" element={<OrderFailurePage />} />
 
         </Routes>
