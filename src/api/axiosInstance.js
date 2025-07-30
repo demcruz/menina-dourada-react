@@ -6,7 +6,7 @@ const API_BASE_URL_ENV = '/api';
 //LOCAL
 //const API_BASE_URL_ENV = 'http://18.228.9.73:9090/api/'
 console.log(import.meta.env)
-
+//
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL_ENV, 
