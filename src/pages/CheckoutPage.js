@@ -7,8 +7,12 @@ const CheckoutPage = ({ cart }) => {
 
     const [deliveryInfo, setDeliveryInfo] = useState({
         fullName: '',
+        email: '',
         cpf: '',
+        phone: '',         // <-- NOVO
         address: '',
+        number: '',        // <-- NOVO
+        neighborhood: '',  // <-- NOVO
         city: '',
         state: '',
         zipCode: ''
@@ -41,26 +45,37 @@ const CheckoutPage = ({ cart }) => {
         setError(null);
         setSuccessMessage(null);
 
+        // Validação dos campos obrigatórios
         if (!Object.values(deliveryInfo).every(field => field.trim() !== '')) {
             setError('Por favor, preencha todas as informações de entrega.');
             setIsLoading(false);
             return;
         }
 
-        // Monta os itens no formato esperado pelo backend
-        const orderItems = cart.map(item => ({
-            productId: item.id,
-            productName: item.name,
-            variationId: item.cartItemId,
-            quantity: item.quantity,
-            unitPrice: parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0
-        }));
-
+        // Monta o objeto conforme o PaymentRequestDTO do backend
         const paymentRequestDTO = {
-            userId: "user-123",
-            payerEmail: "cliente@teste.com",
-            totalAmount: subtotal,
-            items: orderItems
+            userId: "user-123", // ajuste conforme sua lógica de autenticação
+            payerEmail: deliveryInfo.email, // ajuste conforme sua lógica de autenticação
+            customerName: deliveryInfo.fullName,
+            customerCpf: deliveryInfo.cpf,
+            customerPhone: deliveryInfo.phone,
+            shippingAddress: {
+                street: deliveryInfo.address,
+                number: deliveryInfo.number,
+                neighborhood: deliveryInfo.neighborhood,
+                city: deliveryInfo.city,
+                state: deliveryInfo.state,
+                zipCode: deliveryInfo.zipCode
+            },
+            items: cart.map(item => ({
+                productId: item.id,
+                quantity: item.quantity,
+                unitPrice: parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0
+            })),
+            totalAmount: cart.reduce((total, item) => {
+                const price = parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0;
+                return total + (price * item.quantity);
+            }, 0)
         };
 
         try {
@@ -68,7 +83,7 @@ const CheckoutPage = ({ cart }) => {
             setSuccessMessage('Pedido criado! Você será redirecionado para o Mercado Pago para finalizar o pagamento.');
             setTimeout(() => {
                 window.location.href = response.initPoint;
-            }, 2000); // Dá tempo para o usuário ler a mensagem
+            }, 2000);
         } catch (err) {
             setError('Falha ao processar o pagamento. Tente novamente.');
         } finally {
@@ -92,14 +107,29 @@ const CheckoutPage = ({ cart }) => {
                     <div className="checkout-form-section">
                         <label className="form-field-label">Nome Completo</label>
                         <input type="text" name="fullName" value={deliveryInfo.fullName} onChange={handleDeliveryInfoChange} required />
-
+                        <label className="form-field-label">Telefone</label>
+                        <input type="text" name="phone" value={deliveryInfo.phone} onChange={handleDeliveryInfoChange} required />
+                        <label className="form-field-label">E-mail</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={deliveryInfo.email}
+                            onChange={handleDeliveryInfoChange}
+                            required
+                        />
                         <label className="form-field-label">CPF</label>
                         <input type="text" name="cpf" value={deliveryInfo.cpf} onChange={handleDeliveryInfoChange} required />
 
                         <label className="form-field-label">Endereço</label>
                         <input type="text" name="address" value={deliveryInfo.address} onChange={handleDeliveryInfoChange} required />
+                        <label className="form-field-label">Número</label>
 
+                        <input type="text" name="number" value={deliveryInfo.number} onChange={handleDeliveryInfoChange} required />
+                        <label className="form-field-label">Bairro</label>
+
+                        <input type="text" name="neighborhood" value={deliveryInfo.neighborhood} onChange={handleDeliveryInfoChange} required />
                         <label className="form-field-label">Cidade</label>
+
                         <input type="text" name="city" value={deliveryInfo.city} onChange={handleDeliveryInfoChange} required />
 
                         <label className="form-field-label">Estado</label>
@@ -107,6 +137,8 @@ const CheckoutPage = ({ cart }) => {
 
                         <label className="form-field-label">CEP</label>
                         <input type="text" name="zipCode" value={deliveryInfo.zipCode} onChange={handleDeliveryInfoChange} required />
+
+
                     </div>
                 </div>
 
