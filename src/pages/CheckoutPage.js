@@ -75,10 +75,14 @@ const CheckoutPage = ({ cart }) => {
                     item.variationId ||
                     (item.variacaoSelecionada && item.variacaoSelecionada.id) ||
                     (item.variacoes?.[0]?.id) ||
-                    'Única', // ou qualquer valor padrão que faça sentido
+                    'Única',
                 quantity: item.quantity,
                 unitPrice: parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0
             })),
+            totalAmount: cart.reduce((total, item) => {
+                const price = parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0;
+                return total + (price * item.quantity);
+            }, 0)
         };
 
         try {
