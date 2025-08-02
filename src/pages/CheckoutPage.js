@@ -54,28 +54,31 @@ const CheckoutPage = ({ cart }) => {
 
         // Monta o objeto conforme o PaymentRequestDTO do backend
         const paymentRequestDTO = {
-            userId: "user-123", // ajuste conforme sua lógica de autenticação
-            payerEmail: deliveryInfo.email, // ajuste conforme sua lógica de autenticação
+            userId: "user-123",
+            payerEmail: deliveryInfo.email,
             customerName: deliveryInfo.fullName,
             customerCpf: deliveryInfo.cpf,
             customerPhone: deliveryInfo.phone,
             shippingAddress: {
-                street: deliveryInfo.address,
-                number: deliveryInfo.number,
+                streetName: deliveryInfo.address,
+                streetNumber: deliveryInfo.number,
                 neighborhood: deliveryInfo.neighborhood,
-                city: deliveryInfo.city,
-                state: deliveryInfo.state,
-                zipCode: deliveryInfo.zipCode
+                cityName: deliveryInfo.city,
+                stateName: deliveryInfo.state,
+                zipCode: deliveryInfo.zipCode,
+                countryName: "Brasil"
             },
             items: cart.map(item => ({
                 productId: item.id,
+                productName: item.name || 'Produto',
+                variationId:
+                    item.variationId ||
+                    (item.variacaoSelecionada && item.variacaoSelecionada.id) ||
+                    (item.variacoes?.[0]?.id) ||
+                    'Única', // ou qualquer valor padrão que faça sentido
                 quantity: item.quantity,
                 unitPrice: parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0
             })),
-            totalAmount: cart.reduce((total, item) => {
-                const price = parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0;
-                return total + (price * item.quantity);
-            }, 0)
         };
 
         try {
