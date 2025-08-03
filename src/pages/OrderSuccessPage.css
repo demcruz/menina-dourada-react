@@ -1,90 +1,114 @@
-/* src/pages/orderStatus.css */
-
-.order-status-container {
+.success-page-container {
+    min-height: 100vh;
+    background-color: #faf5f0;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 200px); /* Ajuste para a altura da viewport menos navbar/footer */
+    padding: 20px;
+}
+
+.success-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
     text-align: center;
-    padding: 2rem 1rem;
-    background-color: var(--light-sand); /* Cor de fundo suave */
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    margin-top: 2rem;
-    margin-bottom: 2rem;
 }
 
-.order-status-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
+.success-icon {
+    margin-bottom: 24px;
 }
 
-.order-status-title.success {
-    color: #28a745; /* Verde para sucesso */
+.success-title {
+    color: #2c3e50;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
-.order-status-title.pending {
-    color: #ffc107; /* Amarelo/Laranja para pendente */
-}
-
-.order-status-title.failure {
-    color: #dc3545; /* Vermelho para falha */
-}
-
-.order-status-message {
-    font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 1.5rem;
-    line-height: 1.5;
-    max-width: 600px;
-}
-
-.order-detail {
-    font-size: 0.95rem;
+.success-subtitle {
     color: #666;
-    margin-bottom: 0.5rem;
+    font-size: 16px;
+    margin-bottom: 32px;
 }
 
-.order-status-button {
-    background-color: var(--primary-gold); /* Seu dourado primário */
+.success-details {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 32px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+}
+
+.info-label {
+    color: #666;
+}
+
+.info-value {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.email-notice {
+    color: #666;
+    margin-bottom: 32px;
+    font-size: 14px;
+}
+
+.success-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.action-button.shopping {
+    background-color: #bfa14a;
     color: white;
-    font-weight: 700;
-    padding: 0.8rem 2rem;
-    border-radius: 9999px; /* Botão arredondado */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 1.5rem;
-    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
 }
 
-.order-status-button:hover {
-    background-color: var(--hover-gold);
-    transform: translateY(-2px);
+.action-button.shopping:hover {
+    background-color: #a68c3d;
 }
 
-.order-status-link {
-    color: #007bff; /* Azul padrão para links */
-    text-decoration: none;
-    margin-top: 1rem;
-    font-size: 0.95rem;
-    transition: text-decoration 0.2s ease, color 0.2s ease;
+.action-button.orders {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    border: 1px solid #dee2e6;
 }
 
-.order-status-link:hover {
-    text-decoration: underline;
-    color: #0056b3;
+.action-button.orders:hover {
+    background-color: #e9ecef;
 }
 
-/* Estilos para o container principal em telas maiores */
-@media (min-width: 768px) {
-    .order-status-container {
-        padding: 3rem 2rem;
+@media (max-width: 480px) {
+    .success-card {
+        padding: 24px;
     }
-    .order-status-title {
-        font-size: 3rem;
+
+    .success-actions {
+        flex-direction: column;
+    }
+
+    .action-button {
+        width: 100%;
+        justify-content: center;
     }
 }

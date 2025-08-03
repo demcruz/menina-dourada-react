@@ -1,28 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaCheckCircle, FaShoppingBag, FaClipboardList } from 'react-icons/fa';
 
 const OrderSuccessPage = () => {
-    const location = useLocation();
-    const [paymentId, setPaymentId] = useState(null);
-    const [preferenceId, setPreferenceId] = useState(null);
-
-    useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        setPaymentId(queryParams.get('payment_id'));
-        setPreferenceId(queryParams.get('preference_id'));
-        // Você pode adicionar lógica aqui para, por exemplo, buscar os detalhes do pedido no backend
-        // usando o paymentId ou preferenceId, se necessário.
-    }, [location]);
-
     return (
-        <div className="order-status-container container">
-            <h1 className="order-status-title success">Pagamento Aprovado!</h1>
-            <p className="order-status-message">Seu pedido foi realizado com sucesso.</p>
-            {paymentId && <p className="order-detail">ID do Pagamento: <strong>{paymentId}</strong></p>}
-            {preferenceId && <p className="order-detail">ID da Preferência: <strong>{preferenceId}</strong></p>}
-            <p className="order-status-message">Em breve você receberá um e-mail com os detalhes da sua compra.</p>
-            <Link to="/shop" className="order-status-button">Continuar Comprando</Link>
-            <Link to="/my-orders" className="order-status-link">Ver Meus Pedidos (se houver)</Link>
+        <div className="success-page-container">
+            <div className="success-card">
+                <div className="success-icon">
+                    <FaCheckCircle size={60} color="#4CAF50"/>
+                </div>
+
+                <h1 className="success-title">Pagamento Aprovado!</h1>
+                <p className="success-subtitle">Seu pedido foi realizado com sucesso</p>
+
+                <div className="success-details">
+                    <div className="info-row">
+                        <span className="info-label">Número do Pedido:</span>
+                        <span className="info-value">#1340014759</span>
+                    </div>
+                </div>
+
+                <p className="email-notice">
+                    Em breve você receberá um e-mail com os detalhes da sua compra
+                </p>
+
+                <div className="success-actions">
+                    <Link to="/shop" className="action-button shopping">
+                        <FaShoppingBag />
+                        <span>Continuar Comprando</span>
+                    </Link>
+                    <Link to="/meus-pedidos" className="action-button orders">
+                        <FaClipboardList />
+                        <span>Meus Pedidos</span>
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 };

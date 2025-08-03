@@ -1,20 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import './CartSidebar.css'; // Importa os estilos do carrinho
 
 const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQuantity, onCheckoutClick }) => {
     // Garante que price e quantity são números válidos antes de somar
     const subtotal = cart.reduce((total, item) => {
         // Converte para float/int, default 0 se o valor for inválido (NaN, null, undefined)
-        const price = parseFloat(item.price) || 0; 
-        const quantity = parseInt(item.quantity) || 0; 
+        const price = parseFloat(item.price) || 0;
+        const quantity = parseInt(item.quantity) || 0;
         return total + (price * quantity);
     }, 0);
 
     // Função auxiliar para formatar valores monetários com segurança
     const formatCurrency = (value) => {
         // Garante que o valor é um número antes de formatar
-        const numValue = parseFloat(value) || 0; 
+        const numValue = parseFloat(value) || 0;
         return numValue.toFixed(2).replace('.', ',');
     };
 
@@ -45,7 +45,7 @@ const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQ
                                     )}
 
                                     <div className="cart-item-details">
-                                        <h4 className="cart-item-name">{item.name}</h4>
+                                        <h4 className="cart-item-name">{item.nome || item.name || 'Produto'}</h4>
                                         <div className="cart-item-quantity-control">
                                             <button
                                                 className="quantity-button"

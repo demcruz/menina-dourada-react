@@ -185,8 +185,9 @@ const CheckoutPage = ({ cart }) => {
                                             }}
                                         />
                                         <div className="summary-item-details" style={{ flex: 1 }}>
-                                            <span className="summary-item-name" style={{ fontWeight: 500 }}>{item.name}</span>
-                                            <span className="summary-item-qty" style={{ color: '#bfa14a', marginLeft: 8 }}>Qtd: {item.quantity}</span>
+                                            <span className="summary-item-name" style={{ fontWeight: 500 }}>
+                                                {item.nome || item.name || 'Produto'}
+                                            </span>                                           <span className="summary-item-qty" style={{ color: '#bfa14a', marginLeft: 8 }}>Qtd: {item.quantity}</span>
                                         </div>
                                         <span className="summary-item-price" style={{ fontWeight: 600 }}>
                                             R$ {formatCurrency(price * item.quantity)}
