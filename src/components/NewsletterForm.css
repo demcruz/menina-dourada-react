@@ -1,119 +1,354 @@
-/* src/components/NewsletterForm/NewsletterForm.css */
+/* Newsletter Form - Premium Menina Dourada */
+
+.newsletter-wrapper {
+    background: var(--lighter-sand, #FAEDDF);
+    padding: 4rem 1.5rem;
+}
 
 .newsletter-container {
-    /* Fundo transparente ou muito sutil para integrar melhor */
-    background-color: transparent; /* Transparente para se adaptar ao fundo da seção pai */
-    padding: 2rem 1.5rem; /* Padding reduzido, mas ainda com respiro */
-    border-radius: 0; /* Sem bordas arredondadas para um visual mais limpo */
-    box-shadow: none; /* Sem sombra para um visual mais leve */
+    max-width: 900px;
+    margin: 0 auto;
     text-align: center;
-    max-width: 500px; /* Largura um pouco menor para foco */
-    margin: 0 auto; /* Centraliza e remove margem externa desnecessária */
-    font-family: 'Poppins', sans-serif; /* Garante a fonte Poppins */
+}
+
+.newsletter-content {
+    position: relative;
+}
+
+/* Header */
+.newsletter-header {
+    margin-bottom: 2rem;
 }
 
 .newsletter-title {
-    font-size: 1.8rem; /* Título ligeiramente menor, mas ainda impactante */
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 0.5rem; /* Espaçamento reduzido */
+    font-family: 'Playfair Display', serif;
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: var(--text-color-default, #1a1a1a);
+    margin: 0 0 0.75rem 0;
     line-height: 1.2;
 }
 
 .newsletter-subtitle {
-    font-size: 1rem; /* Subtítulo mais conciso */
-    color: #555;
-    margin-bottom: 1.5rem; /* Espaçamento ajustado */
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
     line-height: 1.5;
 }
 
+/* Form */
 .newsletter-form {
-    display: flex;
-    flex-direction: column; /* Organiza input e botão em coluna por padrão */
-    gap: 0.75rem; /* Espaçamento entre input e botão */
-    justify-content: center;
-    align-items: center; /* Centraliza os itens */
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-/* Em telas maiores, input e botão ficam lado a lado */
-@media (min-width: 600px) {
-    .newsletter-form {
-        flex-direction: row; /* Volta para linha em telas maiores */
-        gap: 0.75rem;
-    }
+.newsletter-input-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.newsletter-input-group {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 200ms ease;
+}
+
+.newsletter-input-group:focus-within {
+    border-color: var(--primary-gold, #d4a853);
+    box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.1);
+}
+
+.newsletter-input-group:focus-within .newsletter-input-icon {
+    color: var(--primary-gold, #d4a853);
+}
+
+.newsletter-input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.875rem;
+    color: #999;
+    flex-shrink: 0;
+}
+
+.newsletter-input-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.newsletter-input-divider {
+    width: 1px;
+    height: 24px;
+    background: #e0e0e0;
+    flex-shrink: 0;
 }
 
 .newsletter-input {
-    flex-grow: 1; 
-    padding: 1rem 1.2rem; /* AUMENTADO O PADDING para maior área de preenchimento */
-    border: 1px solid #dcdcdc; /* Borda mais clara e discreta */
-    border-radius: 6px; /* Cantos levemente arredondados */
-    font-size: 1rem; /* AUMENTADO O TAMANHO DA FONTE */
-    min-width: 220px; /* AUMENTADO A LARGURA MÍNIMA */
-    width: 100%; /* Garante que ocupe a largura total em coluna */
-    max-width: 380px; /* <<<< AUMENTADO A LARGURA MÁXIMA para ocupar mais espaço */
-    box-sizing: border-box; 
-    color: #333; 
-    transition: border-color 0.2s ease; 
-    box-shadow: none; 
-}
-
-.newsletter-input::placeholder {
-    color: #a0a0a0; /* Placeholder mais discreto */
+    flex: 1;
+    padding: 1rem 1rem;
+    border: none;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    background: transparent;
+    color: var(--text-color-default, #1a1a1a);
+    outline: none;
+    min-width: 0;
+    text-decoration: none;
+    box-shadow: none;
 }
 
 .newsletter-input:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15); /* MANTIDO SOMBRA APENAS NO FOCO */
+    box-shadow: none;
+    text-decoration: none;
+}
+
+.newsletter-input::placeholder {
+    color: #999;
+}
+
+.newsletter-input:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.newsletter-input-group:has(input:disabled) {
+    background: #f5f5f5;
 }
 
 .newsletter-button {
-    background-color: #f8f8f8; /* Fundo muito claro, quase branco */
-    color: #2c3e50; /* Cor do texto escura para contraste */
-    padding: 0.8rem 1.8rem;
-    border: 1px solid #dcdcdc; /* Borda sutil para definir o botão */
-    border-radius: 6px;
-    font-size: 0.95rem;
+    background: linear-gradient(135deg, var(--primary-gold, #d4a853) 0%, #c9983f 100%);
+    color: white;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
     font-weight: 600;
+    letter-spacing: 0.1em;
     cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-    white-space: nowrap; 
-    flex-shrink: 0; 
-    width: 100%; 
-    max-width: 150px; 
+    transition: all 200ms ease;
+    white-space: nowrap;
 }
 
-.newsletter-button:hover {
-    background-color: #e0e0e0; /* Fundo um pouco mais escuro no hover */
-    border-color: #c0c0c0; /* Borda mais escura no hover */
-    transform: translateY(-1px); 
+.newsletter-button:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 168, 83, 0.3);
 }
 
 .newsletter-button:disabled {
-    background-color: #cccccc;
+    opacity: 0.7;
     cursor: not-allowed;
     transform: none;
-    border-color: #cccccc; /* Borda também desabilitada */
 }
 
+/* Checkbox */
+.newsletter-checkbox {
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.newsletter-checkbox label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.newsletter-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.newsletter-checkbox-mark {
+    position: relative;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    transition: all 200ms ease;
+    margin-top: 1px;
+}
+
+.newsletter-checkbox input:checked ~ .newsletter-checkbox-mark {
+    background: var(--primary-gold, #d4a853);
+    border-color: var(--primary-gold, #d4a853);
+}
+
+.newsletter-checkbox-mark::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.newsletter-checkbox input:checked ~ .newsletter-checkbox-mark::after {
+    display: block;
+}
+
+.newsletter-checkbox input:focus ~ .newsletter-checkbox-mark {
+    box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.2);
+}
+
+.newsletter-checkbox-text {
+    flex: 1;
+}
+
+/* Message */
 .newsletter-message {
-    margin-top: 1rem; 
-    padding: 0.6rem 1rem; 
-    border-radius: 6px;
-    font-size: 0.85rem; 
+    margin-top: 1.25rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.4;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .newsletter-message.success {
-    background-color: #e6ffe6;
-    color: #28a745;
-    border: 1px solid #c3e6cb;
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+    border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
 .newsletter-message.error {
-    background-color: #ffe6e6;
-    color: #dc3545;
-    border: 1px solid #f5c6cb;
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .newsletter-wrapper {
+        padding: 5rem 2rem;
+    }
+    
+    .newsletter-title {
+        font-size: 2.5rem;
+    }
+    
+    .newsletter-subtitle {
+        font-size: 1.0625rem;
+    }
+    
+    .newsletter-input-row {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0.875rem;
+    }
+    
+    .newsletter-input-group {
+        min-width: 0;
+    }
+    
+    .newsletter-input-group:first-child {
+        flex: 0.8;
+    }
+    
+    .newsletter-input-group:nth-child(2) {
+        flex: 1;
+    }
+    
+    .newsletter-button {
+        flex-shrink: 0;
+        padding: 1rem 2rem;
+    }
+    
+    .newsletter-checkbox {
+        text-align: center;
+    }
+    
+    .newsletter-checkbox label {
+        justify-content: center;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .newsletter-wrapper {
+        padding: 3rem 1rem;
+    }
+    
+    .newsletter-title {
+        font-size: 1.75rem;
+    }
+    
+    .newsletter-subtitle {
+        font-size: 0.9375rem;
+    }
+    
+    .newsletter-input {
+        padding: 0.875rem 0.875rem;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .newsletter-input-icon {
+        padding: 0 0.75rem;
+    }
+    
+    .newsletter-input-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .newsletter-input-divider {
+        height: 20px;
+    }
+    
+    .newsletter-button {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
+    }
+    
+    .newsletter-checkbox label {
+        font-size: 0.75rem;
+    }
+    
+    .newsletter-checkbox-mark {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .newsletter-checkbox-mark::after {
+        left: 5px;
+        top: 1px;
+        width: 4px;
+        height: 9px;
+    }
+}
+
+/* Small devices */
+@media (max-width: 374px) {
+    .newsletter-title {
+        font-size: 1.5rem;
+    }
+    
+    .newsletter-subtitle {
+        font-size: 0.875rem;
+    }
 }

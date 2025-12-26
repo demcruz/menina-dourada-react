@@ -13,6 +13,8 @@ import NewsletterSection from './components/NewsletterSection';
 import Footer from './components/Footer';
 import ProductModal from './components/ProductModal';
 import CheckoutPage from './pages/CheckoutPage';
+import LGPDModal from './components/LGPDModal';
+import ContactWidget from './components/ContactWidget';
 
 
 
@@ -137,6 +139,9 @@ function App() {
             addToCart={addToCart}
           />
         )}
+
+        <LGPDModal />
+        <ContactWidget />
       </div>
     </Router>
   );

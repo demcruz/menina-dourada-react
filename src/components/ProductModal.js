@@ -1,60 +1,148 @@
-import React, { useState, useEffect } from 'react';
-
-import './ProductModal.css'; 
-
+import React, { useState, useEffect, useMemo } from 'react';
+import './ProductModal.css';
 
 const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
     const [quantity, setQuantity] = useState(1);
-    // Alterado para armazenar o ID da variação selecionada ou o objeto da variação
-    const [selectedVariation, setSelectedVariation] = useState(null); 
+    const [selectedVariation, setSelectedVariation] = useState(null);
+    const [selectedColor, setSelectedColor] = useState(null);
+    const [selectedSize, setSelectedSize] = useState(null);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
     const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+    const [isTableExpanded, setIsTableExpanded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    // Função para obter a variação principal (primeira disponível)
     const getMainVariation = (produto) => {
         if (!produto?.variacoes || produto.variacoes.length === 0) return null;
         return produto.variacoes[0];
     };
 
-    // Use a variação do produto para inicializar o estado
+    // Extrai cores únicas das variações
+    const uniqueColors = useMemo(() => {
+        if (!product?.variacoes) return [];
+        const colors = [...new Set(product.variacoes.map(v => v.cor).filter(Boolean))];
+        return colors;
+    }, [product?.variacoes]);
+
+    // Extrai tamanhos únicos das variações
+    const uniqueSizes = useMemo(() => {
+        if (!product?.variacoes) return [];
+        const sizes = [...new Set(product.variacoes.map(v => v.tamanho).filter(Boolean))];
+        // Ordenar tamanhos
+        const sizeOrder = ['PP', 'P', 'M', 'G', 'GG', 'XG', 'XXG'];
+        return sizes.sort((a, b) => {
+            const indexA = sizeOrder.indexOf(a.toUpperCase());
+            const indexB = sizeOrder.indexOf(b.toUpperCase());
+            if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+            if (indexA === -1) return 1;
+            if (indexB === -1) return -1;
+            return indexA - indexB;
+        });
+    }, [product?.variacoes]);
+
+    // Encontra variação baseada na cor e tamanho selecionados
+    const findVariation = (color, size) => {
+        if (!product?.variacoes) return null;
+        return product.variacoes.find(v => 
+            (!color || v.cor === color) && 
+            (!size || v.tamanho === size)
+        );
+    };
+
     const initialVariation = getMainVariation(product);
-    
-    // Efeito para resetar o estado quando o modal abre ou o produto muda
+
     useEffect(() => {
         if (isOpen && product) {
             setQuantity(1);
-            // Inicializa a variação selecionada com a primeira variação do produto
-            setSelectedVariation(initialVariation); 
+            const initial = initialVariation;
+            setSelectedVariation(initial);
+            setSelectedColor(initial?.cor || uniqueColors[0] || null);
+            setSelectedSize(initial?.tamanho || null);
             setSelectedImageIndex(0);
             setIsZoomed(false);
+            setIsTableExpanded(false);
+            setIsLoading(false);
+            document.body.classList.add('modal-open');
+            
+            setTimeout(() => {
+                const modal = document.querySelector('.modal-content-wrapper');
+                if (modal) modal.focus();
+            }, 100);
+        } else {
+            document.body.classList.remove('modal-open');
         }
-    }, [isOpen, product, initialVariation]); // Dependências ajustadas
+        
+        return () => {
+            document.body.classList.remove('modal-open');
+        };
+    }, [isOpen, product, initialVariation, uniqueColors]);
 
-    // Se o modal não estiver aberto ou não houver produto, não renderiza nada
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && isOpen) {
+                onClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('keydown', handleKeyDown);
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen, onClose]);
+
+    // Atualiza variação quando cor ou tamanho mudam
+    useEffect(() => {
+        if (selectedColor || selectedSize) {
+            const variation = findVariation(selectedColor, selectedSize);
+            if (variation) {
+                setSelectedVariation(variation);
+                setSelectedImageIndex(0);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedColor, selectedSize]);
+
     if (!isOpen || !product) return null;
 
-    // Dados da variação atualmente selecionada
-    const currentVariation = selectedVariation || initialVariation; // Usa a variação selecionada ou a inicial
+    const currentVariation = selectedVariation || initialVariation;
     const preco = currentVariation?.preco;
     const imagem = currentVariation?.imagens?.[selectedImageIndex]?.url;
     const altText = currentVariation?.imagens?.[selectedImageIndex]?.altText || product?.nome;
-    const imagens = currentVariation?.imagens || []; // Imagens da variação selecionada
+    const imagens = currentVariation?.imagens || [];
 
-   const handleAddToCart = () => {
-    if (!currentVariation) {
-        alert('Por favor, selecione uma variação do produto.');
-        return;
-    }
+    const handleAddToCart = async () => {
+        if (!currentVariation) {
+            alert('Por favor, selecione cor e tamanho.');
+            return;
+        }
 
-    const productWithPrice = {
-        ...product,
-        price: currentVariation.preco, // <- garante que o preço é incluído
+        if (uniqueSizes.length > 1 && !selectedSize) {
+            alert('Por favor, selecione um tamanho.');
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            const productWithPrice = {
+                ...product,
+                price: currentVariation.preco,
+            };
+
+            await addToCart(productWithPrice, quantity, currentVariation.tamanho, currentVariation.cor);
+            
+            setTimeout(() => {
+                onClose();
+                setIsLoading(false);
+            }, 500);
+        } catch (error) {
+            console.error('Erro ao adicionar ao carrinho:', error);
+            setIsLoading(false);
+        }
     };
-
-    addToCart(productWithPrice, quantity, currentVariation.tamanho, currentVariation.cor);
-    onClose();
-};
 
     const handleOverlayClick = (e) => {
         if (e.target.id === 'product-modal') {
@@ -75,34 +163,82 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
         }
     };
 
+    const formatPrice = (price) => {
+        if (typeof price === 'number' && !isNaN(price)) {
+            return `R$ ${price.toFixed(2).replace('.', ',')}`;
+        }
+        if (typeof price === 'string' && !isNaN(parseFloat(price.replace(',', '.')))) {
+            return `R$ ${parseFloat(price.replace(',', '.')).toFixed(2).replace('.', ',')}`;
+        }
+        return 'Preço sob consulta';
+    };
+
+    // Tabela de medidas
+    const MeasurementsTable = () => (
+        <table className="modal-table">
+            <thead>
+                <tr>
+                    <th>TAM.</th>
+                    <th>BUSTO</th>
+                    <th>CINTURA</th>
+                    <th>QUADRIL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>PP</td><td>78-82</td><td>60-64</td><td>86-90</td></tr>
+                <tr><td>P</td><td>82-86</td><td>64-68</td><td>90-94</td></tr>
+                <tr><td>M</td><td>86-90</td><td>68-72</td><td>94-98</td></tr>
+                <tr><td>G</td><td>90-94</td><td>72-76</td><td>98-102</td></tr>
+                <tr><td>GG</td><td>94-98</td><td>76-80</td><td>102-106</td></tr>
+            </tbody>
+        </table>
+    );
+
     return (
-        <div id="product-modal" className={isOpen ? 'is-open' : ''} onClick={handleOverlayClick}>
-            <div className="modal-content-wrapper" onClick={(e) => e.stopPropagation()}>
-                <button id="close-modal" className="modal-close-button" onClick={onClose}>
+        <div 
+            id="product-modal" 
+            className={isOpen ? 'is-open' : ''} 
+            onClick={handleOverlayClick}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-product-name"
+        >
+            <div 
+                className="modal-content-wrapper" 
+                onClick={(e) => e.stopPropagation()}
+                tabIndex="-1"
+            >
+                <button 
+                    className="modal-close-button" 
+                    onClick={onClose}
+                    aria-label="Fechar modal"
+                >
                     <i className="fas fa-times"></i>
                 </button>
 
-                <div className="modal-product-layout md:flex-row">
-                    <div className="modal-product-image-area md:w-1/2">
+                <div className="modal-product-layout">
+                    {/* ESQUERDA: Imagem + Descrição */}
+                    <div className="modal-product-image-area">
                         <div
                             className="modal-main-image-container"
                             onClick={handleImageClick}
                             onMouseMove={handleImageMouseMove}
                             onMouseLeave={() => setIsZoomed(false)}
+                            role="button"
+                            tabIndex="0"
+                            aria-label={isZoomed ? "Diminuir zoom" : "Ampliar imagem"}
                         >
                             <img
-                                id="modal-product-image"
                                 src={imagem || '/placeholder.jpg'}
                                 alt={altText}
-                                className={`modal-product-image ${isZoomed ? 'zoomed' : ''}`}
+                                className={isZoomed ? 'zoomed' : ''}
                                 style={isZoomed ? { transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` } : {}}
                             />
                             <div className="modal-zoom-icon">
-                                <i className="fas fa-search-plus"></i>
+                                <i className={`fas ${isZoomed ? 'fa-search-minus' : 'fa-search-plus'}`}></i>
                             </div>
                         </div>
 
-                        {/* Renderiza thumbnails da variação selecionada */}
                         {imagens.length > 1 && (
                             <div className="modal-thumbnail-grid">
                                 {imagens.map((img, index) => (
@@ -110,94 +246,157 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                                         key={index}
                                         className={`modal-thumbnail-item ${index === selectedImageIndex ? 'selected' : ''}`}
                                         onClick={() => setSelectedImageIndex(index)}
+                                        role="button"
+                                        tabIndex="0"
+                                        aria-label={`Imagem ${index + 1}`}
                                     >
-                                        <img src={img.url} alt={img.altText || `Variação ${index + 1}`} />
+                                        <img src={img.url} alt={img.altText || `Foto ${index + 1}`} />
                                     </div>
                                 ))}
                             </div>
                         )}
+
+                        {/* DESCRIÇÃO - Desktop */}
+                        {product.descricao && (
+                            <div className="modal-description-desktop">
+                                <h4>SOBRE O PRODUTO</h4>
+                                <p>{product.descricao}</p>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="modal-product-details-area md:w-1/2">
-                        <h2 id="modal-product-name" className="modal-product-name">{product.nome}</h2>
-                        <p>Preço: R$ {preco ? preco.toFixed(2).replace('.', ',') : '—'}</p>
+                    {/* DIREITA: Detalhes */}
+                    <div className="modal-product-details-area">
+                        <h2 id="modal-product-name" className="modal-product-name">
+                            {product.nome}
+                        </h2>
+                        
+                        <div className="modal-product-price">
+                            {formatPrice(preco)}
+                        </div>
 
-                        {/* SELEÇÃO DE VARIAÇÕES (TAMANHO E COR) */}
-                        {product.variacoes && product.variacoes.length > 0 && (
-                            <div className="mb-6">
-                                <h3 className="modal-section-title">Variações</h3>
-                                <div className="modal-variation-grid">
-                                    {product.variacoes.map((v, index) => (
+                        {/* SELEÇÃO DE COR */}
+                        {uniqueColors.length > 0 && (
+                            <div className="modal-color-section">
+                                <span className="modal-section-label">
+                                    Cor: <strong>{selectedColor?.toUpperCase() || '—'}</strong>
+                                </span>
+                                {uniqueColors.length > 1 ? (
+                                    <div className="modal-color-options">
+                                        {uniqueColors.map((color, index) => (
+                                            <button
+                                                key={index}
+                                                className={`modal-color-btn ${selectedColor === color ? 'selected' : ''}`}
+                                                onClick={() => setSelectedColor(color)}
+                                                aria-label={`Cor ${color}`}
+                                            >
+                                                {color}
+                                            </button>
+                                        ))}
+                                    </div>
+                                ) : null}
+                            </div>
+                        )}
+
+                        {/* SELEÇÃO DE TAMANHO */}
+                        {uniqueSizes.length > 0 && (
+                            <div className="modal-size-section">
+                                <span className="modal-section-label">Selecione o tamanho</span>
+                                <div className="modal-size-tabs">
+                                    {uniqueSizes.map((size, index) => (
                                         <button
-                                            key={v.id || index} // Usa o ID da variação como key
-                                            className={`modal-variation-button ${selectedVariation?.id === v.id ? 'selected' : ''}`}
-                                            onClick={() => {
-                                                setSelectedVariation(v); // Define a variação selecionada
-                                                setSelectedImageIndex(0); // Reseta a imagem para a primeira da nova variação
-                                            }}
+                                            key={index}
+                                            className={`modal-size-tab ${selectedSize === size ? 'selected' : ''}`}
+                                            onClick={() => setSelectedSize(size)}
+                                            aria-label={`Tamanho ${size}`}
                                         >
-                                            {v.tamanho} - {v.cor}
+                                            {size}
                                         </button>
                                     ))}
                                 </div>
                             </div>
                         )}
 
-                        <div className="mb-6">
-                            <h3 className="modal-section-title">Quantidade</h3>
+                        {/* QUANTIDADE */}
+                        <div className="modal-quantity-section">
+                            <span className="modal-section-label">Quantidade</span>
                             <div className="modal-quantity-control">
                                 <button
-                                    className="modal-quantity-button rounded-l"
+                                    className="modal-quantity-button"
                                     onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                                >-</button>
+                                    aria-label="Diminuir quantidade"
+                                    disabled={quantity <= 1}
+                                >
+                                    −
+                                </button>
                                 <input
                                     type="number"
                                     value={quantity}
                                     min="1"
                                     onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
                                     className="modal-quantity-input"
+                                    aria-label="Quantidade"
                                 />
                                 <button
-                                    className="modal-quantity-button rounded-r"
+                                    className="modal-quantity-button"
                                     onClick={() => setQuantity(prev => prev + 1)}
-                                >+</button>
+                                    aria-label="Aumentar quantidade"
+                                >
+                                    +
+                                </button>
                             </div>
                         </div>
 
-                        <button
-                            id="modal-add-to-cart"
-                            className="modal-add-to-cart-button"
-                            onClick={handleAddToCart}
-                        >
-                            Adicionar ao Carrinho
-                        </button>
-
-                        {/* DESCRIÇÃO DO PRODUTO */}
-                        {product.descricao && ( // Renderiza apenas se a descrição existir
-                            <div className="modal-description-separator">
-                                <h3 className="modal-section-title">Descrição</h3>
-                                <p id="modal-product-description" className="modal-product-description">
-                                    {product.descricao}
-                                </p>
+                        {/* CTA */}
+                        <div className="modal-cta-section">
+                            <button
+                                className="modal-add-to-cart-button"
+                                onClick={handleAddToCart}
+                                disabled={isLoading || (uniqueSizes.length > 1 && !selectedSize)}
+                            >
+                                {isLoading ? (
+                                    <>
+                                        <i className="fas fa-spinner fa-spin"></i>
+                                        Adicionando...
+                                    </>
+                                ) : (
+                                    'ADICIONAR AO CARRINHO'
+                                )}
+                            </button>
+                            
+                            <div className="modal-trust-line">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path fillRule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clipRule="evenodd" />
+                                </svg>
+                                <span>Compra segura • PIX com aprovação imediata</span>
                             </div>
-                        )}
+                        </div>
 
-                        <h3 className="modal-section-title">Tabela de Medidas</h3>
-                        <div className="modal-table-container">
-                            <table className="modal-table">
-                                <thead>
-                                    <tr className="bg-sand-100">
-                                        <th>Tamanho</th><th>Busto (cm)</th><th>Cintura (cm)</th><th>Quadril (cm)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td>PP</td><td>78-82</td><td>60-64</td><td>86-90</td></tr>
-                                    <tr><td>P</td><td>82-86</td><td>64-68</td><td>90-94</td></tr>
-                                    <tr><td>M</td><td>86-90</td><td>68-72</td><td>94-98</td></tr>
-                                    <tr><td>G</td><td>90-94</td><td>72-76</td><td>98-102</td></tr>
-                                    <tr><td>GG</td><td>94-98</td><td>76-80</td><td>102-106</td></tr>
-                                </tbody>
-                            </table>
+                        {/* MEDIDAS - Desktop */}
+                        <div className="modal-measurements-desktop">
+                            <h4>MEDIDAS</h4>
+                            <MeasurementsTable />
+                        </div>
+
+                        {/* MOBILE: Descrição + Medidas */}
+                        <div className="modal-mobile-extras">
+                            {product.descricao && (
+                                <div className="modal-description-box">
+                                    <h4>SOBRE O PRODUTO</h4>
+                                    <p>{product.descricao}</p>
+                                </div>
+                            )}
+
+                            <button 
+                                className="modal-table-toggle"
+                                onClick={() => setIsTableExpanded(!isTableExpanded)}
+                                aria-expanded={isTableExpanded}
+                            >
+                                <span>Ver tabela de medidas</span>
+                                <i className={`fas fa-chevron-${isTableExpanded ? 'up' : 'down'}`}></i>
+                            </button>
+                            
+                            {isTableExpanded && <MeasurementsTable />}
                         </div>
                     </div>
                 </div>

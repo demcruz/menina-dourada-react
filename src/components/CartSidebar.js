@@ -1,115 +1,152 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './CartSidebar.css'; // Importa os estilos do carrinho
+import './CartSidebar.css';
+import { API_BASE_URL } from '../api/axiosInstance';
+
+const buildImageUrl = (url) => {
+    if (!url) return null;
+    if (/^https?:\/\//i.test(url)) return url;
+    return `${API_BASE_URL.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
+};
+
+const getCartItemImage = (item) => {
+    const url =
+        item.image ||
+        item.imagens?.[0]?.url ||
+        item.variacoes?.[0]?.imagens?.[0]?.url ||
+        item.variacoes?.[0]?.imagemPrincipal;
+    return buildImageUrl(url);
+};
 
 const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQuantity, onCheckoutClick }) => {
-    // Garante que price e quantity são números válidos antes de somar
     const subtotal = cart.reduce((total, item) => {
-        // Converte para float/int, default 0 se o valor for inválido (NaN, null, undefined)
         const price = parseFloat(item.price) || 0;
         const quantity = parseInt(item.quantity) || 0;
         return total + (price * quantity);
     }, 0);
 
-    // Função auxiliar para formatar valores monetários com segurança
     const formatCurrency = (value) => {
-        // Garante que o valor é um número antes de formatar
         const numValue = parseFloat(value) || 0;
         return numValue.toFixed(2).replace('.', ',');
     };
 
+    // Mensagem PIX
+    const pixMessage = subtotal > 0 ? 'Pagamento via PIX • Aprovação imediata' : '';
+
     return (
         <>
-            <div
-                id="cart-sidebar"
-                className={`cart-sidebar md:w-96 ${isOpen ? 'cart-open' : 'cart-closed'}`}
-            >
-                <div className="cart-content-padding">
-                    <div className="cart-header">
-                        <h3 className="cart-title">Seu Carrinho</h3>
-                        <button id="close-cart" className="close-cart-button" onClick={toggleCart}>
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </div>
+            <div className={`cart-sidebar ${isOpen ? 'cart-open' : 'cart-closed'}`}>
+                {/* Header */}
+                <div className="cart-header">
+                    <h3 className="cart-header-title">Seu Carrinho</h3>
+                    <button className="cart-close-btn" onClick={toggleCart} aria-label="Fechar carrinho">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
 
-                    <div id="cart-items" className="cart-items-list">
-                        {cart.length === 0 ? (
-                            (<p id="empty-cart-message" className="empty-cart-message">Seu carrinho está vazio</p>)
-                        ) : (
-                            cart.map(item => (
+                {/* Items */}
+                <div className="cart-items">
+                    {cart.length === 0 ? (
+                        <div className="cart-empty">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            <p>Seu carrinho está vazio</p>
+                            <button className="cart-empty-btn" onClick={toggleCart}>
+                                Explorar produtos
+                            </button>
+                        </div>
+                    ) : (
+                        cart.map((item) => {
+                            const imageUrl = getCartItemImage(item) || 'https://via.placeholder.com/80x80?text=Foto';
+                            const altText = item.nome || item.name || 'Produto';
+                            const quantityValue = parseInt(item.quantity) || 0;
+                            const priceValue = (parseFloat(item.price) || 0) * quantityValue;
+                            const itemInfo = [item.cor, item.tamanho].filter(Boolean).join(', ');
+
+                            return (
                                 <div key={item.id} className="cart-item">
-                                    {/* Adicionar imagem do produto ao item do carrinho, se disponível */}
-                                    {/* Acessa a primeira imagem da primeira variação do item */}
-                                    {item.variacoes && item.variacoes[0]?.imagens[0]?.url && (
-                                        <img src={item.variacoes[0].imagens[0].url} alt={item.name} className="cart-item-image" />
-                                    )}
-
-                                    <div className="cart-item-details">
-                                        <h4 className="cart-item-name">{item.nome || item.name || 'Produto'}</h4>
-                                        <div className="cart-item-quantity-control">
+                                    <img src={imageUrl} alt={altText} className="cart-item-img" />
+                                    
+                                    <div className="cart-item-info">
+                                        <div className="cart-item-top">
+                                            <div className="cart-item-name-wrap">
+                                                <h4 className="cart-item-name">{altText}</h4>
+                                                {itemInfo && <span className="cart-item-variant">({itemInfo})</span>}
+                                            </div>
                                             <button
-                                                className="quantity-button"
-                                                onClick={() => updateCartItemQuantity(item.id, (parseInt(item.quantity) || 0) - 1)}
+                                                className="cart-item-remove"
+                                                onClick={() => removeFromCart(item.id)}
+                                                aria-label="Remover item"
                                             >
-                                                -
-                                            </button>
-                                            <span className="quantity-display">{parseInt(item.quantity) || 0}</span>
-                                            <button
-                                                className="quantity-button"
-                                                onClick={() => updateCartItemQuantity(item.id, (parseInt(item.quantity) || 0) + 1)}
-                                            >
-                                                +
+                                                Remover
                                             </button>
                                         </div>
-                                    </div>
-                                    <div className="cart-item-price-remove">
-                                        {/* Garante que o cálculo seja feito com números válidos e formatado */}
-                                        <p className="cart-item-price">
-                                            R$ {formatCurrency((parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0))}
-                                        </p>
-                                        <button
-                                            className="remove-item-button"
-                                            onClick={() => removeFromCart(item.id)}
-                                        >
-                                            Remover
-                                        </button>
+                                        
+                                        <div className="cart-item-bottom">
+                                            <div className="cart-item-qty">
+                                                <button
+                                                    className="qty-btn"
+                                                    onClick={() => updateCartItemQuantity(item.id, quantityValue - 1)}
+                                                    disabled={quantityValue <= 1}
+                                                >
+                                                    −
+                                                </button>
+                                                <span className="qty-value">{quantityValue}</span>
+                                                <button
+                                                    className="qty-btn"
+                                                    onClick={() => updateCartItemQuantity(item.id, quantityValue + 1)}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                            <span className="cart-item-price">R$ {formatCurrency(priceValue)}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            ))
-                        )}
-                    </div>
+                            );
+                        })
+                    )}
+                </div>
 
-                    <div className="cart-summary">
-                        <div className="cart-summary-row">
-                            <span>Subtotal</span>
-                            <span id="cart-subtotal">R$ {formatCurrency(subtotal)}</span>
+                {/* Footer - só mostra se tiver itens */}
+                {cart.length > 0 && (
+                    <div className="cart-footer">
+                        <div className="cart-summary">
+                            <div className="cart-summary-row">
+                                <span>Subtotal</span>
+                                <span>R$ {formatCurrency(subtotal)}</span>
+                            </div>
+                            <div className="cart-summary-row">
+                                <span>Frete</span>
+                                <span className="cart-shipping-calc">Calcular</span>
+                            </div>
+                            <div className="cart-summary-total">
+                                <span>Total</span>
+                                <div className="cart-total-value">
+                                    <strong>R$ {formatCurrency(subtotal)}</strong>
+                                    <span className="cart-pix-info">{pixMessage}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="cart-summary-row">
-                            <span>Frete</span>
-                            <span id="cart-shipping">Calcular</span>
-                        </div>
-                        <div className="cart-total-row">
-                            <span>Total</span>
-                            <span id="cart-total">R$ {formatCurrency(subtotal)}</span> {/* Total é igual ao subtotal por enquanto */}
-                        </div>
-                    </div>
 
+                        <Link to="/checkout" className="cart-checkout-btn" onClick={onCheckoutClick}>
+                            Finalizar Compra
+                        </Link>
 
-                    <Link to="/checkout" className="checkout-button" onClick={onCheckoutClick}>
-                        Finalizar Compra
-                    </Link>
-
-                    <div className="continue-shopping-area">
-                        <p className="continue-shopping-text">ou</p>
-                        <button id="continue-shopping" className="continue-shopping-button" onClick={toggleCart}>
-                            Continuar comprando
+                        <button className="cart-continue-btn" onClick={toggleCart}>
+                            Ver mais produtos
                         </button>
                     </div>
-                </div>
+                )}
             </div>
-            {isOpen && (
-                <div id="cart-overlay" className="cart-overlay" onClick={toggleCart}></div>
-            )}
+
+            {isOpen && <div className="cart-overlay" onClick={toggleCart}></div>}
         </>
     );
 };

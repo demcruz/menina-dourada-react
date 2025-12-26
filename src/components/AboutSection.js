@@ -15,28 +15,45 @@ const AboutSection = () => {
 
                     <div className="about-text-area md:w-1/2 md:pl-8">
                         <h2 className="section-title text-left">Nossa História</h2>
-                        <p className="about-text">Menina Dourada nasceu em 2018 da paixão da Weryka pela moda praia e pelo desejo de criar peças que valorizassem a beleza da mulher brasileira.</p>
-                        <p className="about-text">Inspirada nos tons dourados do pôr do sol em sua cidade natal, Weryka começou a confeccionar biquínis artesanais que rapidamente conquistaram admiradoras.</p>
-                        <p className="about-text">Hoje, somos uma marca reconhecida nacionalmente, mas mantemos o cuidado artesanal e a atenção aos detalhes que nos fizeram crescer.</p>
+                        
+                        <div className="about-story">
+                            <p className="about-text-highlight">
+                                <strong>Desde 2018</strong> criamos biquínis que celebram a beleza única de cada mulher brasileira.
+                            </p>
+                            
+                            <p className="about-text">
+                                Inspirada nos tons dourados do pôr do sol, nossa fundadora Weryka começou com peças artesanais que rapidamente conquistaram o coração das clientes.
+                            </p>
+                            
+                            <p className="about-text">
+                                Hoje somos reconhecidas nacionalmente, mas mantemos o cuidado artesanal que nos fez crescer.
+                            </p>
+                        </div>
 
-                        <h3 className="about-subtitle">Nossa Missão</h3>
-                        <p className="about-text">Empoderar mulheres através de peças que celebrem seus corpos e sua liberdade, ajudando cada uma a se sentir confiante e radiante.</p>
+                        <div className="about-mission">
+                            <h3 className="about-subtitle">Por que escolher Menina Dourada?</h3>
+                            <p className="about-text-benefit">
+                                ✨ Peças que realçam sua confiança e liberdade<br/>
+                                🏆 Qualidade premium com acabamento impecável<br/>
+                                💛 Feito com amor para você se sentir radiante
+                            </p>
+                        </div>
 
                         <div className="about-values-grid md:space-x-4">
                             <div className="value-card">
-                                <i className="fas fa-tshirt value-icon"></i>
-                                <h4 className="value-title">Qualidade</h4>
-                                <p className="value-description">Materiais premium e costura impecável</p>
+                                <i className="fas fa-award value-icon"></i>
+                                <h4 className="value-title">Premium</h4>
+                                <p className="value-description">Materiais selecionados</p>
                             </div>
                             <div className="value-card">
                                 <i className="fas fa-heart value-icon"></i>
-                                <h4 className="value-title">Amor</h4>
-                                <p className="value-description">Feito com carinho para você</p>
+                                <h4 className="value-title">Confiança</h4>
+                                <p className="value-description">Realça sua beleza</p>
                             </div>
                             <div className="value-card">
-                                <i className="fas fa-leaf value-icon"></i>
-                                <h4 className="value-title">Sustentabilidade</h4>
-                                <p className="value-description">Produção consciente e responsável</p>
+                                <i className="fas fa-shipping-fast value-icon"></i>
+                                <h4 className="value-title">Entrega</h4>
+                                <p className="value-description">Rápida e segura</p>
                             </div>
                         </div>
                     </div>

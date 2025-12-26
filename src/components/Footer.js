@@ -1,72 +1,153 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import logo from '../img/logo2.png';
+import pixLogo from '../img/pix-banco-central.svg';
 
 const Footer = () => (
-  <footer className="footer-uiux">
-    <div className="footer-content">
-      <div className="footer-brand">
-        <h2 className="footer-title">Menina Dourada</h2>
-        <p className="footer-description">
-          Biquínis e moda praia que celebram o verão e empoderam mulheres.
+  <footer className="footer-premium">
+    <div className="footer-main-content">
+      {/* Seção da Marca */}
+      <div className="footer-brand-section">
+        <div className="footer-logo-area">
+          <img src={logo} alt="Menina Dourada" className="footer-logo-img" />
+          <p className="footer-brand-tagline">
+            Desperte sua deusa interior com biquínis que celebram sua beleza única
+          </p>
+        </div>
+        
+        <div className="footer-trust-badges">
+          <div className="trust-badge">
+            <div className="trust-icon">
+              <i className="fas fa-shipping-fast"></i>
+            </div>
+            <div className="trust-text">
+              <strong>Frete Grátis</strong>
+              <span>Compras acima de R$ 200</span>
+            </div>
+          </div>
+          
+          <div className="trust-badge">
+            <div className="trust-icon">
+              <i className="fas fa-undo-alt"></i>
+            </div>
+            <div className="trust-text">
+              <strong>Troca Garantida</strong>
+              <span>30 dias para trocar</span>
+            </div>
+          </div>
+          
+          <div className="trust-badge">
+            <div className="trust-icon">
+              <i className="fas fa-shield-alt"></i>
+            </div>
+            <div className="trust-text">
+              <strong>Compra Segura</strong>
+              <span>Dados protegidos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Seção de Contato Premium */}
+      <div className="footer-contact-section">
+        <h3 className="footer-section-title">Atendimento VIP</h3>
+        <div className="whatsapp-premium">
+          <div className="whatsapp-info">
+            <div className="whatsapp-icon">
+              <i className="fab fa-whatsapp"></i>
+            </div>
+            <div className="whatsapp-details">
+              <strong className="whatsapp-number">(21) 99804-3354</strong>
+              <span className="whatsapp-hours">Segunda a Sexta: 9h às 18h</span>
+              <span className="whatsapp-response">Resposta em até 2h</span>
+            </div>
+          </div>
+          <a 
+            href="https://wa.me/5521998043354" 
+            className="whatsapp-cta"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Falar com especialista via WhatsApp"
+          >
+            <i className="fab fa-whatsapp"></i>
+            Falar com Especialista
+          </a>
+        </div>
+      </div>
+      
+      {/* Seção de Pagamento - Design Premium */}
+      <div className="footer-payment-section">
+        <h3 className="footer-section-title">Pagamento</h3>
+        <div className="pix-payment-card">
+          <div className="pix-header">
+            <img src={pixLogo} alt="PIX" className="pix-logo" />
+          </div>
+          <div className="pix-body">
+            <span className="pix-label">Pagamento instantâneo</span>
+            <ul className="pix-features">
+              <li><i className="fas fa-check-circle"></i> Sem taxas</li>
+              <li><i className="fas fa-check-circle"></i> Aprovação imediata</li>
+              <li><i className="fas fa-check-circle"></i> 100% seguro</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      {/* Seção Social - Instagram com gradiente oficial */}
+      <div className="footer-social-section">
+        <h3 className="footer-section-title">Siga a Menina Dourada</h3>
+        <p className="social-description">
+          Bastidores, lançamentos e inspirações da coleção.
         </p>
-      </div>
-      <div className="footer-links">
-        <h3>Links</h3>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/shop">Loja</Link></li>
-          <li><Link to="/about">Sobre Nós</Link></li>
-          <li><Link to="/contact">Contato</Link></li>
-        </ul>
-      </div>
-      <div className="footer-contact">
-        <h3>Contato & Redes</h3>
-        <ul>
-          <li>
-            <span className="footer-icon"><i className="fas fa-envelope"></i></span>
-            <a href="mailto:contato@meninadourada.com.br">contato@meninadourada.com.br</a>
-          </li>
-          <li>
-            <span className="footer-icon"><i className="fab fa-whatsapp"></i></span>
-            <a href="tel:+5511987654321">(11) 98765-4321</a>
-          </li>
-          <li>
-            <span className="footer-icon"><i className="fas fa-map-marker-alt"></i></span>
-            Rua das Praias, 123 - São Paulo/SP
-          </li>
-        </ul>
-        <div className="footer-social">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i className="fab fa-facebook"></i></a>
-          <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><i className="fab fa-pinterest"></i></a>
-          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i className="fab fa-tiktok"></i></a>
-        </div>
-      </div>
-      <div className="footer-help">
-        <h3>Ajuda</h3>
-        <ul>
-          <li><Link to="/trocas">Trocas e Devoluções</Link></li>
-          <li><Link to="/privacidade">Política de Privacidade</Link></li>
-          <li><Link to="/termos">Termos de Serviço</Link></li>
-          <li><Link to="/faq">Perguntas Frequentes</Link></li>
-        </ul>
-      </div>
-      <div className="footer-payments">
-        <h3>Pagamentos</h3>
-        <div className="footer-payment-icons">
-          <i className="fab fa-cc-visa"></i>
-          <i className="fab fa-cc-mastercard"></i>
-          <i className="fab fa-cc-amex"></i>
-          <i className="fas fa-barcode"></i>
-          <i className="fas fa-money-bill-wave"></i>
-          <i className="fas fa-qrcode"></i>
-        </div>
-        <span className="footer-secure">Compra 100% segura</span>
+        <a 
+          href="https://www.instagram.com/meninadouradaloja/" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="instagram-cta-premium"
+          aria-label="Seguir Menina Dourada no Instagram"
+        >
+          <i className="fab fa-instagram"></i>
+          <span>VER INSTAGRAM</span>
+        </a>
       </div>
     </div>
-    <div className="footer-bottom">
-      <span>© 2025 Menina Dourada. Todos os direitos reservados.</span>
+    
+    {/* Rodapé Inferior */}
+    <div className="footer-bottom-premium">
+      <div className="footer-links-premium">
+        <div className="links-group">
+          <h4>Loja</h4>
+          <Link to="/shop">Todos os Produtos</Link>
+          <Link to="/shop?categoria=biquinis">Biquínis</Link>
+          <Link to="/shop?categoria=maiôs">Maiôs</Link>
+          <Link to="/shop?categoria=acessorios">Acessórios</Link>
+        </div>
+        
+        <div className="links-group">
+          <h4>Suporte</h4>
+          <Link to="/about">Nossa História</Link>
+          <Link to="/contact">Fale Conosco</Link>
+          <Link to="/trocas">Trocas e Devoluções</Link>
+          <Link to="/guia-tamanhos">Guia de Tamanhos</Link>
+        </div>
+        
+        <div className="links-group">
+          <h4>Políticas</h4>
+          <Link to="/privacidade">Privacidade</Link>
+          <Link to="/termos">Termos de Uso</Link>
+          <Link to="/cookies">Cookies</Link>
+          <Link to="/lgpd">LGPD</Link>
+        </div>
+      </div>
+      
+      <div className="footer-copyright">
+        <div className="footer-copyright-brand">
+          <img src={logo} alt="Menina Dourada" className="footer-copyright-logo" />
+          <span>© 2025 Menina Dourada — Todos os direitos reservados</span>
+        </div>
+        <span className="footer-dev-note">Desenvolvido com cuidado para oferecer a melhor experiência.</span>
+      </div>
     </div>
   </footer>
 );
