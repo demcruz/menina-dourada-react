@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import ProductGrid from './components/ProductGrid';
 import CartSidebar from './components/CartSidebar';
 import AboutSection from './components/AboutSection';
-import ContactSection from './components/ContactSection';
-//import TestimonialsSection from './components/TestimonialsSection';
-//import FeaturedCollections from './components/FeaturedCollections';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
 import NewsletterSection from './components/NewsletterSection';
 import Footer from './components/Footer';
 import ProductModal from './components/ProductModal';
@@ -23,6 +22,15 @@ import OrderSuccessPage from './pages/OrderSuccessPage';
 import OrderPendingPage from './pages/OrderPendingPage';
 import OrderFailurePage from './pages/OrderFailurePage';
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
+
+  return null;
+};
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -45,7 +53,16 @@ function App() {
             : item
         );
       } else {
-        return [...prevCart, { ...productToAdd, quantity: quantity, selectedSize, selectedColor }];
+        // Garante que tamanho, cor e ufCadastro estejam disponíveis
+        return [...prevCart, { 
+          ...productToAdd, 
+          quantity: quantity, 
+          selectedSize, 
+          selectedColor,
+          tamanho: selectedSize || productToAdd.tamanho,
+          cor: selectedColor || productToAdd.cor,
+          ufCadastro: productToAdd.ufCadastro, // Origem do frete
+        }];
       }
     });
 
@@ -85,18 +102,17 @@ function App() {
   return (
     <Router>
       <div className="bg-sand-50 text-sand-800">
+        <ScrollToTop />
         <Navbar setIsCartOpen={setIsCartOpen} cart={cart} />
 
         <Routes>
           <Route path="/" element={
             <>
               <HeroSection />
-              {/* <FeaturedCollections /> */}
+              
               <ProductGrid addToCart={addToCart} openProductModal={openProductModal} />
               <AboutSection />
               <NewsletterSection />
-              <ContactSection />
-              {/* <TestimonialsSection /> */}
             </>
           } />
 
@@ -109,8 +125,11 @@ function App() {
           } />
 
           <Route path="/shop" element={<ProductGrid addToCart={addToCart} openProductModal={openProductModal} />} />
-          <Route path="/about" element={<AboutSection />} />
-          <Route path="/contact" element={<ContactSection />} />
+          <Route path="/loja" element={<ProductGrid addToCart={addToCart} openProductModal={openProductModal} />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/sobre" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/contato" element={<ContactPage />} />
           <Route path="*" element={<div>404: Not Found</div>} />
           <Route path="/checkout/success" element={<OrderSuccessPage />} />
           <Route path="/checkout/failure" element={<OrderPendingPage />} />

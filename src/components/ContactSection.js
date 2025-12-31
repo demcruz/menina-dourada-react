@@ -63,10 +63,10 @@ const ContactSection = () => {
                             
                             <div className="whatsapp-content">
                                 <p className="whatsapp-subtitle">Prefere falar direto conosco?</p>
-                                <p className="whatsapp-phone">(21) 99804-3354</p>
+                                <p className="whatsapp-phone">(21) 99804-3352</p>
                                 <p className="whatsapp-hours">📱 Seg a Sex: 9h às 18h<br/>📱 Sáb: 9h às 14h</p>
                                 
-                                <a href="https://wa.me/5521998043354?text=Olá! Gostaria de saber mais sobre os biquínis da Menina Dourada" 
+                                <a href="https://wa.me/5521998043352?text=Olá! Gostaria de saber mais sobre os biquínis da Menina Dourada" 
                                    className="whatsapp-button" 
                                    target="_blank" 
                                    rel="noopener noreferrer">

@@ -116,6 +116,10 @@
   grid-template-columns: 100px 1fr;
 }
 
+.checkout-grid-2-uneven-uf {
+  grid-template-columns: 70px 180px;
+}
+
 .checkout-grid-cep {
   grid-template-columns: 1fr auto;
   align-items: end;
@@ -399,6 +403,311 @@
   font-weight: 500;
 }
 
+/* Calculadora de Frete */
+.checkout-summary-calc-btn {
+  background: var(--primary-gold, #BFA14A);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.checkout-summary-calc-btn:hover {
+  background: var(--hover-gold, #A89040);
+}
+
+.checkout-summary-shipping-selected {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkout-shipping-change-btn {
+  background: transparent;
+  border: none;
+  color: var(--primary-gold, #BFA14A);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.checkout-shipping-change-btn:hover {
+  text-decoration: underline;
+}
+
+.checkout-shipping-calc {
+  background: var(--lighter-sand, #FAEDDF);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.75rem 0;
+}
+
+.checkout-shipping-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.checkout-shipping-input {
+  flex: 1;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--lightest-sand, #F5E3CE);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  background: white;
+  outline: none;
+}
+
+.checkout-shipping-input:focus {
+  border-color: var(--primary-gold, #BFA14A);
+}
+
+.checkout-shipping-btn {
+  padding: 0.625rem 1rem;
+  background: var(--primary-gold, #BFA14A);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.checkout-shipping-btn:hover:not(:disabled) {
+  background: var(--hover-gold, #A89040);
+}
+
+.checkout-shipping-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.checkout-shipping-options {
+  margin-top: 0.875rem;
+}
+
+.checkout-shipping-options-title {
+  font-size: 0.8125rem;
+  color: #5A4A3A;
+  margin: 0 0 0.625rem;
+}
+
+.checkout-shipping-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  background: white;
+  border: 1px solid var(--lightest-sand, #F5E3CE);
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  transition: border-color 200ms ease;
+}
+
+.checkout-shipping-option:last-child {
+  margin-bottom: 0;
+}
+
+.checkout-shipping-option:hover {
+  border-color: var(--primary-gold, #BFA14A);
+}
+
+.checkout-shipping-option input[type="radio"] {
+  margin-top: 2px;
+  accent-color: var(--primary-gold, #BFA14A);
+}
+
+.checkout-shipping-option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.checkout-shipping-option-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primary-gold, #BFA14A);
+}
+
+.checkout-shipping-option-days {
+  font-size: 0.75rem;
+  color: #8B7355;
+}
+
+/* Frete pendente */
+.checkout-shipping-pending {
+  font-size: 0.8125rem;
+  color: #8B7355;
+  font-style: italic;
+}
+
+.checkout-shipping-pending-error {
+  color: #e74c3c;
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Seção de Frete Inline */
+.checkout-shipping-section {
+  padding: 0.875rem 0;
+  border-top: 1px solid #F0EBE3;
+  margin-top: 0.5rem;
+}
+
+/* Campo de CEP no OrderSummary */
+.checkout-summary-cep {
+  margin-bottom: 1rem;
+}
+
+.checkout-summary-cep-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #5A4A3A;
+  margin-bottom: 0.5rem;
+}
+
+.checkout-summary-cep-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.checkout-summary-cep-input {
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid #E0D6C8;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #5A4A3A;
+  background: #FAFAFA;
+  transition: all 200ms ease;
+}
+
+.checkout-summary-cep-input:focus {
+  outline: none;
+  border-color: var(--primary-gold, #BFA14A);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(191, 161, 74, 0.1);
+}
+
+.checkout-summary-cep-input::placeholder {
+  color: #B0A090;
+}
+
+.checkout-summary-cep-btn {
+  padding: 0.625rem 1rem;
+  background: var(--primary-gold, #BFA14A);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+  min-width: 50px;
+}
+
+.checkout-summary-cep-btn:hover:not(:disabled) {
+  background: #A8903F;
+}
+
+.checkout-summary-cep-btn:disabled {
+  background: #D0C8B8;
+  cursor: not-allowed;
+}
+
+.checkout-shipping-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #5A4A3A;
+  margin: 0 0 0.625rem;
+}
+
+.checkout-shipping-options-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkout-shipping-option-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  background: #FAFAFA;
+  border: 2px solid #F0EBE3;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.checkout-shipping-option-inline:hover {
+  border-color: var(--primary-gold, #BFA14A);
+  background: #FFFBF5;
+}
+
+.checkout-shipping-option-inline.selected {
+  border-color: var(--primary-gold, #BFA14A);
+  background: #FFFBF5;
+}
+
+.checkout-shipping-option-inline input[type="radio"] {
+  accent-color: var(--primary-gold, #BFA14A);
+  width: 18px;
+  height: 18px;
+}
+
+.checkout-shipping-option-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.checkout-shipping-option-inline .checkout-shipping-option-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #5A4A3A;
+}
+
+.checkout-shipping-option-inline .checkout-shipping-option-price {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-gold, #BFA14A);
+}
+
+.checkout-shipping-option-inline .checkout-shipping-option-days {
+  font-size: 0.75rem;
+  color: #8B7355;
+  width: 100%;
+}
+
+.checkout-summary-calc-btn-error {
+  background: #e74c3c;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.checkout-shipping-error {
+  font-size: 0.75rem;
+  color: #e74c3c;
+  margin: 0.5rem 0 0;
+  text-align: left;
+  font-weight: 500;
+}
+
 .checkout-summary-total {
   padding-top: 0.75rem;
   border-top: 1px solid #F0EBE3;
@@ -636,7 +945,7 @@
 /* Mobile < 768px */
 @media (max-width: 767px) {
   .checkout-page {
-    padding: 1rem 0.75rem 7rem;
+      padding: 1rem 0.75rem 2rem;
   }
 
   .checkout-title {
@@ -678,15 +987,11 @@
 
   /* Fixed CTA */
   .checkout-mobile-cta {
-    display: block;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #FFFFFF;
-    padding: 1rem;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-    z-index: 100;
+      display: block;
+      position: static;
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
   }
 
   .checkout-mobile-cta .checkout-cta-btn {
@@ -1235,6 +1540,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.checkout-order-item-variant {
+  display: block;
+  font-size: 0.7rem;
+  color: #BFA14A;
+  margin-top: 2px;
+  font-weight: 500;
 }
 
 .checkout-order-item-qty {
@@ -1881,9 +2194,12 @@
 }
 
 .pix-card-qr-section {
-  text-align: center;
-  margin-bottom: 1rem;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
 
 .pix-card-qr-wrapper {
   display: inline-block;
@@ -1901,16 +2217,16 @@
 }
 
 .pix-card-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.875rem;
-  border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.875rem;
+    border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
   color: #FFF;
-  margin-bottom: 0.75rem;
-}
+    margin-bottom: 0.75rem;
+  }
 
 .pix-card-value {
   display: flex;
@@ -2010,17 +2326,17 @@
 }
 
 .pix-card-retry-btn {
-  width: 100%;
-  margin-top: 0.75rem;
-  padding: 0.625rem;
-  background: #E57373;
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.625rem;
+    background: #E57373;
   color: #FFF;
   font-size: 0.8125rem;
   font-weight: 600;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
+    border-radius: 8px;
+    cursor: pointer;
+  }
 
 .pix-card-retry-btn:hover {
   background: #EF5350;

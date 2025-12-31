@@ -122,10 +122,6 @@ const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQ
                                 <span>Subtotal</span>
                                 <span>R$ {formatCurrency(subtotal)}</span>
                             </div>
-                            <div className="cart-summary-row">
-                                <span>Frete</span>
-                                <span className="cart-shipping-calc">Calcular</span>
-                            </div>
                             <div className="cart-summary-total">
                                 <span>Total</span>
                                 <div className="cart-total-value">

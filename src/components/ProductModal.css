@@ -58,19 +58,20 @@ body.modal-open {
 
 .modal-close-button {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0.75rem;
+    right: 0.75rem;
     background: rgba(0, 0, 0, 0.04);
-    border: none;
-    font-size: 1rem;
-    color: #666;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    font-size: 1.05rem;
+    color: #555;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     z-index: 10;
     transition: all 150ms ease;
 }
@@ -350,18 +351,20 @@ body.modal-open {
     display: inline-flex;
     align-items: center;
     border: 1.5px solid #e0e0e0;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
+    background: #fff;
 }
 
 .modal-quantity-button {
     background-color: transparent;
     border: none;
     font-size: 1.125rem;
+    font-weight: 600;
     color: #333;
     cursor: pointer;
-    min-width: 44px;
-    height: 44px;
+    min-width: 48px;
+    height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -378,7 +381,7 @@ body.modal-open {
 }
 
 .modal-quantity-input {
-    width: 50px;
+    width: 64px;
     text-align: center;
     border: none;
     border-left: 1px solid #e0e0e0;
@@ -386,7 +389,7 @@ body.modal-open {
     font-size: 1rem;
     font-weight: 600;
     color: #1a1a1a;
-    height: 44px;
+    height: 46px;
     -moz-appearance: textfield;
 }
 
@@ -585,10 +588,8 @@ body.modal-open {
     }
     
     .modal-close-button {
-        top: 0.75rem;
-        right: 0.75rem;
-        width: 36px;
-        height: 36px;
+        width: 44px;
+        height: 44px;
     }
     
     .modal-product-layout {
@@ -615,7 +616,7 @@ body.modal-open {
     
     .modal-quantity-input {
         flex: 1;
-        max-width: 100px;
+        max-width: 120px;
     }
     
     .modal-add-to-cart-button {

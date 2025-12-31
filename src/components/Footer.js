@@ -58,13 +58,13 @@ const Footer = () => (
               <i className="fab fa-whatsapp"></i>
             </div>
             <div className="whatsapp-details">
-              <strong className="whatsapp-number">(21) 99804-3354</strong>
+              <strong className="whatsapp-number">(21) 99804-3352</strong>
               <span className="whatsapp-hours">Segunda a Sexta: 9h às 18h</span>
               <span className="whatsapp-response">Resposta em até 2h</span>
             </div>
           </div>
           <a 
-            href="https://wa.me/5521998043354" 
+            href="https://wa.me/5521998043352" 
             className="whatsapp-cta"
             target="_blank"
             rel="noopener noreferrer"
@@ -118,16 +118,16 @@ const Footer = () => (
       <div className="footer-links-premium">
         <div className="links-group">
           <h4>Loja</h4>
-          <Link to="/shop">Todos os Produtos</Link>
-          <Link to="/shop?categoria=biquinis">Biquínis</Link>
-          <Link to="/shop?categoria=maiôs">Maiôs</Link>
-          <Link to="/shop?categoria=acessorios">Acessórios</Link>
+          <Link to="/loja">Todos os Produtos</Link>
+          <Link to="/loja?categoria=biquinis">Biquínis</Link>
+          <Link to="/loja?categoria=maiôs">Maiôs</Link>
+          <Link to="/loja?categoria=acessorios">Acessórios</Link>
         </div>
         
         <div className="links-group">
           <h4>Suporte</h4>
-          <Link to="/about">Nossa História</Link>
-          <Link to="/contact">Fale Conosco</Link>
+          <Link to="/sobre">Nossa História</Link>
+          <Link to="/contato">Fale Conosco</Link>
           <Link to="/trocas">Trocas e Devoluções</Link>
           <Link to="/guia-tamanhos">Guia de Tamanhos</Link>
         </div>

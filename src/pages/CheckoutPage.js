@@ -10,6 +10,7 @@ import ShippingInfoCard from '../components/checkout/ShippingInfoCard';
 import PixPaymentCard from '../components/checkout/PixPaymentCard';
 import OrderItemsCard from '../components/checkout/OrderItemsCard';
 import PixHowItWorks from '../components/checkout/PixHowItWorks';
+import useFreteCalculator from '../hooks/useFreteCalculator';
 import '../styles/Checkout.css';
 
 // Utility functions
@@ -17,7 +18,6 @@ const digitsOnly = (value = '') => (value ?? '').toString().replace(/\D/g, '');
 const safeTrim = (value = '') => (value ?? '').toString().trim();
 const getISODate = (date) => date.toISOString().split('T')[0];
 const PIX_WS_URL = 'wss://05v2xyhlhc.execute-api.sa-east-1.amazonaws.com/prod';
-const PAYMENT_TIMEOUT_MS = 5 * 60 * 1000;
 
 const safeJsonParse = (value, fallback = null) => {
   if (!value) return fallback;
@@ -82,20 +82,37 @@ const CheckoutPage = ({ cart, emptyCart }) => {
   const [error, setError] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState('IDLE');
   
+  // Sistema de frete com API Lambda
+  const freteCalculator = useFreteCalculator();
+  const {
+    freteValor,
+    status: freteStatus,
+    servicoSelecionado,
+    cepDestino,
+    prazoLabel,
+    prazoMin,
+    prazoMax,
+    errorMessage: freteErrorMessage,
+    opcoesFrete,
+    shipmentsInfo,
+    setServico,
+    setCepDestino,
+    calcularFrete,
+  } = freteCalculator;
+
   // Confirmed data snapshots
   const [confirmedDeliveryInfo, setConfirmedDeliveryInfo] = useState(null);
   const [confirmedCartItems, setConfirmedCartItems] = useState([]);
   const [confirmedOrderTitle, setConfirmedOrderTitle] = useState('');
+  const [confirmedShippingCost, setConfirmedShippingCost] = useState(0);
   
   // WebSocket refs
   const [wsRetryKey, setWsRetryKey] = useState(0);
   const [checkoutInitialized, setCheckoutInitialized] = useState(false);
   const wsRef = useRef(null);
-  const wsTimeoutRef = useRef(null);
   const wsConfirmedRef = useRef(false);
 
   const cleanupRealtime = useCallback(() => {
-    if (wsTimeoutRef.current) { clearTimeout(wsTimeoutRef.current); wsTimeoutRef.current = null; }
     if (wsRef.current) { try { wsRef.current.close(); } catch {} wsRef.current = null; }
     wsConfirmedRef.current = false;
   }, []);
@@ -105,7 +122,31 @@ const CheckoutPage = ({ cart, emptyCart }) => {
     return total + price * (parseInt(item.quantity) || 0);
   }, 0);
 
+  const shippingCost = freteStatus === 'success' && freteValor !== null ? freteValor : 0;
+  const totalWithShipping = subtotal + shippingCost;
+
   const totalQuantity = cart.reduce((acc, item) => acc + (parseInt(item.quantity) || 0), 0);
+
+  const handleFreteServicoChange = useCallback((servico) => {
+    setServico(servico);
+  }, [setServico]);
+
+  const handleFreteCepChange = useCallback((cep) => {
+    setCepDestino(cep);
+  }, [setCepDestino]);
+
+  const handleCalcularFrete = useCallback((cep) => {
+    setCepDestino(cep);
+    if (cep && cep.length === 8) {
+      const cepFormatado = `${cep.slice(0, 5)}-${cep.slice(5)}`;
+      setFormData(prev => ({ ...prev, zipCode: cepFormatado }));
+    }
+    calcularFrete(cep, cart);
+  }, [calcularFrete, cart, setCepDestino]);
+
+  const handleShippingLoad = (options) => {
+    console.log('Shipping options loaded:', options);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -171,10 +212,10 @@ const CheckoutPage = ({ cart, emptyCart }) => {
       neighborhood: safeTrim(formData.neighborhood), city: safeTrim(formData.city),
     };
     const cleanedBody = Object.fromEntries(Object.entries(customerBody).filter(([, v]) => v));
-    const avgUnitPrice = totalQuantity > 0 ? subtotal / totalQuantity : subtotal;
+    const avgUnitPrice = totalQuantity > 0 ? totalWithShipping / totalQuantity : totalWithShipping;
     return {
       ...cleanedBody, createPayment: true,
-      payment: { billingType: 'PIX', value: Number(subtotal.toFixed(2)), dueDate: getISODate(new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)) },
+      payment: { billingType: 'PIX', value: Number(totalWithShipping.toFixed(2)), dueDate: getISODate(new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)) },
       order: { title: buildOrderTitle(), qty: totalQuantity || 1, unitPrice: Number(avgUnitPrice.toFixed(2)) },
     };
   };
@@ -182,6 +223,11 @@ const CheckoutPage = ({ cart, emptyCart }) => {
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
+    if (freteStatus !== 'success' || freteValor === null) {
+      setError('Por favor, calcule o frete antes de finalizar a compra.');
+      return;
+    }
     
     cleanupRealtime();
     setLoadingCreate(true);
@@ -206,6 +252,7 @@ const CheckoutPage = ({ cart, emptyCart }) => {
     setConfirmedDeliveryInfo(deliverySnapshot);
     setConfirmedCartItems(itemsSnapshot);
     setConfirmedOrderTitle(orderTitle);
+    setConfirmedShippingCost(shippingCost);
     
     // Transition to payment state
     setCheckoutState(CHECKOUT_STATES.PAYMENT);
@@ -274,21 +321,13 @@ const CheckoutPage = ({ cart, emptyCart }) => {
     wsConfirmedRef.current = false;
     
     const socket = new WebSocket(PIX_WS_URL);
-    wsRef.current = socket;
-    
-    const timeoutId = setTimeout(() => {
-      if (!isActive || wsConfirmedRef.current) return;
-      setPaymentStatus('TIMEOUT');
-      setError('Pagamento não identificado. Tente novamente.');
-      cleanupRealtime();
-    }, PAYMENT_TIMEOUT_MS);
-    wsTimeoutRef.current = timeoutId;
+      wsRef.current = socket;
 
-    socket.onopen = () => {
-      if (isActive) {
-        socket.send(JSON.stringify({ action: 'register', paymentId }));
-      }
-    };
+      socket.onopen = () => {
+        if (isActive) {
+          socket.send(JSON.stringify({ action: 'register', paymentId }));
+        }
+      };
 
     socket.onmessage = (event) => {
       if (!isActive) return;
@@ -299,17 +338,12 @@ const CheckoutPage = ({ cart, emptyCart }) => {
       
       const incomingPaymentId = data?.paymentId || data?.payment?.id || data?.payment?.paymentId || data?.id || '';
       
-      if (isPaidWsEvent(data) && incomingPaymentId === paymentId && !wsConfirmedRef.current) {
-        wsConfirmedRef.current = true;
-        setPaymentStatus('CONFIRMING');
-        
-        if (wsTimeoutRef.current) {
-          clearTimeout(wsTimeoutRef.current);
-          wsTimeoutRef.current = null;
-        }
-        
-        setError(null);
-        setPaymentStatus('PAID');
+        if (isPaidWsEvent(data) && incomingPaymentId === paymentId && !wsConfirmedRef.current) {
+          wsConfirmedRef.current = true;
+          setPaymentStatus('CONFIRMING');
+          
+          setError(null);
+          setPaymentStatus('PAID');
         setCheckoutState(CHECKOUT_STATES.CONFIRMED);
         cleanupRealtime();
         
@@ -341,11 +375,7 @@ const CheckoutPage = ({ cart, emptyCart }) => {
 
     return () => {
       isActive = false;
-      if (wsTimeoutRef.current) {
-        clearTimeout(wsTimeoutRef.current);
-        wsTimeoutRef.current = null;
-      }
-      try { socket.close(); } catch {}
+try { socket.close(); } catch {}
       if (wsRef.current === socket) wsRef.current = null;
     };
   }, [paymentId, wsRetryKey, paymentStatus, cleanupRealtime, confirmedCartItems, confirmedDeliveryInfo, confirmedOrderTitle, paymentMeta, emptyCart, navigate, subtotal]);
@@ -358,13 +388,38 @@ const CheckoutPage = ({ cart, emptyCart }) => {
       <div className="checkout-main">
         <div className="checkout-card">
           <CustomerForm data={formData} onChange={handleChange} errors={errors} />
-          <AddressForm data={formData} onChange={handleChange} onCepSearch={handleCepSearch} errors={errors} />
+          <AddressForm
+            data={formData}
+            onChange={handleChange}
+            onCepSearch={handleCepSearch}
+            onShippingLoad={handleShippingLoad}
+            onCalcularFrete={handleCalcularFrete}
+            errors={errors}
+          />
         </div>
       </div>
 
       <div className="checkout-sidebar">
         <PixInfoCard />
-        <OrderSummary cart={cart} subtotal={subtotal} />
+        <OrderSummary
+          cart={cart}
+          subtotal={subtotal}
+          freteState={{
+            cepDestino,
+            servicoSelecionado,
+            freteValor,
+            prazoLabel,
+            prazoMin,
+            prazoMax,
+            status: freteStatus,
+            errorMessage: freteErrorMessage,
+            opcoesFrete,
+            shipmentsInfo,
+          }}
+          onCepChange={handleFreteCepChange}
+          onServicoChange={handleFreteServicoChange}
+          onCalcularFrete={handleCalcularFrete}
+        />
 
         <div className="checkout-cta-container">
           <button type="submit" className="checkout-cta-btn" disabled={loadingCreate}>
@@ -409,7 +464,12 @@ const CheckoutPage = ({ cart, emptyCart }) => {
           
           {/* Order Summary Compact */}
           <div className="payment-order-summary">
-            <OrderItemsCard items={confirmedCartItems} subtotal={subtotal} compact />
+            <OrderItemsCard
+              items={confirmedCartItems}
+              subtotal={subtotal}
+              shippingCost={confirmedShippingCost}
+              compact
+            />
           </div>
 
           {/* Shipping Info */}
@@ -438,7 +498,12 @@ const CheckoutPage = ({ cart, emptyCart }) => {
 
       {/* Mobile: Order details below */}
       <div className="payment-mobile-details">
-        <OrderItemsCard items={confirmedCartItems} subtotal={subtotal} compact />
+        <OrderItemsCard
+          items={confirmedCartItems}
+          subtotal={subtotal}
+          shippingCost={confirmedShippingCost}
+          compact
+        />
         <ShippingInfoCard deliveryInfo={confirmedDeliveryInfo} />
         <button type="button" onClick={handleBackToForm} className="payment-edit-btn">
           ← Editar dados
@@ -479,7 +544,26 @@ const CheckoutPage = ({ cart, emptyCart }) => {
         {/* Mobile Summary - Only in filling state */}
         {checkoutState === CHECKOUT_STATES.FILLING && (
           <div className="checkout-mobile-summary">
-            <OrderSummary cart={cart} subtotal={subtotal} isAccordion />
+            <OrderSummary
+              cart={cart}
+              subtotal={subtotal}
+              isAccordion
+              freteState={{
+                cepDestino,
+                servicoSelecionado,
+                freteValor,
+                prazoLabel,
+                prazoMin,
+                prazoMax,
+                status: freteStatus,
+                errorMessage: freteErrorMessage,
+                opcoesFrete,
+                shipmentsInfo,
+              }}
+              onCepChange={handleFreteCepChange}
+              onServicoChange={handleFreteServicoChange}
+              onCalcularFrete={handleCalcularFrete}
+            />
           </div>
         )}
 
@@ -497,7 +581,7 @@ const CheckoutPage = ({ cart, emptyCart }) => {
               disabled={loadingCreate} 
               onClick={handlePlaceOrder}
             >
-              {loadingCreate ? 'Processando...' : `Finalizar • R$ ${formatCurrency(subtotal)}`}
+              {loadingCreate ? 'Processando...' : `Finalizar • R$ ${formatCurrency(totalWithShipping)}`}
             </button>
           </div>
         )}
@@ -507,3 +591,6 @@ const CheckoutPage = ({ cart, emptyCart }) => {
 };
 
 export default CheckoutPage;
+
+
+

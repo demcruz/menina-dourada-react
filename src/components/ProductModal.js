@@ -24,29 +24,69 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
         return colors;
     }, [product?.variacoes]);
 
-    // Extrai tamanhos únicos das variações
+    // Extrai tamanhos únicos das variações OU do campo tamanho (array)
     const uniqueSizes = useMemo(() => {
-        if (!product?.variacoes) return [];
-        const sizes = [...new Set(product.variacoes.map(v => v.tamanho).filter(Boolean))];
-        // Ordenar tamanhos
         const sizeOrder = ['PP', 'P', 'M', 'G', 'GG', 'XG', 'XXG'];
-        return sizes.sort((a, b) => {
-            const indexA = sizeOrder.indexOf(a.toUpperCase());
-            const indexB = sizeOrder.indexOf(b.toUpperCase());
-            if (indexA === -1 && indexB === -1) return a.localeCompare(b);
-            if (indexA === -1) return 1;
-            if (indexB === -1) return -1;
-            return indexA - indexB;
-        });
-    }, [product?.variacoes]);
+        
+        // Função para normalizar tamanho (uppercase)
+        const normalizeSizes = (sizes) => {
+            return sizes
+                .map(s => s.toUpperCase()) // Normaliza para maiúsculo
+                .sort((a, b) => {
+                    const indexA = sizeOrder.indexOf(a);
+                    const indexB = sizeOrder.indexOf(b);
+                    if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+                    if (indexA === -1) return 1;
+                    if (indexB === -1) return -1;
+                    return indexA - indexB;
+                });
+        };
+        
+        // Novo formato: tamanho é um array dentro da variação
+        const variacaoTamanho = product?.variacoes?.[0]?.tamanho;
+        if (variacaoTamanho && Array.isArray(variacaoTamanho)) {
+            return normalizeSizes([...variacaoTamanho]);
+        }
+        
+        // Formato alternativo: tamanho direto no produto
+        if (product?.tamanho && Array.isArray(product.tamanho)) {
+            return normalizeSizes([...product.tamanho]);
+        }
+        
+        // Formato legado: extrai tamanhos únicos de múltiplas variações (string)
+        if (!product?.variacoes) return [];
+        const sizes = [...new Set(product.variacoes.map(v => v.tamanho).filter(t => t && typeof t === 'string'))];
+        if (sizes.length === 0) return [];
+        
+        return normalizeSizes(sizes);
+    }, [product?.variacoes, product?.tamanho]);
 
     // Encontra variação baseada na cor e tamanho selecionados
     const findVariation = (color, size) => {
         if (!product?.variacoes) return null;
-        return product.variacoes.find(v => 
-            (!color || v.cor === color) && 
-            (!size || v.tamanho === size)
-        );
+        
+        // Garante que size é uma string
+        const sizeStr = typeof size === 'string' ? size : null;
+        
+        return product.variacoes.find(v => {
+            const colorMatch = !color || v.cor === color;
+            
+            // Verifica tamanho - pode ser string ou array
+            let sizeMatch = !sizeStr;
+            if (sizeStr && v.tamanho) {
+                if (Array.isArray(v.tamanho)) {
+                    // Se tamanho é array, verifica se o size está incluído
+                    sizeMatch = v.tamanho.some(t => 
+                        typeof t === 'string' && t.toUpperCase() === sizeStr.toUpperCase()
+                    );
+                } else if (typeof v.tamanho === 'string') {
+                    // Se tamanho é string, compara diretamente
+                    sizeMatch = v.tamanho.toUpperCase() === sizeStr.toUpperCase();
+                }
+            }
+            
+            return colorMatch && sizeMatch;
+        });
     };
 
     const initialVariation = getMainVariation(product);
@@ -57,7 +97,8 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
             const initial = initialVariation;
             setSelectedVariation(initial);
             setSelectedColor(initial?.cor || uniqueColors[0] || null);
-            setSelectedSize(initial?.tamanho || null);
+            // Não pré-seleciona tamanho - usuário deve escolher
+            setSelectedSize(null);
             setSelectedImageIndex(0);
             setIsZoomed(false);
             setIsTableExpanded(false);
@@ -108,31 +149,40 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
     if (!isOpen || !product) return null;
 
     const currentVariation = selectedVariation || initialVariation;
-    const preco = currentVariation?.preco;
+    // Suporta tanto 'precoVenda' (novo formato) quanto 'preco' (legado)
+    const preco = currentVariation?.precoVenda ?? currentVariation?.preco;
     const imagem = currentVariation?.imagens?.[selectedImageIndex]?.url;
     const altText = currentVariation?.imagens?.[selectedImageIndex]?.altText || product?.nome;
     const imagens = currentVariation?.imagens || [];
 
     const handleAddToCart = async () => {
-        if (!currentVariation) {
-            alert('Por favor, selecione cor e tamanho.');
+        // Se tem tamanhos disponíveis e nenhum foi selecionado
+        if (uniqueSizes.length > 0 && !selectedSize) {
+            alert('Por favor, selecione um tamanho.');
             return;
         }
 
-        if (uniqueSizes.length > 1 && !selectedSize) {
-            alert('Por favor, selecione um tamanho.');
+        if (!currentVariation && !product) {
+            alert('Produto não disponível.');
             return;
         }
 
         setIsLoading(true);
 
         try {
+            // Suporta tanto 'precoVenda' (novo formato) quanto 'preco' (legado)
+            const precoFinal = currentVariation?.precoVenda ?? currentVariation?.preco ?? product?.precoVenda ?? product?.preco;
+            
             const productWithPrice = {
                 ...product,
-                price: currentVariation.preco,
+                price: precoFinal,
             };
 
-            await addToCart(productWithPrice, quantity, currentVariation.tamanho, currentVariation.cor);
+            // Usa o tamanho selecionado (do array ou da variação)
+            const tamanhoFinal = selectedSize || currentVariation?.tamanho;
+            const corFinal = currentVariation?.cor || selectedColor;
+
+            await addToCart(productWithPrice, quantity, tamanhoFinal, corFinal);
             
             setTimeout(() => {
                 onClose();
@@ -327,7 +377,7 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                                     aria-label="Diminuir quantidade"
                                     disabled={quantity <= 1}
                                 >
-                                    −
+                                    -
                                 </button>
                                 <input
                                     type="number"
@@ -352,7 +402,7 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                             <button
                                 className="modal-add-to-cart-button"
                                 onClick={handleAddToCart}
-                                disabled={isLoading || (uniqueSizes.length > 1 && !selectedSize)}
+                                disabled={isLoading || (uniqueSizes.length > 0 && !selectedSize)}
                             >
                                 {isLoading ? (
                                     <>
@@ -406,3 +456,4 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
 };
 
 export default ProductModal;
+

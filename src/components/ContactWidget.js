@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './ContactWidget.css';
 
 const ContactWidget = () => {
+    const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
+    const [hasScrolled, setHasScrolled] = useState(false);
+    const [isOverProducts, setIsOverProducts] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const isCheckoutRoute = location.pathname.startsWith('/checkout');
     const [activeTab, setActiveTab] = useState('chat'); // 'chat' or 'email'
     const [formData, setFormData] = useState({
         nome: '',
@@ -23,8 +29,54 @@ const ContactWidget = () => {
         }
     };
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setHasScrolled(window.scrollY > 120);
+        };
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        if (!('matchMedia' in window)) return;
+        const media = window.matchMedia('(max-width: 767px)');
+        const updateMatch = () => setIsMobile(media.matches);
+        updateMatch();
+
+        if (typeof media.addEventListener === 'function') {
+            media.addEventListener('change', updateMatch);
+            return () => media.removeEventListener('change', updateMatch);
+        }
+
+        media.addListener(updateMatch);
+        return () => media.removeListener(updateMatch);
+    }, []);
+
+    useEffect(() => {
+        const target = document.querySelector('#shop');
+        if (!target) return;
+
+        const handleVisibilityCheck = () => {
+            const rect = target.getBoundingClientRect();
+            const viewportHeight = window.innerHeight || 0;
+            const isVisible =
+                rect.top < viewportHeight * 0.7 &&
+                rect.bottom > viewportHeight * 0.2;
+            setIsOverProducts(isVisible);
+        };
+
+        handleVisibilityCheck();
+        window.addEventListener('scroll', handleVisibilityCheck, { passive: true });
+        window.addEventListener('resize', handleVisibilityCheck);
+        return () => {
+            window.removeEventListener('scroll', handleVisibilityCheck);
+            window.removeEventListener('resize', handleVisibilityCheck);
+        };
+    }, []);
+
     const handleWhatsApp = () => {
-        window.open('https://wa.me/5521998043354?text=Olá! Gostaria de mais informações.', '_blank');
+        window.open('https://wa.me/5521998043352?text=Olá! Gostaria de mais informações.', '_blank');
     };
 
     const handleInputChange = (e) => {
@@ -63,6 +115,8 @@ const ContactWidget = () => {
         setIsOpen(false);
         setSubmitSuccess(false);
     };
+
+    if (isCheckoutRoute) return null;
 
     return (
         <>
@@ -113,7 +167,7 @@ const ContactWidget = () => {
                             <div className="contact-option-text">
                                 <strong>Fale conosco</strong>
                                 <span>Segunda a Sexta: 9h às 18h</span>
-                                <span className="contact-phone">(21) 99804-3354</span>
+                                <span className="contact-phone">(21) 99804-3352</span>
                             </div>
                         </div>
                     </div>
@@ -249,7 +303,7 @@ const ContactWidget = () => {
 
             {/* Floating Button */}
             <button 
-                className={`contact-widget-button ${isOpen ? 'active' : ''}`}
+                className={`contact-widget-button ${isOpen ? 'active' : ''} ${isMobile && !isOpen && (!hasScrolled || isOverProducts) ? 'is-hidden' : ''}`}
                 onClick={toggleWidget}
                 aria-label={isOpen ? 'Fechar contato' : 'Abrir contato'}
             >

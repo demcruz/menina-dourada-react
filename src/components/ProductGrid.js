@@ -3,18 +3,12 @@ import LoadingSpinner from './LoadingSpinner';
 import { getProducts as fetchProductsFromApi } from '../api/axiosInstance';
 import { toNumber, formatBRL } from '../utils/price';
 
-const PRODUCTS_PER_PAGE = 8;
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutos
-
-function cacheKey(page, size) {
-  return `md:products:page=${page}:size=${size}`;
-}
+const PRODUCTS_PER_PAGE = 9;
+const LOAD_MORE_DELAY = 1500; // 1.5 segundos de loading
 
 function normalizeResponse(raw) {
-  // Pode vir direto como array/paginado ou como objeto proxy { statusCode, body: "..." }
   let payload = raw;
 
-  // Se vier do Lambda como { body: string }, faz parse
   if (payload && payload.body) {
     try {
       payload = JSON.parse(payload.body);
@@ -23,7 +17,6 @@ function normalizeResponse(raw) {
     }
   }
 
-  // Se for paginação do back-end: { content: [...], totalPages: N }
   const items =
     Array.isArray(payload?.content) ? payload.content :
       Array.isArray(payload) ? payload :
@@ -35,25 +28,23 @@ function normalizeResponse(raw) {
 
 const ProductGrid = ({ addToCart, openProductModal }) => {
   const [products, setProducts] = useState([]);
-  const [allProducts, setAllProducts] = useState([]); // Todos os produtos para filtro
+  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   
   // Estados dos filtros
   const [categoryFilter, setCategoryFilter] = useState('todos');
   const [colorFilter, setColorFilter] = useState('todas');
   const [sortOrder, setSortOrder] = useState('vendidos');
 
-  // Refs para controle de scroll
   const didFetchRef = useRef(false);
-  const productGridRef = useRef(null);
   const sectionRef = useRef(null);
 
-  // Evita o duplo fetch do React.StrictMode em dev
   useEffect(() => {
-    // Em produção não precisa, mas em dev evita duplo useEffect
     if (didFetchRef.current) return;
     didFetchRef.current = true;
   }, []);
@@ -63,15 +54,15 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
     try {
       const allItems = [];
       let page = 0;
-      let hasMore = true;
+      let hasMorePages = true;
       
-      while (hasMore && page < 10) { // Limite de 10 páginas para segurança
+      while (hasMorePages && page < 10) {
         const resp = await fetchProductsFromApi(page, PRODUCTS_PER_PAGE);
         const norm = normalizeResponse(resp);
         allItems.push(...norm.items);
         
         if (page >= norm.totalPages - 1 || norm.items.length === 0) {
-          hasMore = false;
+          hasMorePages = false;
         }
         page++;
       }
@@ -84,6 +75,7 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
     }
   }, []);
 
+  // Carrega produtos iniciais
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -93,46 +85,17 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
       setError(null);
 
       try {
-        // 1) Tenta cache
-        const key = cacheKey(currentPage, PRODUCTS_PER_PAGE);
-        const cached = localStorage.getItem(key);
-        if (cached) {
-          const { ts, data } = JSON.parse(cached);
-          if (Date.now() - ts < CACHE_TTL_MS) {
-            const norm = normalizeResponse(data);
-            setProducts(norm.items);
-            setTotalPages(norm.totalPages);
-            setLoading(false);
-            
-            // Carrega todos em background para filtros
-            if (allProducts.length === 0) {
-              loadAllProducts();
-            }
-            return; // usa cache, não chama a API
-          } else {
-            localStorage.removeItem(key);
-          }
-        }
-
-        // 2) Busca API
-        const resp = await fetchProductsFromApi(currentPage, PRODUCTS_PER_PAGE, { signal });
+        const resp = await fetchProductsFromApi(0, PRODUCTS_PER_PAGE, { signal });
         const norm = normalizeResponse(resp);
 
         setProducts(norm.items);
         setTotalPages(norm.totalPages);
-
-        // 3) Salva no cache
-        localStorage.setItem(
-          key,
-          JSON.stringify({ ts: Date.now(), data: norm.raw })
-        );
+        setCurrentPage(0);
+        setHasMore(norm.totalPages > 1);
         
         // Carrega todos em background para filtros
-        if (allProducts.length === 0) {
-          loadAllProducts();
-        }
+        loadAllProducts();
       } catch (err) {
-        // ignora se foi cancelado pelo unmount/troca de página
         if (err?.name === 'CanceledError' || err?.name === 'AbortError') return;
         console.error('Erro ao buscar produtos:', err);
         setError(err?.message || 'Erro ao carregar produtos do servidor.');
@@ -144,43 +107,36 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
     loadProducts();
 
     return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [loadAllProducts]);
 
-  // Função para scroll suave para o topo da grid de produtos
-  const scrollToProductGrid = () => {
-    if (productGridRef.current) {
-      // Calcula offset para ficar um pouco acima da grid (para mostrar o título)
-      const element = productGridRef.current;
-      const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
-      const offset = 100; // 100px acima da grid para mostrar o título
+  // Função para carregar mais produtos
+  const handleLoadMore = async () => {
+    if (loadingMore || !hasMore) return;
+    
+    setLoadingMore(true);
+    
+    // Delay para dar sensação de carregamento premium
+    await new Promise(resolve => setTimeout(resolve, LOAD_MORE_DELAY));
+    
+    try {
+      const nextPage = currentPage + 1;
+      const resp = await fetchProductsFromApi(nextPage, PRODUCTS_PER_PAGE);
+      const norm = normalizeResponse(resp);
       
-      window.scrollTo({
-        top: elementTop - offset,
-        behavior: 'smooth'
-      });
-    } else if (sectionRef.current) {
-      // Fallback: scroll para a seção
-      sectionRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  };
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 0 && newPage < totalPages) {
-      setCurrentPage(newPage);
-      
-      // Scroll suave para o topo da grid após mudança de página
-      setTimeout(() => {
-        scrollToProductGrid();
-      }, 100); // Pequeno delay para garantir que o estado foi atualizado
+      // Adiciona novos produtos à lista existente
+      setProducts(prev => [...prev, ...norm.items]);
+      setCurrentPage(nextPage);
+      setHasMore(nextPage < norm.totalPages - 1);
+    } catch (err) {
+      console.error('Erro ao carregar mais produtos:', err);
+    } finally {
+      setLoadingMore(false);
     }
   };
 
   const getPrecoPrincipal = (produto) => {
-    const preco = produto?.variacoes?.[0]?.preco;
+    const variacao = produto?.variacoes?.[0];
+    const preco = variacao?.precoVenda ?? variacao?.preco;
     if (preco == null) return null;
     return typeof preco === 'string' ? parseFloat(preco) : preco;
   };
@@ -190,16 +146,29 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
 
   const getId = (p) => p?._id?.timestamp || p?.id || crypto.randomUUID();
 
-  // Detecta categoria do produto pelo nome
   const getProductCategory = (product) => {
     const nome = product?.nome?.toLowerCase() || '';
+    const categoria = product?.categoria?.toLowerCase() || '';
+    
+    // Primeiro verifica pela categoria do produto (se existir)
+    if (categoria) {
+      if (categoria.includes('biquini') || categoria.includes('biquíni')) return 'biquinis';
+      if (categoria.includes('maio') || categoria.includes('maiô')) return 'maios';
+      if (categoria.includes('saida') || categoria.includes('saída')) return 'saidas';
+      if (categoria.includes('canga')) return 'cangas';
+      if (categoria.includes('acessorio') || categoria.includes('acessório')) return 'acessorios';
+    }
+    
+    // Fallback: verifica pelo nome do produto
     if (nome.includes('maiô') || nome.includes('maio')) return 'maios';
     if (nome.includes('saída') || nome.includes('saida')) return 'saidas';
+    if (nome.includes('canga')) return 'cangas';
+    if (nome.includes('acessório') || nome.includes('acessorio')) return 'acessorios';
     if (nome.includes('biquíni') || nome.includes('biquini')) return 'biquinis';
+    
     return 'outros';
   };
 
-  // Extrai todas as cores de um produto (de todas as variações)
   const getProductColors = (product) => {
     const colors = new Set();
     product?.variacoes?.forEach(v => {
@@ -210,7 +179,6 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
     return Array.from(colors);
   };
 
-  // Lista de cores disponíveis (extraída de todos os produtos)
   const availableColors = useMemo(() => {
     const colors = new Set();
     const sourceList = allProducts.length > 0 ? allProducts : products;
@@ -226,22 +194,16 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
     return Array.from(colors).sort();
   }, [allProducts, products]);
 
-  // Verifica se filtro está ativo
   const isFilterActive = categoryFilter !== 'todos' || colorFilter !== 'todas';
-
-  // Decide qual lista usar baseado no filtro
   const sourceProducts = isFilterActive ? allProducts : products;
 
-  // Filtra e ordena produtos
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...sourceProducts];
 
-    // Filtro por categoria
     if (categoryFilter !== 'todos') {
       result = result.filter(product => getProductCategory(product) === categoryFilter);
     }
 
-    // Filtro por cor
     if (colorFilter !== 'todas') {
       result = result.filter(product => {
         const productColors = getProductColors(product);
@@ -249,7 +211,6 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
       });
     }
 
-    // Ordenação
     switch (sortOrder) {
       case 'menor':
         result.sort((a, b) => (getPrecoPrincipal(a) || 0) - (getPrecoPrincipal(b) || 0));
@@ -258,26 +219,23 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
         result.sort((a, b) => (getPrecoPrincipal(b) || 0) - (getPrecoPrincipal(a) || 0));
         break;
       case 'novidades':
-        // Mantém ordem original (assumindo que já vem ordenado por data)
         result.reverse();
         break;
       case 'vendidos':
       default:
-        // Mantém ordem original da API
         break;
     }
 
     return result;
   }, [sourceProducts, categoryFilter, colorFilter, sortOrder]);
 
-  // Mostra paginação apenas quando não há filtro ativo
-  const showPagination = !isFilterActive && totalPages > 1;
+  // Mostra "Carregar mais" apenas quando não há filtro ativo e há mais produtos
+  const showLoadMore = !isFilterActive && hasMore && !loading;
 
   return (
     <section id="shop" className="product-grid-section" ref={sectionRef}>
       <div className="container px-4">
         <h2 className="section-title">Lançamentos</h2>
-
 
         <div className="product-filters-compact">
           <div className="filter-group-compact">
@@ -290,7 +248,10 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
               <option value="todos">Todos</option>
               <option value="biquinis">Biquínis</option>
               <option value="maios">Maiôs</option>
-              <option value="saidas">Saídas</option>
+              <option value="saidas">Saídas de Praia</option>
+              <option value="cangas">Cangas</option>
+              <option value="acessorios">Acessórios</option>
+              <option value="outros">Outros</option>
             </select>
 
             <select 
@@ -320,7 +281,6 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
           </div>
         </div>
 
-
         {loading ? (
           <LoadingSpinner />
         ) : error ? (
@@ -330,7 +290,7 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
             Nenhum produto encontrado para este filtro.
           </p>
         ) : (
-          <div className="products-grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" ref={productGridRef}>
+          <div className="products-grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredAndSortedProducts.map((product) => {
               const preco = getPrecoPrincipal(product);
               return (
@@ -347,13 +307,21 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                       }
                       className="product-image"
                     />
+                    <div className="product-overlay">
+                      <button className="product-quick-view" aria-label="Ver detalhes">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
 
                   <div className="product-info">
                     <div className="product-info-text">
                       <h3 className="product-name">{product?.nome}</h3>
                       <p className="product-category">
-                        {product?.variacoes?.[0]?.cor || 'Cor unica'}
+                        {product?.variacoes?.[0]?.cor || 'Cor única'}
                       </p>
                     </div>
 
@@ -367,18 +335,24 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           const precoNumerico = toNumber(preco);
+                          const variacaoTamanho = product?.variacoes?.[0]?.tamanho;
+                          let tamanhoValue = Array.isArray(variacaoTamanho) 
+                            ? variacaoTamanho[0] 
+                            : (Array.isArray(product?.tamanho) ? product.tamanho[0] : variacaoTamanho);
+                          if (tamanhoValue) tamanhoValue = tamanhoValue.toUpperCase();
                           addToCart({
                             id: getId(product),
                             nome: product?.nome,
                             price: precoNumerico ?? 0,
                             image: getImagemPrincipal(product),
                             cor: product?.variacoes?.[0]?.cor,
-                            tamanho: product?.variacoes?.[0]?.tamanho,
+                            tamanho: tamanhoValue,
+                            ufCadastro: product?.ufCadastro,
                             quantity: 1,
                           });
                         }}
                       >
-                        Adicionar
+                        Comprar
                       </button>
                     </div>
                   </div>
@@ -388,29 +362,35 @@ const ProductGrid = ({ addToCart, openProductModal }) => {
           </div>
         )}
 
-        {showPagination && (
-          <div className="pagination-controls">
+        {/* Botão Carregar Mais */}
+        {showLoadMore && (
+          <div className="load-more-container">
             <button
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 0 || loading}
-              aria-label="Página anterior"
+              className="load-more-btn"
+              onClick={handleLoadMore}
+              disabled={loadingMore}
             >
-              <i className="fas fa-chevron-left"></i>
+              {loadingMore ? (
+                <>
+                  <span className="load-more-spinner"></span>
+                  <span>Carregando...</span>
+                </>
+              ) : (
+                <>
+                  <span>Ver mais produtos</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </>
+              )}
             </button>
+          </div>
+        )}
 
-            <span className="pagination-info">
-              Página <strong className="pagination-current">{currentPage + 1}</strong> de {totalPages}
-            </span>
-
-            <button
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages - 1 || loading}
-              aria-label="Próxima página"
-            >
-              <i className="fas fa-chevron-right"></i>
-            </button>
+        {/* Mensagem quando não há mais produtos */}
+        {!isFilterActive && !hasMore && products.length > PRODUCTS_PER_PAGE && (
+          <div className="no-more-products">
+            <span>✨ Você viu todos os produtos ✨</span>
           </div>
         )}
       </div>

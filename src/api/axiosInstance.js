@@ -87,7 +87,14 @@ const ensurePlainBody = (payload) => {
 export const createPaymentOrder = (payload, cfg) =>
   client.post(`/payments/orders`, ensurePlainBody(payload), cfg);
 
-const ASAAS_PIX_BASE_URL = "https://api-sandbox.asaas.com/v3";
+const ASAAS_BASE_URL =
+  (process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_ASAAS_BASE_URL_PROD
+    : process.env.REACT_APP_ASAAS_BASE_URL_SANDBOX
+  )?.trim() || "";
+const ASAAS_PIX_BASE_URL = ASAAS_BASE_URL
+  ? `${ASAAS_BASE_URL.replace(/\/$/, "")}/v3`
+  : "";
 
 export const getAsaasPixQrCode = (paymentId, cfg) =>
   axios.get(`${ASAAS_PIX_BASE_URL}/payments/${paymentId}/pixQrCode`, cfg);

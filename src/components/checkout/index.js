@@ -10,3 +10,4 @@ export { default as ShippingInfoCard } from './ShippingInfoCard';
 export { default as PixPaymentCard } from './PixPaymentCard';
 export { default as OrderItemsCard } from './OrderItemsCard';
 export { default as PixHowItWorks } from './PixHowItWorks';
+export { default as FreteCalculator } from './FreteCalculator';

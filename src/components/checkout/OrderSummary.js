@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { API_BASE_URL } from '../../api/axiosInstance';
+import FreteCalculator from './FreteCalculator';
 
 const buildImageUrl = (url) => {
   if (!url) return null;
@@ -15,8 +16,32 @@ const OrderSummary = ({
   subtotal,
   onUpdateQuantity,
   isAccordion = false,
+  defaultOpen,
+  // Props do sistema de frete
+  freteState,
+  onCepChange,
+  onServicoChange,
+  onCalcularFrete,
+  // Props legadas (mantidas para compatibilidade)
+  onShippingChange,
+  selectedShipping,
+  shippingOptions = [],
+  shippingError,
+  cepValue = '',
+  onCepSearch,
+  loadingCep = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(!isAccordion);
+  const initialOpen = defaultOpen ?? !isAccordion;
+  const [isOpen, setIsOpen] = useState(initialOpen);
+
+  // Usa o novo sistema de frete se disponível, senão usa o legado
+  const usaNovoFrete = !!freteState;
+  
+  // Calcula total com frete
+  const freteValor = usaNovoFrete 
+    ? (freteState?.status === 'success' ? freteState.freteValor : 0)
+    : (selectedShipping?.price || 0);
+  const total = subtotal + freteValor;
 
   const renderItems = () => (
     <div className="checkout-summary-items">
@@ -94,19 +119,90 @@ const OrderSummary = ({
     </div>
   );
 
+  const renderShippingSection = () => {
+    // Novo sistema de frete com API
+    if (usaNovoFrete) {
+      return (
+        <div className="checkout-shipping-section">
+          <FreteCalculator
+            cepDestino={freteState.cepDestino}
+            servicoSelecionado={freteState.servicoSelecionado}
+            freteValor={freteState.freteValor}
+            prazoLabel={freteState.prazoLabel}
+            prazoMin={freteState.prazoMin}
+            prazoMax={freteState.prazoMax}
+            status={freteState.status}
+            errorMessage={freteState.errorMessage}
+            opcoesFrete={freteState.opcoesFrete || []}
+            shipmentsInfo={freteState.shipmentsInfo}
+            onCepChange={onCepChange}
+            onServicoChange={onServicoChange}
+            onCalcular={onCalcularFrete}
+          />
+        </div>
+      );
+    }
+
+    // Sistema legado (fallback)
+    return (
+      <div className="checkout-shipping-section">
+        {shippingOptions.length > 0 && (
+          <>
+            <p className="checkout-shipping-title">Escolha a entrega:</p>
+            <div className="checkout-shipping-options-inline">
+              {shippingOptions.map(option => (
+                <label 
+                  key={option.id} 
+                  className={`checkout-shipping-option-inline ${selectedShipping?.id === option.id ? 'selected' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="shipping"
+                    checked={selectedShipping?.id === option.id}
+                    onChange={() => onShippingChange?.(option)}
+                  />
+                  <div className="checkout-shipping-option-content">
+                    <span className="checkout-shipping-option-name">
+                      {option.name}
+                    </span>
+                    <span className="checkout-shipping-option-price">
+                      {option.price === 0 ? 'Grátis' : `R$ ${formatCurrency(option.price)}`}
+                    </span>
+                    <span className="checkout-shipping-option-days">{option.days}</span>
+                  </div>
+                </label>
+              ))}
+            </div>
+            
+            {shippingError && !selectedShipping && (
+              <p className="checkout-shipping-error">⚠ Selecione uma opção de entrega</p>
+            )}
+          </>
+        )}
+      </div>
+    );
+  };
+
   const renderTotals = () => (
     <div className="checkout-summary-totals">
       <div className="checkout-summary-row">
         <span>Subtotal</span>
         <span>R$ {formatCurrency(subtotal)}</span>
       </div>
-      <div className="checkout-summary-row">
-        <span>Frete</span>
-        <span className="checkout-summary-free">Grátis</span>
-      </div>
+      
+      {renderShippingSection()}
+
+      {/* Linha de frete no resumo */}
+      {freteValor > 0 && (
+        <div className="checkout-summary-row checkout-summary-frete">
+          <span>Frete ({usaNovoFrete ? freteState?.servicoSelecionado : selectedShipping?.name})</span>
+          <span>R$ {formatCurrency(freteValor)}</span>
+        </div>
+      )}
+
       <div className="checkout-summary-row checkout-summary-total">
         <span>Total</span>
-        <span>R$ {formatCurrency(subtotal)}</span>
+        <span>R$ {formatCurrency(total)}</span>
       </div>
     </div>
   );
@@ -123,7 +219,7 @@ const OrderSummary = ({
           <span>
             {isOpen ? 'Ocultar resumo' : 'Ver resumo'}
             <span className="checkout-summary-accordion-total">
-              R$ {formatCurrency(subtotal)}
+              R$ {formatCurrency(total)}
             </span>
           </span>
           <span className={`checkout-accordion-icon ${isOpen ? 'open' : ''}`}>

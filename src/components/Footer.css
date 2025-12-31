@@ -565,3 +565,29 @@
         font-size: 1rem;
     }
 }
+
+/* Responsive refinements for Instagram CTA */
+.instagram-cta-premium {
+    width: min(100%, 18rem);
+    text-align: center;
+    line-height: 1.1;
+    padding: clamp(0.7rem, 2.5vw, 0.95rem) clamp(1.1rem, 5vw, 1.75rem);
+    font-size: clamp(0.8rem, 2.2vw, 0.95rem);
+}
+
+@media (max-width: 767px) {
+    .footer-social-section {
+        align-items: center;
+        text-align: center;
+    }
+
+    .instagram-cta-premium {
+        width: min(100%, 20rem);
+    }
+}
+
+@media (min-width: 1024px) {
+    .instagram-cta-premium {
+        width: auto;
+    }
+}
