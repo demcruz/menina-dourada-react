@@ -11,7 +11,7 @@ const HeroSection = () => {
         <p className="hero-subtitle">Biquínis exclusivos que realçam suas curvas e elevam sua confiança. O drop mais desejado do verão chegou.</p> 
         <div className="hero-cta-container">
           <Link to="/shop" className="hero-button-primary">Ver Coleção 2026</Link>
-          <p className="hero-trust-signal">🚚 Frete grátis acima de R$ 200 | 💎 Qualidade premium garantida</p>
+          <p className="hero-trust-signal">🚚 Frete grátis a partir de R$ 350 | 💎 Qualidade premium garantida</p>
         </div>
       </div>
     </section>

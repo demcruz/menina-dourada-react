@@ -548,6 +548,7 @@ try { socket.close(); } catch {}
               cart={cart}
               subtotal={subtotal}
               isAccordion
+              defaultOpen
               freteState={{
                 cepDestino,
                 servicoSelecionado,

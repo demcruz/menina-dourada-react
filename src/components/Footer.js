@@ -21,7 +21,7 @@ const Footer = () => (
             </div>
             <div className="trust-text">
               <strong>Frete Grátis</strong>
-              <span>Compras acima de R$ 200</span>
+              <span>Compras a partir de R$ 350</span>
             </div>
           </div>
           

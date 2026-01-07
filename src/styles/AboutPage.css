@@ -88,28 +88,28 @@
 }
 
 /* Products Grid */
-.products-grid {
+.about-page .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin: 2rem 0;
 }
 
-.product-item {
+.about-page .product-item {
   background: #faf7f2;
   padding: 1.5rem;
   border-radius: 12px;
   border-left: 4px solid #d4a574;
 }
 
-.product-item h3 {
+.about-page .product-item h3 {
   font-size: 1.25rem;
   font-weight: 600;
   color: #d4a574;
   margin-bottom: 0.75rem;
 }
 
-.product-item p {
+.about-page .product-item p {
   margin-bottom: 0;
   font-size: 1rem;
   line-height: 1.6;
@@ -282,7 +282,7 @@
     font-size: 1rem;
   }
   
-  .products-grid,
+  .about-page .products-grid,
   .coverage-info,
   .contact-grid,
   .mission-grid {
@@ -292,7 +292,7 @@
   
   .contact-item,
   .coverage-item,
-  .product-item,
+  .about-page .product-item,
   .mission-item {
     padding: 1.5rem;
   }

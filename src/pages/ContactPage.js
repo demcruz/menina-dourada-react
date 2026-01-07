@@ -222,7 +222,7 @@ const ContactPage = () => {
                                 </li>
                                 <li>
                                     <i className="fas fa-check-circle"></i>
-                                    Frete grátis acima de R$ 300
+                                    Frete grátis a partir de R$ 350
                                 </li>
                                 <li>
                                     <i className="fas fa-check-circle"></i>
