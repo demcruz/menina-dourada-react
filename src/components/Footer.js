@@ -11,9 +11,7 @@ const Footer = () => (
       <div className="footer-brand-section">
         <div className="footer-logo-area">
           <img src={logo} alt="Menina Dourada" className="footer-logo-img" />
-          <p className="footer-brand-tagline">
-            Desperte sua deusa interior com biquínis que celebram sua beleza única
-          </p>
+          <p className="footer-brand-tagline">Biquínis premium que celebram sua beleza única e elevam sua confiança.</p>
         </div>
         
         <div className="footer-trust-badges">
@@ -144,7 +142,7 @@ const Footer = () => (
       <div className="footer-copyright">
         <div className="footer-copyright-brand">
           <img src={logo} alt="Menina Dourada" className="footer-copyright-logo" />
-          <span>© 2025 Menina Dourada — Todos os direitos reservados</span>
+          <span>© 2026 Menina Dourada — Todos os direitos reservados</span>
         </div>
         <span className="footer-dev-note">Desenvolvido com cuidado para oferecer a melhor experiência.</span>
       </div>
