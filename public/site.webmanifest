@@ -1,1 +1,23 @@
-{"name":"","short_name":"","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+﻿{
+  "name": "Menina Dourada Swim",
+  "short_name": "Menina Dourada",
+  "description": "Moda praia feminina: biquínis, maiôs e cangas.",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#f5e9dc",
+  "background_color": "#f5e9dc",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "lang": "pt-BR"
+}

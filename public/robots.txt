@@ -1,8 +1,5 @@
 User-agent: *
 Allow: /
-
-Disallow: /static/
-Disallow: /assets/
-Disallow: /googlee0f219f89ffd06bd.html
+Disallow: /checkout
 
 Sitemap: https://meninadourada.shop/sitemap.xml

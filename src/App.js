@@ -14,6 +14,7 @@ import ProductModal from './components/ProductModal';
 import CheckoutPage from './pages/CheckoutPage';
 import LGPDModal from './components/LGPDModal';
 import ContactWidget from './components/ContactWidget';
+import SEO from './components/SEO';
 
 
 
@@ -103,6 +104,7 @@ function App() {
     <Router>
       <div className="bg-sand-50 text-sand-800">
         <ScrollToTop />
+        <SEO />
         <Navbar setIsCartOpen={setIsCartOpen} cart={cart} />
 
         <Routes>
