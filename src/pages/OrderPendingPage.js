@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import AdvancedSEO from '../seo/AdvancedSEO';
 
 const OrderPendingPage = () => {
     const location = useLocation();
@@ -16,12 +17,17 @@ const OrderPendingPage = () => {
 
     return (
         <div className="order-status-container container">
+            <AdvancedSEO
+                title="Pagamento Pendente | Menina Dourada"
+                description="Seu pagamento está aguardando confirmação. Você receberá uma atualização por e-mail."
+                noindex
+            />
             <h1 className="order-status-title pending">Pagamento Pendente</h1>
             <p className="order-status-message">Seu pagamento está aguardando confirmação.</p>
             {paymentId && <p className="order-detail">ID do Pagamento: <strong>{paymentId}</strong></p>}
             {preferenceId && <p className="order-detail">ID da Preferência: <strong>{preferenceId}</strong></p>}
             <p className="order-status-message">Você receberá uma atualização por e-mail assim que o pagamento for confirmado.</p>
-            <Link to="/shop" className="order-status-button">Continuar Comprando</Link>
+            <Link to="/produtos" className="order-status-button">Continuar Comprando</Link>
             <Link to="/contact" className="order-status-link">Precisa de Ajuda? Entre em Contato</Link>
         </div>
     );

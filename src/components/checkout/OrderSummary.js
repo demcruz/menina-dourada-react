@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { API_BASE_URL } from '../../api/axiosInstance';
+import { getThumbSrc } from '../../utils/productImage';
 import FreteCalculator from './FreteCalculator';
 
 const buildImageUrl = (url) => {
@@ -52,8 +53,7 @@ const OrderSummary = ({
           0;
         const rawImage =
           item.image ||
-          item.imagens?.[0]?.url ||
-          item.variacoes?.[0]?.imagens?.[0]?.url ||
+          getThumbSrc(item.imagens?.[0] || item.variacoes?.[0]?.imagens?.[0]) ||
           '';
         const imageUrl =
           buildImageUrl(rawImage) ||

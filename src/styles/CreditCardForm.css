@@ -1,0 +1,110 @@
+/* ========================================
+   CREDIT CARD FORM
+   ======================================== */
+
+.cc-form {
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid rgba(191, 161, 74, 0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  padding: 1.5rem;
+  animation: checkoutFadeIn 0.3s ease-out;
+}
+
+.cc-form-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #F0EBE3;
+}
+
+.cc-form-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(191, 161, 74, 0.12) 0%, rgba(212, 184, 90, 0.12) 100%);
+  border-radius: 10px;
+}
+
+.cc-form-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #5A4A3A;
+  margin: 0;
+}
+
+.cc-form-subtitle {
+  font-size: 0.75rem;
+  color: #8B7355;
+  margin: 0.125rem 0 0;
+}
+
+.cc-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.cc-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.875rem;
+}
+
+.cc-form-footer {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #F0EBE3;
+}
+
+.cc-form-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #8B7355;
+}
+
+/* Placeholder message for future integration */
+.cc-pending-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #FFFBF5 0%, #FDF7F0 100%);
+  border: 1px dashed rgba(191, 161, 74, 0.3);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #8B7355;
+}
+
+.cc-pending-message strong {
+  color: #BFA14A;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 767px) {
+  .cc-form {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .cc-form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cc-form {
+    padding: 2rem;
+  }
+}

@@ -18,16 +18,23 @@ const ROUTE_META = {
       'Menina Dourada Swim é a loja oficial de moda praia feminina: biquínis, maiôs, cangas e acessórios. Envio para todo o Brasil e pagamento via PIX.',
   },
   '/loja': {
-    title: 'Loja | Biquínis, Maiôs e Cangas',
+    title: 'Produtos | Menina Dourada',
     description:
       'Compre biquínis, maiôs, cangas e acessórios na Menina Dourada Swim. Entrega para todo o Brasil e pagamento via PIX.',
+    canonical: `${SITE_URL}/produtos`,
+    robots: 'noindex, follow',
   },
   '/shop': {
-    title: 'Loja | Biquínis, Maiôs e Cangas',
+    title: 'Produtos | Menina Dourada',
     description:
       'Compre biquínis, maiôs, cangas e acessórios na Menina Dourada Swim. Entrega para todo o Brasil e pagamento via PIX.',
-    canonical: `${SITE_URL}/loja`,
+    canonical: `${SITE_URL}/produtos`,
     robots: 'noindex, follow',
+  },
+  '/produtos': {
+    title: 'Produtos | Menina Dourada',
+    description:
+      'Compre biquínis, maiôs, cangas e acessórios na Menina Dourada Swim. Entrega para todo o Brasil e pagamento via PIX.',
   },
   '/sobre': {
     title: 'Sobre a Menina Dourada',

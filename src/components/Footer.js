@@ -116,18 +116,18 @@ const Footer = () => (
       <div className="footer-links-premium">
         <div className="links-group">
           <h4>Loja</h4>
-          <Link to="/loja">Todos os Produtos</Link>
-          <Link to="/loja?categoria=biquinis">Biquínis</Link>
-          <Link to="/loja?categoria=maiôs">Maiôs</Link>
-          <Link to="/loja?categoria=acessorios">Acessórios</Link>
+          <Link to="/produtos">Todos os Produtos</Link>
+          <Link to="/produtos?categoria=biquinis">Biquínis</Link>
+          <Link to="/produtos?categoria=maiôs">Maiôs</Link>
+          <Link to="/produtos?categoria=acessorios">Acessórios</Link>
         </div>
         
         <div className="links-group">
           <h4>Suporte</h4>
           <Link to="/sobre">Nossa História</Link>
           <Link to="/contato">Fale Conosco</Link>
-          <Link to="/trocas">Trocas e Devoluções</Link>
-          <Link to="/guia-tamanhos">Guia de Tamanhos</Link>
+          <Link to="/trocas-e-devolucoes">Trocas e Devoluções</Link>
+          <Link to="/politica-de-frete">Política de Frete</Link>
         </div>
         
         <div className="links-group">
@@ -141,7 +141,7 @@ const Footer = () => (
       
       <div className="footer-copyright">
         <div className="footer-copyright-brand">
-          <img src={logo} alt="Menina Dourada" className="footer-copyright-logo" />
+          <img src={logo} alt="Menina Dourada" className="footer-copyright-logo" loading="lazy" />
           <span>© 2026 Menina Dourada — Todos os direitos reservados</span>
         </div>
         <span className="footer-dev-note">Desenvolvido com cuidado para oferecer a melhor experiência.</span>

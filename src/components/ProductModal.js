@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './ProductModal.css';
+import { getMediumSrc, getThumbSrc } from '../utils/productImage';
 
 const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
     const [quantity, setQuantity] = useState(1);
@@ -151,7 +152,7 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
     const currentVariation = selectedVariation || initialVariation;
     // Suporta tanto 'precoVenda' (novo formato) quanto 'preco' (legado)
     const preco = currentVariation?.precoVenda ?? currentVariation?.preco;
-    const imagem = currentVariation?.imagens?.[selectedImageIndex]?.url;
+    const imagem = getMediumSrc(currentVariation?.imagens?.[selectedImageIndex]);
     const altText = currentVariation?.imagens?.[selectedImageIndex]?.altText || product?.nome;
     const imagens = currentVariation?.imagens || [];
 
@@ -300,7 +301,7 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                                         tabIndex="0"
                                         aria-label={`Imagem ${index + 1}`}
                                     >
-                                        <img src={img.url} alt={img.altText || `Foto ${index + 1}`} />
+                                        <img src={getThumbSrc(img)} alt={img.altText || product?.nome || `Foto ${index + 1}`} loading="lazy" />
                                     </div>
                                 ))}
                             </div>

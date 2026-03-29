@@ -16,6 +16,15 @@ const client = axios.create({
 });
 
 /** ===== Interceptors ===== */
+// Bloqueia requisições para URLs HTTP inseguras (exceto localhost)
+client.interceptors.request.use((config) => {
+  const url = (config.baseURL || '') + (config.url || '');
+  if (/^http:\/\/(?!localhost|127\.0\.0\.1)/i.test(url)) {
+    return Promise.reject(new Error(`Requisição HTTP insegura bloqueada: ${url}`));
+  }
+  return config;
+});
+
 // Já retorna somente o payload
 client.interceptors.response.use(
   (res) => res.data,
@@ -35,7 +44,21 @@ client.interceptors.response.use(
 );
 
 /** ===== API ===== */
-// Produtos
+// Produtos — cache em memória para evitar re-fetch entre rotas
+const _productCache = { data: null, timestamp: 0, ttl: 5 * 60 * 1000 }; // 5 min TTL
+
+const _isProductCacheValid = () =>
+  _productCache.data && (Date.now() - _productCache.timestamp < _productCache.ttl);
+
+export const getCachedAllProducts = () => _productCache.data;
+
+export const setCachedAllProducts = (products) => {
+  if (Array.isArray(products) && products.length > 0) {
+    _productCache.data = products;
+    _productCache.timestamp = Date.now();
+  }
+};
+
 export const getProducts = async (page = 0, size = 10, { signal } = {}) => {
   const data = await client.get("/produtos/all", { params: { page, size }, signal });
 
@@ -50,6 +73,30 @@ export const getProducts = async (page = 0, size = 10, { signal } = {}) => {
     };
   }
   return data;
+};
+
+/**
+ * Busca todos os produtos com cache em memória.
+ * Se o cache estiver válido, retorna imediatamente sem requisição.
+ * Usado pela página de detalhe para evitar re-fetch do catálogo inteiro.
+ */
+export const getAllProductsCached = async ({ signal } = {}) => {
+  if (_isProductCacheValid()) return _productCache.data;
+
+  const all = [];
+  let page = 0;
+  let more = true;
+  while (more && page < 10) {
+    const resp = await getProducts(page, 20, { signal });
+    const items = Array.isArray(resp?.content) ? resp.content : Array.isArray(resp) ? resp : [];
+    all.push(...items);
+    const totalPages = resp?.totalPages ?? 1;
+    if (page >= totalPages - 1 || items.length === 0) more = false;
+    page++;
+  }
+
+  setCachedAllProducts(all);
+  return all;
 };
 
 export const createProduct       = (product,        cfg) => client.post(`/produtos/insert`,          product,        cfg);

@@ -29,13 +29,23 @@ const Navbar = ({ setIsCartOpen, cart }) => {
 
     return (
         <nav className={`navbar-main ${isScrolled ? 'navbar-scrolled' : ''}`}>
+            {/* Trust bar — visível apenas antes do scroll */}
+            {!isScrolled && (
+                <div className="trust-bar">
+                    <span>🚚 Frete grátis acima de R$&nbsp;250</span>
+                    <span className="trust-bar-divider">·</span>
+                    <span>🔒 Pagamento seguro</span>
+                    <span className="trust-bar-divider">·</span>
+                    <span>⭐ Qualidade premium</span>
+                </div>
+            )}
             <div className="navbar-content">
 <Link to="/" className="navbar-logo-link">
                     <img src={log} alt="Menina Dourada Logo" className="navbar-logo-image" />
                 </Link>
                 <div className="navbar-links-desktop">
                     <Link to="/" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Home</Link>
-                    <Link to="/loja" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Loja</Link>
+                    <Link to="/produtos" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Loja</Link>
                     <Link to="/sobre" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Sobre Nós</Link>
                     <Link to="/contato" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Contato</Link>
                 </div>
@@ -54,7 +64,7 @@ const Navbar = ({ setIsCartOpen, cart }) => {
             {isMobileMenuOpen && (
                 <div id="mobile-menu" className="mobile-menu-panel">
                     <Link to="/" className="block py-2 hover:text-gold-600 transition" onClick={handleNavLinkClick}>Home</Link>
-                    <Link to="/loja" className="block py-2 hover:text-gold-600 transition" onClick={handleNavLinkClick}>Loja</Link>
+                    <Link to="/produtos" className="block py-2 hover:text-gold-600 transition" onClick={handleNavLinkClick}>Loja</Link>
                     <Link to="/sobre" className="block py-2 hover:text-gold-600 transition" onClick={handleNavLinkClick}>Sobre Nós</Link>
                     <Link to="/contato" className="block py-2 hover:text-gold-600 transition" onClick={handleNavLinkClick}>Contato</Link>
                 </div>

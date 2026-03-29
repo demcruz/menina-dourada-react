@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './CartSidebar.css';
 import { API_BASE_URL } from '../api/axiosInstance';
+import { getThumbSrc } from '../utils/productImage';
 
 const buildImageUrl = (url) => {
     if (!url) return null;
@@ -10,10 +11,10 @@ const buildImageUrl = (url) => {
 };
 
 const getCartItemImage = (item) => {
+    const img = item.imagens?.[0] || item.variacoes?.[0]?.imagens?.[0];
     const url =
         item.image ||
-        item.imagens?.[0]?.url ||
-        item.variacoes?.[0]?.imagens?.[0]?.url ||
+        (img ? getThumbSrc(img) : null) ||
         item.variacoes?.[0]?.imagemPrincipal;
     return buildImageUrl(url);
 };
@@ -57,10 +58,13 @@ const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQ
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
                             <p>Seu carrinho está vazio</p>
-                            <button className="cart-empty-btn" onClick={toggleCart}>
+                            <Link
+                                to="/produtos"
+                                className="cart-empty-btn"
+                                onClick={toggleCart}
+                            >
                                 Explorar produtos
-                            </button>
-                        </div>
+                            </Link>                        </div>
                     ) : (
                         cart.map((item) => {
                             const imageUrl = getCartItemImage(item) || 'https://via.placeholder.com/80x80?text=Foto';
@@ -71,7 +75,7 @@ const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQ
 
                             return (
                                 <div key={item.id} className="cart-item">
-                                    <img src={imageUrl} alt={altText} className="cart-item-img" />
+                                    <img src={imageUrl} alt={altText} className="cart-item-img" loading="lazy" />
                                     
                                     <div className="cart-item-info">
                                         <div className="cart-item-top">
@@ -135,9 +139,13 @@ const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQ
                             Finalizar Compra
                         </Link>
 
-                        <button className="cart-continue-btn" onClick={toggleCart}>
+                        <Link
+                            to="/produtos"
+                            className="cart-continue-btn"
+                            onClick={toggleCart}
+                        >
                             Ver mais produtos
-                        </button>
+                        </Link>
                     </div>
                 )}
             </div>

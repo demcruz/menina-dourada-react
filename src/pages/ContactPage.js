@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './ContactPage.css';
+import AdvancedSEO from '../seo/AdvancedSEO';
+import { breadcrumbSchema } from '../seo/schema';
 
 const ContactPage = () => {
     const [formData, setFormData] = useState({
@@ -30,6 +32,16 @@ const ContactPage = () => {
 
     return (
         <div className="contact-page">
+            <AdvancedSEO
+                title="Contato | Menina Dourada"
+                description="Fale com a equipe da Menina Dourada por WhatsApp ou formulário de contato. Atendimento rápido e personalizado."
+                url="https://meninadourada.shop/contato"
+                canonical="https://meninadourada.shop/contato"
+                jsonLd={breadcrumbSchema([
+                    { name: "Home", url: "https://meninadourada.shop/" },
+                    { name: "Contato", url: "https://meninadourada.shop/contato" },
+                ])}
+            />
             {/* Hero Section */}
             <section className="contact-hero">
                 <div className="contact-hero-content">

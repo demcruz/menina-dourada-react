@@ -1,9 +1,24 @@
 import React from 'react';
 import '../styles/AboutPage.css';
+import AdvancedSEO from '../seo/AdvancedSEO';
+import { organizationSchema, breadcrumbSchema } from '../seo/schema';
 
 const AboutPage = () => {
   return (
     <div className="about-page">
+      <AdvancedSEO
+        title="Sobre a Menina Dourada | Moda Praia Feminina"
+        description="Conheça a história da Menina Dourada, marca brasileira de moda praia feminina. Biquínis, maiôs, cangas e acessórios com entrega para todo o Brasil."
+        url="https://meninadourada.shop/sobre"
+        canonical="https://meninadourada.shop/sobre"
+        jsonLd={[
+          organizationSchema(),
+          breadcrumbSchema([
+            { name: "Home", url: "https://meninadourada.shop/" },
+            { name: "Sobre", url: "https://meninadourada.shop/sobre" },
+          ]),
+        ]}
+      />
       {/* Hero Section */}
       <section className="about-hero">
         <div className="about-hero-content">

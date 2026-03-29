@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import AdvancedSEO from '../seo/AdvancedSEO';
 
 const OrderFailurePage = () => {
     const location = useLocation();
@@ -16,6 +17,11 @@ const OrderFailurePage = () => {
 
     return (
         <div className="order-status-container container">
+            <AdvancedSEO
+                title="Pagamento Recusado | Menina Dourada"
+                description="Seu pagamento não foi aprovado. Tente novamente ou entre em contato conosco."
+                noindex
+            />
             <h1 className="order-status-title failure">Pagamento Recusado</h1>
             <p className="order-status-message">Não foi possível processar seu pagamento.</p>
             {paymentId && <p className="order-detail">ID do Pagamento: <strong>{paymentId}</strong></p>}

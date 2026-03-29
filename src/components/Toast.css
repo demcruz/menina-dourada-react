@@ -1,0 +1,83 @@
+.toast {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-12px);
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    max-width: 90%;
+    width: max-content;
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #fff;
+
+    opacity: 0;
+    transition: opacity 0.26s ease, transform 0.26s ease;
+    pointer-events: none;
+}
+
+/* Tipos */
+.toast--warning { background: #f97316; }
+.toast--error   { background: #ef4444; }
+.toast--success { background: #22c55e; }
+.toast--info    { background: var(--cta-gold-end, #C49464); }
+
+/* Entrada */
+.toast--in {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+/* Saída */
+.toast--out {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+    pointer-events: none;
+}
+
+.toast__icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.toast__message {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast__close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0 0 0 4px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+}
+
+.toast__close:hover {
+    color: #fff;
+}
+
+@media (max-width: 480px) {
+    .toast {
+        max-width: 92%;
+        font-size: 0.82rem;
+        padding: 10px 14px;
+        top: 12px;
+    }
+}

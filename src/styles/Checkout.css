@@ -814,6 +814,47 @@
   color: #38A169;
 }
 
+/* Checkout Trust Block — acima do botão finalizar */
+.checkout-trust-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  background: #f8fdf9;
+  border: 1px solid #d4edda;
+  border-radius: 12px;
+  padding: 1rem 1.125rem;
+  margin-bottom: 0.75rem;
+}
+
+.checkout-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.8rem;
+}
+
+.checkout-trust-item > span:first-child {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.checkout-trust-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.checkout-trust-item strong {
+  font-size: 0.8rem;
+  color: #2d6a4f;
+  font-weight: 600;
+}
+
+.checkout-trust-item span {
+  font-size: 0.72rem;
+  color: #52796f;
+}
+
 /* Messages */
 .checkout-message {
   padding: 1rem;
@@ -1039,7 +1080,7 @@
     width: 40%;
     max-width: 420px;
     position: sticky;
-    top: 100px;
+    top: calc(var(--header-height, 102px) + 12px);
     align-self: flex-start;
   }
 
@@ -2412,7 +2453,7 @@
   /* Sticky QR Code */
   .payment-qr-sticky {
     position: sticky;
-    top: 100px;
+    top: calc(var(--header-height, 102px) + 12px);
   }
 
   .pix-card {

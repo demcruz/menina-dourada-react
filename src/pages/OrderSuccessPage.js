@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaCheckCircle, FaShoppingBag, FaClipboardList } from 'react-icons/fa';
 import './OrderSuccessPage.css';
+import AdvancedSEO from '../seo/AdvancedSEO';
 
 const formatCurrency = (value) =>
   (Number(value) || 0).toLocaleString('pt-BR', {
@@ -38,6 +39,11 @@ const OrderSuccessPage = () => {
   if (!hasData) {
     return (
       <div className="success-page-container">
+        <AdvancedSEO
+          title="Pedido Confirmado | Menina Dourada"
+          description="Seu pagamento foi aprovado. Em breve você receberá novidades sobre o envio."
+          noindex
+        />
         <div className="success-card fallback">
           <FaClipboardList size={56} color="#bfa14a" />
           <h1>Nenhum pedido encontrado</h1>
@@ -46,7 +52,7 @@ const OrderSuccessPage = () => {
             visualizar o resumo completo novamente.
           </p>
           <div className="success-actions">
-            <Link to="/shop" className="action-button shopping">
+            <Link to="/produtos" className="action-button shopping">
               <FaShoppingBag />
               <span>Voltar para a loja</span>
             </Link>
@@ -65,6 +71,11 @@ const OrderSuccessPage = () => {
 
   return (
     <div className="success-page-container">
+      <AdvancedSEO
+        title="Pedido Confirmado | Menina Dourada"
+        description="Seu pagamento foi aprovado. Em breve você receberá novidades sobre o envio."
+        noindex
+      />
       <div className="success-grid">
         <section className="success-hero-card">
           <div className="status-pill">
@@ -93,7 +104,7 @@ const OrderSuccessPage = () => {
             </div>
           </div>
           <div className="success-actions">
-            <Link to="/shop" className="action-button shopping">
+            <Link to="/produtos" className="action-button shopping">
               <FaShoppingBag />
               <span>Continuar comprando</span>
             </Link>
@@ -150,7 +161,7 @@ const OrderSuccessPage = () => {
             {items.length === 0 && <p className="delivery-line">Itens indisponiveis.</p>}
             {items.map((item) => (
               <div className="item-row" key={`${item.id}-${item.name}`}>
-                {item.image && <img src={item.image} alt={item.name} />}
+                {item.image && <img src={item.image} alt={item.name || 'Produto Menina Dourada'} loading="lazy" />}
                 <div className="item-details">
                   <p>{item.name}</p>
                   <span>

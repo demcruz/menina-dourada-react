@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <url>
+  <url>
     <loc>https://meninadourada.shop/</loc>
   </url>
-   <url>
-    <loc>https://meninadourada.shop/loja</loc>
+  <url>
+    <loc>https://meninadourada.shop/produtos</loc>
   </url>
-   <url>
+  <url>
     <loc>https://meninadourada.shop/sobre</loc>
   </url>
-   <url>
+  <url>
     <loc>https://meninadourada.shop/contato</loc>
   </url>
- </urlset>
+  <url>
+    <loc>https://meninadourada.shop/produtos</loc>
+  </url>
+  <url>
+    <loc>https://meninadourada.shop/categoria/cangas</loc>
+  </url>
+  <url>
+    <loc>https://meninadourada.shop/categoria/moda-praia</loc>
+  </url>
+</urlset>

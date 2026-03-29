@@ -4,14 +4,22 @@ import { API_BASE_URL, createPaymentOrder } from '../api/axiosInstance';
 import CustomerForm from '../components/checkout/CustomerForm';
 import AddressForm from '../components/checkout/AddressForm';
 import PixInfoCard from '../components/checkout/PixInfoCard';
+import CheckoutTrustBlock from '../components/checkout/CheckoutTrustBlock';
 import OrderSummary from '../components/checkout/OrderSummary';
 import CheckoutSteps from '../components/checkout/CheckoutSteps';
 import ShippingInfoCard from '../components/checkout/ShippingInfoCard';
 import PixPaymentCard from '../components/checkout/PixPaymentCard';
 import OrderItemsCard from '../components/checkout/OrderItemsCard';
 import PixHowItWorks from '../components/checkout/PixHowItWorks';
+import PaymentMethodSelector from '../components/checkout/PaymentMethodSelector';
+import CreditCardPaymentForm from '../components/checkout/CreditCardPaymentForm';
+import AdvancedSEO from '../seo/AdvancedSEO';
 import useFreteCalculator from '../hooks/useFreteCalculator';
+import { getThumbSrc } from '../utils/productImage';
 import '../styles/Checkout.css';
+import '../styles/PaymentMethod.css';
+import '../styles/CreditCardForm.css';
+import { trackEvent } from '../utils/analytics';
 
 // Utility functions
 const digitsOnly = (value = '') => (value ?? '').toString().replace(/\D/g, '');
@@ -53,6 +61,42 @@ const normalizePixResponse = (rawResponse, fallbackPayment = {}) => {
 
 const formatCurrency = (value) => (parseFloat(value) || 0).toFixed(2).replace('.', ',');
 
+// Credit card error code → user-friendly message
+const CC_ERROR_MESSAGES = {
+  denied_creditCard_transaction: 'Transação negada pela operadora. Tente outro cartão.',
+  invalid_creditCard: 'Dados do cartão inválidos. Verifique número, validade e CVV.',
+  invalid_creditCardHolderInfo: 'Dados do titular do cartão inválidos.',
+  expired_creditCard: 'Cartão expirado.',
+  insufficient_balance: 'Saldo insuficiente.',
+  INVALID_CARD_DATA: 'Dados do cartão incompletos. Preencha todos os campos.',
+  INVALID_HOLDER_INFO: 'Preencha nome e CPF do titular do cartão.',
+  CREDIT_CARD_DISABLED: 'Pagamento com cartão não está disponível no momento.',
+  CARD_TOKENIZATION_NOT_ENABLED: 'Tokenização de cartão não disponível.',
+};
+
+const getCreditCardErrorMessage = (errData) => {
+  if (!errData) return 'Erro ao processar pagamento. Tente novamente.';
+  const code = errData?.error?.code || errData?.code || '';
+  if (CC_ERROR_MESSAGES[code]) return CC_ERROR_MESSAGES[code];
+  const msg = errData?.error?.message || errData?.message || '';
+  if (msg) return msg;
+  return 'Erro ao processar pagamento com cartão. Tente novamente.';
+};
+
+// Normalize credit card response from backend
+const normalizeCreditCardResponse = (rawResponse) => {
+  const envelope = safeJsonParse(rawResponse, rawResponse ?? {});
+  const firstBody = safeJsonParse(envelope?.body, envelope);
+  const finalPayload = safeJsonParse(firstBody?.body, firstBody) || {};
+  const payment = finalPayload.payment || firstBody?.payment || envelope?.payment || {};
+  const paymentId = payment?.id || finalPayload.paymentId || firstBody?.paymentId || envelope?.paymentId || '';
+  const status = (payment?.status || payment?.raw?.status || '').toUpperCase();
+  const billingType = payment?.billingType || payment?.raw?.billingType || '';
+  const creditCard = payment?.creditCard || payment?.raw?.creditCard || null;
+  const value = payment?.value ?? payment?.raw?.value ?? 0;
+  return { paymentId, status, billingType, creditCard, value };
+};
+
 // Checkout States
 const CHECKOUT_STATES = {
   FILLING: 'filling',
@@ -81,6 +125,12 @@ const CheckoutPage = ({ cart, emptyCart }) => {
   const [pixQrCode, setPixQrCode] = useState(null);
   const [error, setError] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState('IDLE');
+
+  // Payment method selection (PIX = default, preserves existing flow)
+  const [paymentMethod, setPaymentMethod] = useState('PIX');
+
+  // Credit card form ref (for triggering validation from parent)
+  const ccFormRef = useRef(null);
   
   // Sistema de frete com API Lambda
   const freteCalculator = useFreteCalculator();
@@ -145,7 +195,7 @@ const CheckoutPage = ({ cart, emptyCart }) => {
   }, [calcularFrete, cart, setCepDestino]);
 
   const handleShippingLoad = (options) => {
-    console.log('Shipping options loaded:', options);
+    // Shipping options loaded — no-op (avoid logging in production)
   };
 
   const handleChange = (e) => {
@@ -166,7 +216,7 @@ const CheckoutPage = ({ cart, emptyCart }) => {
 
   const snapshotCartItems = (items) => items.map((item) => {
     const unitPrice = parseFloat(item.price) || parseFloat(item.variacoes?.[0]?.preco) || 0;
-    const rawImage = item.image || item.imagens?.[0]?.url || item.variacoes?.[0]?.imagens?.[0]?.url || '';
+    const rawImage = item.image || getThumbSrc(item.imagens?.[0] || item.variacoes?.[0]?.imagens?.[0]) || '';
     return { 
       id: item.cartItemId || item.id, 
       name: item.nome || item.name || 'Produto', 
@@ -222,6 +272,10 @@ const CheckoutPage = ({ cart, emptyCart }) => {
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
+
+    // Credit card has its own submit path — do NOT trigger PIX flow
+    if (paymentMethod === 'CREDIT_CARD') return;
+
     if (!validateForm()) return;
 
     if (freteStatus !== 'success' || freteValor === null) {
@@ -270,6 +324,12 @@ const CheckoutPage = ({ cart, emptyCart }) => {
       setPixQrCode(qr);
       setPaymentStatus('PENDING');
       setWsRetryKey(k => k + 1);
+
+      // GA4: begin_checkout
+      trackEvent('begin_checkout', {
+        currency: 'BRL',
+        value: Number(totalWithShipping.toFixed(2)),
+      });
     } catch (err) {
       if (err?.isCanceled) return;
       setError(err?.data?.message || err?.message || 'Não foi possível processar o pedido. Tente novamente.');
@@ -297,13 +357,146 @@ const CheckoutPage = ({ cart, emptyCart }) => {
     setError(null);
   };
 
+  // Credit Card submit — real backend integration via same POST /customers endpoint
+  const handleCreditCardSubmit = async () => {
+    if (!validateForm()) return;
+    if (freteStatus !== 'success' || freteValor === null) {
+      setError('Por favor, calcule o frete antes de finalizar a compra.');
+      return;
+    }
+    // Validate card fields via ref
+    if (!ccFormRef.current?.validate()) return;
+
+    const cardData = ccFormRef.current.getData();
+
+    if (!cart.length || totalQuantity === 0) {
+      return setError('Seu carrinho está vazio.');
+    }
+
+    setLoadingCreate(true);
+    setError(null);
+
+    // Snapshot data
+    const deliverySnapshot = { ...formData, fullName: `${formData.firstName} ${formData.lastName}` };
+    const itemsSnapshot = snapshotCartItems(cart);
+    const orderTitle = buildOrderTitle();
+
+    setConfirmedDeliveryInfo(deliverySnapshot);
+    setConfirmedCartItems(itemsSnapshot);
+    setConfirmedOrderTitle(orderTitle);
+    setConfirmedShippingCost(shippingCost);
+
+    // GA4: begin_checkout (credit card)
+    trackEvent('begin_checkout', {
+      currency: 'BRL',
+      value: Number(totalWithShipping.toFixed(2)),
+    });
+
+    // Build payload — same structure as PIX but with billingType CREDIT_CARD + card data
+    const fullName = `${safeTrim(formData.firstName)} ${safeTrim(formData.lastName)}`;
+    const customerBody = {
+      name: fullName, cpfCnpj: digitsOnly(formData.cpf), email: safeTrim(formData.email),
+      mobilePhone: digitsOnly(formData.phone), address: safeTrim(formData.address),
+      addressNumber: safeTrim(formData.number), complement: safeTrim(formData.complement),
+      province: safeTrim(formData.state), postalCode: digitsOnly(formData.zipCode),
+      neighborhood: safeTrim(formData.neighborhood), city: safeTrim(formData.city),
+    };
+    const cleanedBody = Object.fromEntries(Object.entries(customerBody).filter(([, v]) => v));
+    const avgUnitPrice = totalQuantity > 0 ? totalWithShipping / totalQuantity : totalWithShipping;
+
+    // Expiry year: form gives 2-digit, Asaas expects 4-digit
+    const expYearFull = cardData.expYear.length === 2
+      ? `20${cardData.expYear}`
+      : cardData.expYear;
+
+    const payload = {
+      ...cleanedBody,
+      createPayment: true,
+      payment: {
+        billingType: 'CREDIT_CARD',
+        value: Number(totalWithShipping.toFixed(2)),
+        description: orderTitle,
+        creditCard: {
+          holderName: cardData.cardName,
+          number: digitsOnly(cardData.cardNumber),
+          expiryMonth: cardData.expMonth,
+          expiryYear: expYearFull,
+          ccv: digitsOnly(cardData.cvv),
+        },
+        creditCardHolderInfo: {
+          name: fullName,
+          cpfCnpj: digitsOnly(cardData.holderCpf),
+          email: safeTrim(formData.email),
+          postalCode: digitsOnly(formData.zipCode),
+          addressNumber: safeTrim(formData.number),
+          phone: digitsOnly(formData.phone),
+        },
+      },
+      order: { title: orderTitle, qty: totalQuantity || 1, unitPrice: Number(avgUnitPrice.toFixed(2)) },
+    };
+
+    try {
+      const response = await createPaymentOrder(payload);
+      const { paymentId: ccPaymentId, status, value } = normalizeCreditCardResponse(response);
+
+      if (!ccPaymentId) throw new Error('Resposta sem paymentId.');
+
+      setPaymentId(ccPaymentId);
+      setPaymentMeta({ value: value || totalWithShipping, dueDate: '' });
+
+      if (status === 'CONFIRMED' || status === 'RECEIVED') {
+        // Credit card approved synchronously — go straight to confirmed
+        setPaymentStatus('PAID');
+        setCheckoutState(CHECKOUT_STATES.CONFIRMED);
+
+        // GA4: purchase (credit card)
+        trackEvent('purchase', {
+          transaction_id: ccPaymentId,
+          currency: 'BRL',
+          value: value || totalWithShipping,
+          items: itemsSnapshot.map(i => ({
+            item_id: i.id,
+            item_name: i.name,
+            price: i.unitPrice,
+            quantity: i.quantity,
+          })),
+        });
+
+        setTimeout(() => {
+          emptyCart?.();
+          navigate('/checkout/success', {
+            state: {
+              paymentId: ccPaymentId,
+              totalAmount: value || totalWithShipping,
+              dueDate: '',
+              deliveryInfo: deliverySnapshot,
+              items: itemsSnapshot,
+              orderTitle: orderTitle || 'Pedido Menina Dourada',
+              confirmedAt: new Date().toISOString(),
+              paymentMethod: 'CREDIT_CARD',
+            },
+          });
+        }, 2000);
+      } else {
+        // Unexpected status — show error but don't break
+        setError(`Pagamento retornou status: ${status}. Entre em contato com o suporte.`);
+      }
+    } catch (err) {
+      if (err?.isCanceled) return;
+      const errData = err?.data || err?.response?.data || null;
+      setError(getCreditCardErrorMessage(errData));
+    } finally {
+      setLoadingCreate(false);
+    }
+  };
+
   // Initialize checkout
   useEffect(() => {
     if (cart?.length > 0 && !checkoutInitialized) setCheckoutInitialized(true);
   }, [cart, checkoutInitialized]);
 
   useEffect(() => {
-    if (!checkoutInitialized && (!cart || cart.length === 0)) navigate('/shop');
+    if (!checkoutInitialized && (!cart || cart.length === 0)) navigate('/produtos');
   }, [checkoutInitialized, cart, navigate]);
 
   // Scroll to top when page loads or state changes
@@ -342,6 +535,19 @@ const CheckoutPage = ({ cart, emptyCart }) => {
           wsConfirmedRef.current = true;
           setPaymentStatus('CONFIRMING');
           
+          // GA4: purchase (PIX confirmed)
+          trackEvent('purchase', {
+            transaction_id: paymentId,
+            currency: 'BRL',
+            value: paymentMeta?.value ?? subtotal,
+            items: confirmedCartItems.map(i => ({
+              item_id: i.id,
+              item_name: i.name,
+              price: i.unitPrice,
+              quantity: i.quantity,
+            })),
+          });
+
           setError(null);
           setPaymentStatus('PAID');
         setCheckoutState(CHECKOUT_STATES.CONFIRMED);
@@ -362,6 +568,23 @@ const CheckoutPage = ({ cart, emptyCart }) => {
             },
           });
         }, 2000);
+      }
+
+      // Handle DENIED / CHARGEBACK from WebSocket (credit card scenarios)
+      const wsStatus = (data?.status || '').toUpperCase();
+      if (incomingPaymentId === paymentId && !wsConfirmedRef.current) {
+        if (wsStatus === 'DENIED') {
+          wsConfirmedRef.current = true;
+          cleanupRealtime();
+          setPaymentStatus('IDLE');
+          setCheckoutState(CHECKOUT_STATES.FILLING);
+          setError('Pagamento recusado pela operadora. Tente outro cartão.');
+        } else if (wsStatus === 'CHARGEBACK') {
+          wsConfirmedRef.current = true;
+          cleanupRealtime();
+          setPaymentStatus('IDLE');
+          setError('Chargeback detectado. Entre em contato com o suporte.');
+        }
       }
     };
 
@@ -400,7 +623,13 @@ try { socket.close(); } catch {}
       </div>
 
       <div className="checkout-sidebar">
-        <PixInfoCard />
+        <PaymentMethodSelector selected={paymentMethod} onChange={(m) => { setPaymentMethod(m); setError(null); }} />
+
+        {paymentMethod === 'PIX' && <PixInfoCard />}
+        {paymentMethod === 'CREDIT_CARD' && (
+          <CreditCardPaymentForm ref={ccFormRef} loading={loadingCreate} />
+        )}
+
         <OrderSummary
           cart={cart}
           subtotal={subtotal}
@@ -421,13 +650,29 @@ try { socket.close(); } catch {}
           onCalcularFrete={handleCalcularFrete}
         />
 
+        <CheckoutTrustBlock />
+
         <div className="checkout-cta-container">
-          <button type="submit" className="checkout-cta-btn" disabled={loadingCreate}>
-            {loadingCreate ? 'Processando...' : 'Finalizar Compra'}
-          </button>
-          <p className="checkout-cta-hint">
-            Ao finalizar, você recebe o <strong>QR Code do PIX</strong>.
-          </p>
+          {paymentMethod === 'PIX' && (
+            <>
+              <button type="submit" className="checkout-cta-btn" disabled={loadingCreate}>
+                {loadingCreate ? 'Processando...' : 'Finalizar Compra'}
+              </button>
+              <p className="checkout-cta-hint">
+                Ao finalizar, você recebe o <strong>QR Code do PIX</strong>.
+              </p>
+            </>
+          )}
+          {paymentMethod === 'CREDIT_CARD' && (
+            <>
+              <button type="button" className="checkout-cta-btn" disabled={loadingCreate} onClick={handleCreditCardSubmit}>
+                {loadingCreate ? 'Processando pagamento...' : 'Pagar com Cartão'}
+              </button>
+              <p className="checkout-cta-hint">
+                Pagamento processado de forma <strong>segura</strong>.
+              </p>
+            </>
+          )}
           <div className="checkout-trust">
             <span className="checkout-trust-icon">🔒</span>
             <span>Dados protegidos e usados apenas para processar o pedido.</span>
@@ -436,7 +681,7 @@ try { socket.close(); } catch {}
 
         {error && <div className="checkout-message checkout-message-error">{error}</div>}
 
-        <Link to="/shop" className="checkout-back-link">← Voltar para a loja</Link>
+        <Link to="/produtos" className="checkout-back-link">← Voltar para a loja</Link>
       </div>
     </form>
   );
@@ -531,11 +776,16 @@ try { socket.close(); } catch {}
   // ============================================
   return (
     <div className="checkout-page">
+      <AdvancedSEO
+        title="Checkout seguro | Menina Dourada"
+        description="Finalize seu pedido com segurança e pagamento via PIX."
+        noindex
+      />
       <div className="checkout-container">
         <header className="checkout-header">
           <h1 className="checkout-title">
             {checkoutState === CHECKOUT_STATES.FILLING && 'Finalizar Compra'}
-            {checkoutState === CHECKOUT_STATES.PAYMENT && 'Pagamento PIX'}
+            {checkoutState === CHECKOUT_STATES.PAYMENT && (paymentMethod === 'CREDIT_CARD' ? 'Pagamento Cartão' : 'Pagamento PIX')}
             {checkoutState === CHECKOUT_STATES.CONFIRMED && 'Pedido Confirmado'}
           </h1>
           <CheckoutSteps currentStep={checkoutState} />
@@ -576,14 +826,26 @@ try { socket.close(); } catch {}
         {/* Mobile Fixed CTA - Only in filling state */}
         {checkoutState === CHECKOUT_STATES.FILLING && (
           <div className="checkout-mobile-cta">
-            <button 
-              type="button" 
-              className="checkout-cta-btn" 
-              disabled={loadingCreate} 
-              onClick={handlePlaceOrder}
-            >
-              {loadingCreate ? 'Processando...' : `Finalizar • R$ ${formatCurrency(totalWithShipping)}`}
-            </button>
+            {paymentMethod === 'PIX' && (
+              <button 
+                type="button" 
+                className="checkout-cta-btn" 
+                disabled={loadingCreate} 
+                onClick={handlePlaceOrder}
+              >
+                {loadingCreate ? 'Processando...' : `Finalizar • R$ ${formatCurrency(totalWithShipping)}`}
+              </button>
+            )}
+            {paymentMethod === 'CREDIT_CARD' && (
+              <button 
+                type="button" 
+                className="checkout-cta-btn" 
+                disabled={loadingCreate} 
+                onClick={handleCreditCardSubmit}
+              >
+                {loadingCreate ? 'Processando...' : `Cartão • R$ ${formatCurrency(totalWithShipping)}`}
+              </button>
+            )}
           </div>
         )}
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { trackPageView } from './utils/analytics';
 
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
@@ -10,11 +11,12 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import NewsletterSection from './components/NewsletterSection';
 import Footer from './components/Footer';
-import ProductModal from './components/ProductModal';
 import CheckoutPage from './pages/CheckoutPage';
 import LGPDModal from './components/LGPDModal';
 import ContactWidget from './components/ContactWidget';
 import SEO from './components/SEO';
+import AdvancedSEO from './seo/AdvancedSEO';
+import { websiteSchema, organizationSchema, clothingStoreSchema } from './seo/schema';
 
 
 
@@ -22,6 +24,10 @@ import SEO from './components/SEO';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import OrderPendingPage from './pages/OrderPendingPage';
 import OrderFailurePage from './pages/OrderFailurePage';
+import ProductSeoPage from './pages/ProductSeoPage';
+import PoliticaFretePage from './pages/PoliticaFretePage';
+import TrocasDevolucoesPage from './pages/TrocasDevolucoesPage';
+import ContatoPage from './pages/ContatoPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -33,11 +39,17 @@ const ScrollToTop = () => {
   return null;
 };
 
+const PageTracker = () => {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location]);
+  return null;
+};
+
 function App() {
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const toggleCart = () => setIsCartOpen(!isCartOpen);
 
@@ -88,31 +100,29 @@ function App() {
 
   const emptyCart = () => setCart([]);
 
-  const openProductModal = (product) => {
-    setSelectedProduct(product);
-    setIsProductModalOpen(true);
-  };
-
-  const closeProductModal = () => {
-    setIsProductModalOpen(false);
-    setSelectedProduct(null);
-  };
-
   const currentCartSubtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
 
   return (
     <Router>
       <div className="bg-sand-50 text-sand-800">
         <ScrollToTop />
+        <PageTracker />
         <SEO />
         <Navbar setIsCartOpen={setIsCartOpen} cart={cart} />
 
         <Routes>
           <Route path="/" element={
             <>
+              <AdvancedSEO
+                title="Menina Dourada | Moda Praia Feminina e Cangas"
+                description="Encontre cangas, moda praia feminina e peças com estilo tropical na Menina Dourada."
+                url="https://meninadourada.shop/"
+                canonical="https://meninadourada.shop/"
+                jsonLd={[websiteSchema(), organizationSchema(), clothingStoreSchema()]}
+              />
               <HeroSection />
               
-              <ProductGrid addToCart={addToCart} openProductModal={openProductModal} />
+              <ProductGrid addToCart={addToCart} />
               <AboutSection />
               <NewsletterSection />
             </>
@@ -126,12 +136,16 @@ function App() {
             />
           } />
 
-          <Route path="/shop" element={<ProductGrid addToCart={addToCart} openProductModal={openProductModal} />} />
-          <Route path="/loja" element={<ProductGrid addToCart={addToCart} openProductModal={openProductModal} />} />
+          <Route path="/shop" element={<Navigate to="/produtos" replace />} />
+          <Route path="/loja" element={<Navigate to="/produtos" replace />} />
+          <Route path="/produtos" element={<><AdvancedSEO title="Produtos | Menina Dourada" description="Compre biquínis, maiôs, cangas e acessórios na Menina Dourada. Entrega para todo o Brasil." url="https://meninadourada.shop/produtos" canonical="https://meninadourada.shop/produtos" /><ProductGrid addToCart={addToCart} /></>} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/sobre" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/contato" element={<ContactPage />} />
+          <Route path="/contato" element={<ContatoPage />} />
+          <Route path="/politica-de-frete" element={<PoliticaFretePage />} />
+          <Route path="/trocas-e-devolucoes" element={<TrocasDevolucoesPage />} />
+          <Route path="/produto/:slug" element={<ProductSeoPage addToCart={addToCart} />} />
           <Route path="*" element={<div>404: Not Found</div>} />
           <Route path="/checkout/success" element={<OrderSuccessPage />} />
           <Route path="/checkout/failure" element={<OrderPendingPage />} />
@@ -151,15 +165,6 @@ function App() {
 
           onCheckoutClick={() => { toggleCart(); }}
         />
-
-        {selectedProduct && (
-          <ProductModal
-            isOpen={isProductModalOpen}
-            onClose={closeProductModal}
-            product={selectedProduct}
-            addToCart={addToCart}
-          />
-        )}
 
         <LGPDModal />
         <ContactWidget />
