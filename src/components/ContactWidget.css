@@ -147,7 +147,7 @@
 
 .contact-intro {
     font-size: 0.875rem;
-    color: #666;
+    color: #444;
     margin: 0 0 0.5rem 0;
 }
 
@@ -226,7 +226,7 @@
 
 .contact-option-text span {
     font-size: 0.8125rem;
-    color: #666;
+    color: #555;
 }
 
 .contact-phone {
@@ -258,7 +258,7 @@
 
 .contact-form-intro {
     font-size: 0.875rem;
-    color: #666;
+    color: #444;
     margin: 0 0 1rem 0;
 }
 
@@ -319,7 +319,7 @@
     align-items: flex-start;
     gap: 0.5rem;
     font-size: 0.8125rem;
-    color: #666;
+    color: #444;
     cursor: pointer;
 }
 
@@ -417,7 +417,7 @@
 
 .contact-success p {
     font-size: 0.875rem;
-    color: #666;
+    color: #444;
     margin: 0 0 1.5rem 0;
 }
 
@@ -457,7 +457,7 @@
     border: none;
     cursor: pointer;
     transition: all 200ms ease;
-    color: #999;
+    color: #555;
 }
 
 .contact-nav-item:first-child {

@@ -41,7 +41,7 @@
 
 .cc-form-subtitle {
   font-size: 0.75rem;
-  color: #8B7355;
+  color: #5A4A3A;
   margin: 0.125rem 0 0;
 }
 
@@ -69,7 +69,7 @@
   justify-content: center;
   gap: 0.5rem;
   font-size: 0.75rem;
-  color: #8B7355;
+  color: #5A4A3A;
 }
 
 /* Placeholder message for future integration */
@@ -81,7 +81,7 @@
   border-radius: 10px;
   text-align: center;
   font-size: 0.875rem;
-  color: #8B7355;
+  color: #5A4A3A;
 }
 
 .cc-pending-message strong {

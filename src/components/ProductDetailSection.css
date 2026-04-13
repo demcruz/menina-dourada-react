@@ -135,7 +135,7 @@
 .pdp-description-desktop h2 {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #888;
+  color: #555;
   margin: 0 0 0.5rem 0;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -459,6 +459,84 @@
   cursor: not-allowed;
 }
 
+/* ── Amazon button (secondary) — só renderiza se amazonUrl existir ── */
+.pdp-amazon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 56px;
+  border-radius: 12px;
+  border: 1.5px solid #FF9900;
+  background: #fffaf3;
+  color: #1a1a1a;
+  text-decoration: none;
+  padding: 0.625rem 1.25rem;
+  transition: background 200ms ease, border-color 200ms ease,
+              box-shadow 200ms ease, transform 200ms ease;
+  contain: layout;
+}
+
+.pdp-amazon-button:hover {
+  background: #fff3e0;
+  border-color: #e68900;
+  box-shadow: 0 4px 16px rgba(255, 153, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.pdp-amazon-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.pdp-amazon-icon {
+  flex-shrink: 0;
+  color: #1a1a1a;
+}
+
+/* Texto em duas linhas dentro do botão */
+.pdp-amazon-btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+}
+
+.pdp-amazon-btn-main {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.pdp-amazon-btn-sub {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #e68900;
+  line-height: 1.2;
+}
+
+.pdp-amazon-trust {
+  text-align: center;
+  font-size: 0.72rem;
+  color: #aaa;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 767px) {
+  .pdp-amazon-button {
+    min-height: 52px;
+    border-radius: 10px;
+  }
+
+  .pdp-amazon-btn-main {
+    font-size: 0.875rem;
+  }
+}
+
 /* ── Benefits below CTA ── */
 .pdp-benefits {
   display: flex;
@@ -636,14 +714,14 @@
 /* ── BACK LINK ── */
 .pdp-back-link {
   display: inline-block;
-  color: #888;
+  color: #555;
   font-size: 0.9rem;
   text-decoration: none;
   transition: color 150ms ease;
 }
 
 .pdp-back-link:hover {
-  color: #555;
+  color: #333;
 }
 
 /* ══════════════════════════════════════

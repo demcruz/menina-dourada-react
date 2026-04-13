@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AdvancedSEO from '../seo/AdvancedSEO';
 import { webPageSchema } from '../seo/schema';
+import { BUSINESS } from '../config/business';
 import '../styles/InstitucionalPage.css';
 
 const ContatoPage = () => {
   const [copied, setCopied] = useState(false);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('contato@meninadourada.shop').then(() => {
+    navigator.clipboard.writeText(BUSINESS.email).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -18,7 +19,7 @@ const ContatoPage = () => {
     <>
       <AdvancedSEO
         title="Contato | Menina Dourada"
-        description="Entre em contato com a Menina Dourada. Atendimento por e-mail de segunda a sexta, das 9h às 18h."
+        description="Entre em contato com a Menina Dourada por WhatsApp ou e-mail. Atendimento de segunda a sexta, das 9h às 18h."
         url="https://meninadourada.shop/contato"
         canonical="https://meninadourada.shop/contato"
         jsonLd={webPageSchema('Contato', 'https://meninadourada.shop/contato')}
@@ -34,8 +35,23 @@ const ContatoPage = () => {
         <div className="inst-section">
           <p>
             Caso tenha dúvidas, sugestões ou precise de suporte com seu pedido, entre em
-            contato com a nossa equipe.
+            contato com a nossa equipe pelos canais abaixo.
           </p>
+        </div>
+
+        <div className="inst-section">
+          <h2>💬 WhatsApp</h2>
+          <a
+            href={BUSINESS.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inst-contact-card whatsapp inst-email-btn"
+            style={{ maxWidth: '360px' }}
+          >
+            <span className="inst-contact-icon">💬</span>
+            <strong>{BUSINESS.phone}</strong>
+            <span>Clique para abrir o WhatsApp</span>
+          </a>
         </div>
 
         <div className="inst-section">
@@ -45,7 +61,7 @@ const ContatoPage = () => {
             className="inst-contact-card email inst-email-btn"
           >
             <span className="inst-contact-icon">✉️</span>
-            <strong>contato@meninadourada.shop</strong>
+            <strong>{BUSINESS.email}</strong>
             <span>{copied ? '✓ Copiado!' : 'Clique para copiar'}</span>
           </button>
         </div>
@@ -61,6 +77,7 @@ const ContatoPage = () => {
           <div className="inst-highlight">
             <p>
               Nosso compromisso é oferecer uma experiência segura, rápida e transparente para você.
+              Respondemos e-mails em até 24 horas úteis.
             </p>
           </div>
         </div>

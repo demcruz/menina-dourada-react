@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './Footer.css';
 import logo from '../img/logo2.png';
 import pixLogo from '../img/pix-banco-central.svg';
+import { BUSINESS } from '../config/business';
 
 const Footer = () => (
   <footer className="footer-premium">
@@ -10,7 +11,7 @@ const Footer = () => (
       {/* Seção da Marca */}
       <div className="footer-brand-section">
         <div className="footer-logo-area">
-          <img src={logo} alt="Menina Dourada" className="footer-logo-img" />
+          <img src={logo} alt="Menina Dourada" className="footer-logo-img" width="140" height="40" loading="lazy" />
           <p className="footer-brand-tagline">Biquínis premium que celebram sua beleza única e elevam sua confiança.</p>
         </div>
         
@@ -21,7 +22,7 @@ const Footer = () => (
             </div>
             <div className="trust-text">
               <strong>Frete Grátis</strong>
-              <span>Compras a partir de R$ 350</span>
+              <span>Compras a partir de R$ 250</span>
             </div>
           </div>
           
@@ -79,7 +80,7 @@ const Footer = () => (
         <h3 className="footer-section-title">Pagamento</h3>
         <div className="pix-payment-card">
           <div className="pix-header">
-            <img src={pixLogo} alt="PIX" className="pix-logo" />
+            <img src={pixLogo} alt="PIX" className="pix-logo" width="64" height="24" loading="lazy" />
           </div>
           <div className="pix-body">
             <span className="pix-label">Pagamento instantâneo</span>
@@ -141,9 +142,12 @@ const Footer = () => (
       
       <div className="footer-copyright">
         <div className="footer-copyright-brand">
-          <img src={logo} alt="Menina Dourada" className="footer-copyright-logo" loading="lazy" />
-          <span>© 2026 Menina Dourada — Todos os direitos reservados</span>
+          <img src={logo} alt="Menina Dourada" className="footer-copyright-logo" width="100" height="28" loading="lazy" />
+          <span>© 2026 {BUSINESS.tradeName} — Todos os direitos reservados</span>
         </div>
+        <span className="footer-legal-info">
+          {BUSINESS.legalName} · CNPJ {BUSINESS.cnpj} · {BUSINESS.location}
+        </span>
         <span className="footer-dev-note">Desenvolvido com cuidado para oferecer a melhor experiência.</span>
       </div>
     </div>

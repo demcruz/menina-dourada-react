@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# arquivos temporários gerados pelo postbuild
+scripts/product-urls.json
+scripts/product-data.json

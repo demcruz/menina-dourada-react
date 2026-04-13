@@ -161,7 +161,7 @@ const OrderSuccessPage = () => {
             {items.length === 0 && <p className="delivery-line">Itens indisponiveis.</p>}
             {items.map((item) => (
               <div className="item-row" key={`${item.id}-${item.name}`}>
-                {item.image && <img src={item.image} alt={item.name || 'Produto Menina Dourada'} loading="lazy" />}
+                {item.image && <img src={item.image} alt={item.name || 'Produto Menina Dourada'} width="64" height="64" loading="lazy" decoding="async" />}
                 <div className="item-details">
                   <p>{item.name}</p>
                   <span>

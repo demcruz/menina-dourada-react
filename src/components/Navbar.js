@@ -1,38 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../index.css'; 
+import '../index.css';
 
-import log from '../img/logo2.png'
+import log from '../img/logo2.png';
 
 const Navbar = ({ setIsCartOpen, cart }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
-    // Detecta scroll para aplicar efeito translúcido
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
         };
-
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
-    };
-
-    const handleNavLinkClick = () => {
-        setIsMobileMenuOpen(false);
-    };
+    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+    const handleNavLinkClick = () => setIsMobileMenuOpen(false);
 
     return (
         <nav className={`navbar-main ${isScrolled ? 'navbar-scrolled' : ''}`}>
             {/* Trust bar — visível apenas antes do scroll */}
             {!isScrolled && (
                 <div className="trust-bar">
-                    <span>🚚 Frete grátis acima de R$&nbsp;250</span>
+                    <span>🚚 Frete grátis acima de R$ 250</span>
                     <span className="trust-bar-divider">·</span>
                     <span>🔒 Pagamento seguro</span>
                     <span className="trust-bar-divider">·</span>
@@ -40,8 +33,8 @@ const Navbar = ({ setIsCartOpen, cart }) => {
                 </div>
             )}
             <div className="navbar-content">
-<Link to="/" className="navbar-logo-link">
-                    <img src={log} alt="Menina Dourada Logo" className="navbar-logo-image" />
+                <Link to="/" className="navbar-logo-link">
+                    <img src={log} alt="Menina Dourada Logo" className="navbar-logo-image" width="140" height="40" />
                 </Link>
                 <div className="navbar-links-desktop">
                     <Link to="/" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Home</Link>
@@ -49,7 +42,6 @@ const Navbar = ({ setIsCartOpen, cart }) => {
                     <Link to="/sobre" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Sobre Nós</Link>
                     <Link to="/contato" className="hover:text-gold-600 transition" onClick={handleNavLinkClick}>Contato</Link>
                 </div>
-
                 <div className="navbar-actions">
                     <button id="cart-button" className="cart-button-icon-container" onClick={() => setIsCartOpen(true)}>
                         <i className="fas fa-shopping-bag cart-icon"></i>

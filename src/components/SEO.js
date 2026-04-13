@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const SITE_URL = 'https://meninadourada.shop';
@@ -22,14 +22,12 @@ const ROUTE_META = {
     description:
       'Compre biquínis, maiôs, cangas e acessórios na Menina Dourada Swim. Entrega para todo o Brasil e pagamento via PIX.',
     canonical: `${SITE_URL}/produtos`,
-    robots: 'noindex, follow',
   },
   '/shop': {
     title: 'Produtos | Menina Dourada',
     description:
       'Compre biquínis, maiôs, cangas e acessórios na Menina Dourada Swim. Entrega para todo o Brasil e pagamento via PIX.',
     canonical: `${SITE_URL}/produtos`,
-    robots: 'noindex, follow',
   },
   '/produtos': {
     title: 'Produtos | Menina Dourada',
@@ -46,7 +44,6 @@ const ROUTE_META = {
     description:
       'Conheça a história da Menina Dourada Swim e nosso compromisso com moda praia feminina de qualidade.',
     canonical: `${SITE_URL}/sobre`,
-    robots: 'noindex, follow',
   },
   '/contato': {
     title: 'Contato | Menina Dourada Swim',
@@ -58,7 +55,16 @@ const ROUTE_META = {
     description:
       'Fale com a equipe da Menina Dourada Swim por WhatsApp ou formulário de contato.',
     canonical: `${SITE_URL}/contato`,
-    robots: 'noindex, follow',
+  },
+  '/politica-de-frete': {
+    title: 'Política de Frete | Menina Dourada',
+    description:
+      'Saiba tudo sobre prazos, valores e condições de entrega da Menina Dourada. Entregamos para todo o Brasil.',
+  },
+  '/trocas-e-devolucoes': {
+    title: 'Trocas e Devoluções | Menina Dourada',
+    description:
+      'Política de trocas e devoluções da Menina Dourada. Devolução em até 7 dias e troca em até 30 dias.',
   },
   '/checkout': {
     title: 'Checkout seguro | Menina Dourada Swim',
@@ -84,9 +90,7 @@ const ROUTE_META = {
 
 const normalizePathname = (pathname) => {
   if (!pathname) return '/';
-  if (pathname.length > 1 && pathname.endsWith('/')) {
-    return pathname.slice(0, -1);
-  }
+  if (pathname.length > 1 && pathname.endsWith('/')) return pathname.slice(0, -1);
   return pathname;
 };
 
@@ -95,12 +99,10 @@ const ensureMeta = (attributes) => {
     ? `meta[name="${attributes.name}"]`
     : `meta[property="${attributes.property}"]`;
   let element = document.head.querySelector(selector);
-
   if (!element) {
     element = document.createElement('meta');
     document.head.appendChild(element);
   }
-
   Object.entries(attributes).forEach(([key, value]) => {
     if (value) element.setAttribute(key, value);
   });
@@ -110,16 +112,12 @@ const ensureLink = (attributes) => {
   const selectorParts = [];
   if (attributes.rel) selectorParts.push(`rel="${attributes.rel}"`);
   if (attributes.hreflang) selectorParts.push(`hreflang="${attributes.hreflang}"`);
-  const selector = selectorParts.length
-    ? `link[${selectorParts.join('][')}]`
-    : 'link';
-
+  const selector = selectorParts.length ? `link[${selectorParts.join('][')}]` : 'link';
   let element = document.head.querySelector(selector);
   if (!element) {
     element = document.createElement('link');
     document.head.appendChild(element);
   }
-
   Object.entries(attributes).forEach(([key, value]) => {
     if (value) element.setAttribute(key, value);
   });
@@ -130,6 +128,10 @@ const SEO = () => {
 
   useEffect(() => {
     const normalizedPath = normalizePathname(pathname);
+
+    // Páginas de produto têm AdvancedSEO próprio — não sobrescrever
+    if (normalizedPath.startsWith('/produto/')) return;
+
     const routeMeta = ROUTE_META[normalizedPath];
     const isKnownRoute = Boolean(routeMeta);
 
@@ -141,12 +143,7 @@ const SEO = () => {
           robots: 'noindex, follow',
         };
 
-    const meta = {
-      ...DEFAULT_META,
-      ...fallbackMeta,
-      ...routeMeta,
-    };
-
+    const meta = { ...DEFAULT_META, ...fallbackMeta, ...routeMeta };
     const canonical =
       meta.canonical || `${SITE_URL}${normalizedPath === '/' ? '/' : normalizedPath}`;
 
@@ -154,16 +151,13 @@ const SEO = () => {
 
     ensureMeta({ name: 'description', content: meta.description });
     ensureMeta({ name: 'robots', content: meta.robots });
-
     ensureMeta({ property: 'og:title', content: meta.title });
     ensureMeta({ property: 'og:description', content: meta.description });
     ensureMeta({ property: 'og:url', content: canonical });
     ensureMeta({ property: 'og:image', content: DEFAULT_IMAGE });
-
     ensureMeta({ name: 'twitter:title', content: meta.title });
     ensureMeta({ name: 'twitter:description', content: meta.description });
     ensureMeta({ name: 'twitter:image', content: DEFAULT_IMAGE });
-
     ensureLink({ rel: 'canonical', href: canonical });
     ensureLink({ rel: 'alternate', hreflang: 'pt-BR', href: canonical });
   }, [pathname]);

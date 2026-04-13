@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import './ProductDetailSection.css';
 import { getMediumSrc, getThumbSrc } from '../utils/productImage';
 import { trackEvent } from '../utils/analytics';
@@ -242,6 +242,10 @@ const ProductDetailSection = ({ product, addToCart }) => {
             alt={altText}
             className={isZoomed ? 'zoomed' : ''}
             style={isZoomed ? { transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` } : {}}
+            width="600"
+            height="600"
+            fetchpriority="high"
+            decoding="sync"
           />
           <div className="pdp-zoom-icon">
             <i className={`fas ${isZoomed ? 'fa-search-minus' : 'fa-search-plus'}`}></i>
@@ -259,7 +263,7 @@ const ProductDetailSection = ({ product, addToCart }) => {
                 tabIndex="0"
                 aria-label={`Imagem ${index + 1}`}
               >
-                <img src={getThumbSrc(img)} alt={img.altText || product?.nome || `Foto ${index + 1}`} loading="lazy" />
+                <img src={getThumbSrc(img)} alt={img.altText || product?.nome || `Foto ${index + 1}`} width="80" height="80" loading="lazy" decoding="async" />
               </div>
             ))}
           </div>
@@ -281,10 +285,12 @@ const ProductDetailSection = ({ product, addToCart }) => {
         {/* Price + Scarcity */}
         <div className="pdp-price-block">
           <div className="pdp-product-price">{formatPrice(preco)}</div>
-          <div className="pdp-scarcity">
-            <span className="pdp-scarcity-dot"></span>
-            Alta demanda — últimas unidades disponíveis
-          </div>
+          {currentVariation?.estoque > 0 && currentVariation?.estoque <= 5 && (
+            <div className="pdp-scarcity">
+              <span className="pdp-scarcity-dot"></span>
+              Apenas {currentVariation.estoque} unidade{currentVariation.estoque > 1 ? 's' : ''} disponível{currentVariation.estoque > 1 ? 'is' : ''}
+            </div>
+          )}
         </div>
 
         {/* Color selection */}
@@ -374,6 +380,60 @@ const ProductDetailSection = ({ product, addToCart }) => {
             )}
           </button>
 
+          {/* Amazon button — renderiza SOMENTE se amazonUrl for string HTTP válida */}
+          {(() => {
+            const hasAmazon =
+              typeof product.amazonUrl === 'string' &&
+              product.amazonUrl.startsWith('http');
+            if (!hasAmazon) return null;
+            return (
+              <>
+                <a
+                  href={product.amazonUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pdp-amazon-button"
+                  data-testid="amazon-button"
+                  aria-label="Comprar este produto na Amazon"
+                  onClick={() => {
+                    try {
+                      trackEvent('click_amazon', {
+                        // Identificação do produto
+                        item_id:       product.id || product._id?.timestamp || '',
+                        item_name:     product.nome || product.name || '',
+                        item_category: product.categoria || '',
+                        // Preço no momento do clique
+                        price: (() => {
+                          const v = currentVariation || product?.variacoes?.[0];
+                          const p = v?.precoVenda ?? v?.preco;
+                          return typeof p === 'number' ? p : parseFloat(p) || 0;
+                        })(),
+                        currency: 'BRL',
+                        // Contexto
+                        event_label: 'amazon_button_pdp',
+                        event_category: 'ecommerce',
+                      });
+                    } catch { /* analytics indisponível — falha silenciosa */ }
+                  }}
+                >
+                  {/* Ícone de carrinho — sem SVG de texto que corta em flex */}
+                  <svg className="pdp-amazon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18" aria-hidden="true" style={{ flexShrink: 0, display: 'block' }}>
+                    <circle cx="9" cy="21" r="1" fill="currentColor" stroke="none"/>
+                    <circle cx="20" cy="21" r="1" fill="currentColor" stroke="none"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                  </svg>
+                  <span className="pdp-amazon-btn-text">
+                    <span className="pdp-amazon-btn-main">Comprar na Amazon</span>
+                    <span className="pdp-amazon-btn-sub">✔ Mais uma opção de compra segura</span>
+                  </span>
+                </a>
+                <p className="pdp-amazon-trust">
+                  🔒 Pagamento seguro no site (PIX e cartão) · também disponível na Amazon
+                </p>
+              </>
+            );
+          })()}
+
           <ul className="pdp-benefits">
             <li className="pdp-benefit-item">
               <span className="pdp-benefit-icon">🔥</span>
@@ -450,4 +510,4 @@ const ProductDetailSection = ({ product, addToCart }) => {
   );
 };
 
-export default ProductDetailSection;
+export default memo(ProductDetailSection);

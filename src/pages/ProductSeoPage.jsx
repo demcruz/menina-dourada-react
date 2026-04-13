@@ -11,10 +11,19 @@ import ProductDetailSection from "../components/ProductDetailSection";
 /* ── component ── */
 const ProductSeoPage = ({ addToCart }) => {
   const { slug } = useParams();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  // Durante a hydration do react-snap, os produtos já estão em window.__PRELOADED_PRODUCTS__
+  // injetados pelo postbuild. Isso garante que o HTML capturado tem conteúdo real.
+  const preloaded = typeof window !== "undefined" && window.__PRELOADED_PRODUCTS__;
+  const [products, setProducts] = useState(Array.isArray(preloaded) ? preloaded : []);
+  const [loading, setLoading] = useState(!Array.isArray(preloaded) || preloaded.length === 0);
 
   useEffect(() => {
+    // Se já temos dados pré-carregados (prerender ou cache), não busca de novo
+    if (products.length > 0) {
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     const load = async () => {
       setLoading(true);
@@ -24,12 +33,18 @@ const ProductSeoPage = ({ addToCart }) => {
       } catch (err) {
         console.error("Erro ao carregar produto:", err);
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+          // Sinaliza ao react-snap que o conteúdo dinâmico está pronto para captura
+          if (typeof window !== "undefined" && typeof window.snapSaveState === "function") {
+            window.snapSaveState();
+          }
+        }
       }
     };
     load();
     return () => { cancelled = true; };
-  }, []);
+  }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const product = useMemo(
     () => findProductBySlug(products, slug),

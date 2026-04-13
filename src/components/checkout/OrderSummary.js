@@ -66,6 +66,10 @@ const OrderSummary = ({
               src={imageUrl}
               alt={item.nome || item.name || 'Produto'}
               className="checkout-summary-item-img"
+              width="56"
+              height="56"
+              loading="lazy"
+              decoding="async"
             />
             <div className="checkout-summary-item-info">
               <span className="checkout-summary-item-name">

@@ -29,7 +29,7 @@
 
 .checkout-breadcrumb {
   font-size: 0.875rem;
-  color: #8B7355;
+  color: #5A4A3A;
 }
 
 .checkout-breadcrumb a {
@@ -395,7 +395,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.875rem;
-  color: #8B7355;
+  color: #5A4A3A;
 }
 
 .checkout-summary-free {
@@ -791,7 +791,7 @@
 .checkout-cta-hint {
   text-align: center;
   font-size: 0.75rem;
-  color: #8B7355;
+  color: #5A4A3A;
   margin-top: 0.75rem;
 }
 
@@ -806,7 +806,7 @@
   justify-content: center;
   gap: 0.5rem;
   font-size: 0.75rem;
-  color: #8B7355;
+  color: #5A4A3A;
   margin-top: 1rem;
 }
 

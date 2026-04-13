@@ -2,13 +2,30 @@
 <html lang="pt-BR">
 
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKHZWCHSSN"></script>
+  <!-- Google Analytics — carregado com delay de 3s para não bloquear LCP -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KKHZWCHSSN');
+    function loadGA() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KKHZWCHSSN';
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-KKHZWCHSSN', { send_page_view: true });
+    }
+    // Carrega após interação do usuário OU após 3s — o que vier primeiro
+    var _gaLoaded = false;
+    function _loadGAOnce() {
+      if (_gaLoaded) return;
+      _gaLoaded = true;
+      loadGA();
+    }
+    setTimeout(_loadGAOnce, 3000);
+    ['click','scroll','keydown','touchstart'].forEach(function(e) {
+      document.addEventListener(e, _loadGAOnce, { once: true, passive: true });
+    });
   </script>
 
   <meta charset="utf-8" />
@@ -18,7 +35,7 @@
   <meta name="author" content="Menina Dourada" />
   <meta name="keywords" content="canga de praia, canga estampada, moda praia feminina, saída de praia, sarong beach, beachwear brazil">
 
-  <!-- Security Headers (fallback — CloudFront headers take precedence) -->
+  <!-- Security Headers (fallback — CloudFront headers têm precedência) -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https: wss:;" />
@@ -27,14 +44,67 @@
   <link rel="canonical" href="https://meninadourada.shop/" />
   <link rel="alternate" hreflang="pt-BR" href="https://meninadourada.shop/" />
 
+  <!-- Favicons -->
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- DNS prefetch / preconnect — apenas domínios críticos -->
+  <link rel="dns-prefetch" href="https://api.meninadourada.shop">
+  <link rel="preconnect" href="https://api.meninadourada.shop" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Fontes: apenas pesos essenciais, carregamento assíncrono -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&display=swap">
+  </noscript>
+
+  <!-- Font Awesome: carregamento diferido — não bloqueia render -->
+  <link rel="preload" as="style"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </noscript>
+
+  <!-- CSS crítico inline (above-the-fold) — evita FOUC antes do bundle carregar -->
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;font-family:'Raleway',sans-serif;background:#fdf8f0;color:#3d2b1f}
+    #root{min-height:100vh}
+    /* Hero com <img> como LCP element */
+    .hero-section--img{position:relative;height:70vh;min-height:420px;max-height:600px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#1a0a00}
+    .hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3));z-index:1}
+    .hero-content{position:relative;z-index:2;padding:2rem 1rem;max-width:650px;margin:0 auto}
+    .hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.375rem,5vw,3.25rem);font-weight:700;color:#fff;margin:0 0 .75rem;text-shadow:2px 2px 8px rgba(0,0,0,.7);line-height:1.15}
+    .hero-subtitle{font-size:clamp(.875rem,2.5vw,1.25rem);color:#fff;margin:0 0 1.5rem;text-shadow:1px 1px 4px rgba(0,0,0,.7);opacity:.95}
+    .hero-button-primary{background:linear-gradient(135deg,#D4A574,#C49464);color:#fff;font-weight:700;font-size:1rem;padding:0 2.5rem;height:44px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;text-transform:uppercase;letter-spacing:1px;box-shadow:0 10px 22px rgba(212,165,116,.35)}
+    .hero-trust-signal{color:#fff;font-size:.9rem;margin:0;text-shadow:1px 1px 3px rgba(0,0,0,.6);opacity:.9;font-weight:500;background:rgba(0,0,0,.3);padding:.75rem 1.5rem;border-radius:25px}
+    nav,header{position:sticky;top:0;z-index:100}
+    /* font-display: swap para evitar FOIT */
+    @font-face{font-family:'Raleway';font-display:swap}
+    @font-face{font-family:'Playfair Display';font-display:swap}
+    /* CLS: reservar espaço para imagens de produto antes de carregar */
+    .product-image-wrapper{aspect-ratio:1/1;overflow:hidden;background:#f5f0ea;contain:layout}
+    .product-image{width:100%;height:100%;object-fit:cover;display:block}
+    .product-skeleton .skeleton-img{aspect-ratio:1/1;background:#ede8e0;border-radius:8px}
+    /* CLS: skeleton cards com altura fixa */
+    .product-skeleton{background:#fff;border-radius:12px;overflow:hidden}
+    /* CLS: grid de produtos com colunas definidas antes do JS */
+    .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+    @media(min-width:768px){.products-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(min-width:1024px){.products-grid{grid-template-columns:repeat(4,1fr)}}
+  </style>
+
+  <!-- Preload da imagem hero (LCP element) — WebP para browsers modernos -->
+  <link rel="preload" as="image" href="/hero-bg.webp" type="image/webp" fetchpriority="high" />
 
   <title>Menina Dourada Swim | Biquínis, Maiôs e Moda Praia</title>
   <meta name="description" content="Menina Dourada Swim é a loja oficial de moda praia feminina: biquínis, maiôs, cangas e acessórios. Envio para todo o Brasil e pagamento via PIX." />
@@ -57,12 +127,7 @@
   <meta name="twitter:description" content="Menina Dourada Swim é a loja oficial de moda praia feminina: biquínis, maiôs, cangas e acessórios. Envio para todo o Brasil e pagamento via PIX." />
   <meta name="twitter:image" content="https://meninadourada.shop/android-chrome-512x512.png" />
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Schema.org JSON-LD para SEO -->
+  <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",

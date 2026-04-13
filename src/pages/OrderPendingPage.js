@@ -28,7 +28,7 @@ const OrderPendingPage = () => {
             {preferenceId && <p className="order-detail">ID da Preferência: <strong>{preferenceId}</strong></p>}
             <p className="order-status-message">Você receberá uma atualização por e-mail assim que o pagamento for confirmado.</p>
             <Link to="/produtos" className="order-status-button">Continuar Comprando</Link>
-            <Link to="/contact" className="order-status-link">Precisa de Ajuda? Entre em Contato</Link>
+            <Link to="/contato" className="order-status-link">Precisa de Ajuda? Entre em Contato</Link>
         </div>
     );
 };

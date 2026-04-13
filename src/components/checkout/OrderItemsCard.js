@@ -25,10 +25,14 @@ const OrderItemsCard = ({ items, subtotal, shippingCost = 0, compact = false }) 
           return (
             <div key={item.id} className="checkout-order-item">
               {item.image && (
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
+                <img
+                  src={item.image}
+                  alt={item.name}
                   className="checkout-order-item-img"
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
               <div className="checkout-order-item-info">

@@ -44,8 +44,23 @@ client.interceptors.response.use(
 );
 
 /** ===== API ===== */
-// Produtos — cache em memória para evitar re-fetch entre rotas
-const _productCache = { data: null, timestamp: 0, ttl: 5 * 60 * 1000 }; // 5 min TTL
+// Produtos — cache em memória + localStorage para persistir entre recarregamentos
+const CACHE_KEY = 'md_products_cache';
+const CACHE_TTL = 5 * 60 * 1000; // 5 min
+
+const _productCache = { data: null, timestamp: 0, ttl: CACHE_TTL };
+
+// Tenta restaurar cache do localStorage na inicialização
+try {
+  const stored = localStorage.getItem(CACHE_KEY);
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    if (parsed?.timestamp && (Date.now() - parsed.timestamp < CACHE_TTL) && Array.isArray(parsed.data)) {
+      _productCache.data = parsed.data;
+      _productCache.timestamp = parsed.timestamp;
+    }
+  }
+} catch { /* localStorage indisponível — continua sem cache persistido */ }
 
 const _isProductCacheValid = () =>
   _productCache.data && (Date.now() - _productCache.timestamp < _productCache.ttl);
@@ -56,6 +71,13 @@ export const setCachedAllProducts = (products) => {
   if (Array.isArray(products) && products.length > 0) {
     _productCache.data = products;
     _productCache.timestamp = Date.now();
+    // Persiste no localStorage para sobreviver a recarregamentos
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        data: products,
+        timestamp: _productCache.timestamp,
+      }));
+    } catch { /* quota excedida ou modo privado — ignora */ }
   }
 };
 

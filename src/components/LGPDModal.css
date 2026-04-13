@@ -10,7 +10,8 @@
 }
 
 .lgpd-banner-minimal {
-    background: rgba(253, 247, 240, 0.95);
+    background: #111;
+    color: #fff;
     backdrop-filter: blur(20px);
     border-top: 1px solid rgba(255, 192, 10, 0.2);
     padding: 1rem 1.5rem;
@@ -30,16 +31,15 @@
 
 .lgpd-text-minimal {
     font-size: 0.9rem;
-    color: var(--text-color-default);
+    color: #fff;
     line-height: 1.5;
     margin: 0;
-    opacity: 0.85;
     font-weight: 400;
     flex: 1;
 }
 
 .lgpd-link {
-    color: var(--primary-gold);
+    color: #FFC00A;
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
@@ -52,13 +52,13 @@
 }
 
 .lgpd-accept-minimal {
-    background: var(--lighter-sand);
-    color: var(--text-color-default);
-    border: 1px solid rgba(255, 192, 10, 0.3);
+    background: #fff;
+    color: #111;
+    border: 1px solid rgba(255, 255, 255, 0.5);
     padding: 0.5rem 1.5rem;
     border-radius: 20px;
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
@@ -66,8 +66,8 @@
 }
 
 .lgpd-accept-minimal:hover {
-    background: var(--lightest-sand);
-    border-color: rgba(255, 192, 10, 0.5);
+    background: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.8);
     transform: translateY(-1px);
 }
 

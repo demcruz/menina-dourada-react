@@ -75,7 +75,7 @@ const CartSidebar = ({ isOpen, toggleCart, cart, removeFromCart, updateCartItemQ
 
                             return (
                                 <div key={item.id} className="cart-item">
-                                    <img src={imageUrl} alt={altText} className="cart-item-img" loading="lazy" />
+                                    <img src={imageUrl} alt={altText} className="cart-item-img" width="72" height="72" loading="lazy" decoding="async" />
                                     
                                     <div className="cart-item-info">
                                         <div className="cart-item-top">

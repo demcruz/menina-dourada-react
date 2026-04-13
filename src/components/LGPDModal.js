@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './LGPDModal.css';
 
 const LGPDModal = () => {
@@ -34,8 +35,8 @@ const LGPDModal = () => {
             <div className="lgpd-banner-minimal">
                 <div className="lgpd-content-minimal">
                     <p className="lgpd-text-minimal">
-                        Utilizamos cookies para melhorar sua experiência. Ao continuar, você aceita nossa 
-                        <span className="lgpd-link"> Política de Privacidade</span>.
+                        Utilizamos cookies para melhorar sua experiência. Ao continuar, você aceita nossa{' '}
+                        <Link to="/privacidade" className="lgpd-link">Política de Privacidade</Link>.
                     </p>
                     <button 
                         className="lgpd-accept-minimal"

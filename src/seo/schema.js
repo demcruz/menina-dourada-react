@@ -1,3 +1,5 @@
+import { getImageUrl } from "../utils/imageUrl";
+
 export const websiteSchema = () => ({
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -47,10 +49,11 @@ export const breadcrumbSchema = (items) => ({
 
 export const productSchema = (product) => {
   const name = product?.name || product?.nome || "Produto Menina Dourada";
-  const image =
+  const image = getImageUrl(
     product?.image ||
     product?.variacoes?.[0]?.imagens?.[0]?.url ||
-    "https://meninadourada.shop/og-image.jpg";
+    "https://meninadourada.shop/og-image.jpg"
+  );
   const price =
     product?.price ??
     product?.variacoes?.[0]?.precoVenda ??

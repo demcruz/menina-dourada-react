@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { getProducts as fetchProductsFromApi, setCachedAllProducts } from '../api/axiosInstance';
-import { toNumber, formatBRL } from '../utils/price';
 import { getProductPath } from '../seo/productUrl';
-import { getThumbSrc, getProductImageSrc } from '../utils/productImage';
-import { trackEvent } from '../utils/analytics';
+import { getProductImageSrc, getMediumSrc } from '../utils/productImage';
 
 const PRODUCTS_PER_PAGE = 9;
-const LOAD_MORE_DELAY = 1500;
+const LOAD_MORE_DELAY = 300; // reduzido de 1500ms — delay artificial penalizava TBT
 
 const CATEGORY_CHIPS = [
   { value: 'todos',      emoji: '🔥', label: 'Todos' },
@@ -74,30 +72,116 @@ function getCardBadge(index) {
   return null;
 }
 
-// Prova social por posição
-function getSocialProof(index) {
-  if (index === 0) return '⭐ 4.9 · +230 vendidos';
-  if (index === 1) return '⭐ 4.8 · +180 vendidos';
-  if (index === 2) return '⭐ 4.8 · +150 vendidos';
-  if (index < 6)   return '🔥 Alta procura';
+// Social proof removido — números hardcoded violam política de misrepresentation do Google
+function getSocialProof() {
   return null;
 }
 
 function getColorHex(colorName) {
   const lower = (colorName || '').toLowerCase().trim();
-  // Exact match
   if (COLOR_HEX_MAP[lower]) return COLOR_HEX_MAP[lower];
-  // Partial match
   for (const [key, hex] of Object.entries(COLOR_HEX_MAP)) {
     if (lower.includes(key) || key.includes(lower)) return hex;
   }
-  // Fallback: generate from string hash
   let hash = 0;
   for (let i = 0; i < lower.length; i++) {
     hash = lower.charCodeAt(i) + ((hash << 5) - hash);
   }
   return `hsl(${Math.abs(hash) % 360}, 55%, 55%)`;
 }
+
+// Cache de hex por nome de cor — evita recalcular em cada render
+const colorHexCache = new Map();
+function getColorHexCached(colorName) {
+  if (colorHexCache.has(colorName)) return colorHexCache.get(colorName);
+  const result = getColorHex(colorName);
+  colorHexCache.set(colorName, result);
+  return result;
+}
+
+// ID estável por produto — evita crypto.randomUUID() que gera nova key a cada render
+function getStableId(p) {
+  return p?._id?.timestamp || p?.id || p?.nome || '';
+}
+
+// Preço principal de um produto (fora do componente para não recriar a cada render)
+function getPrecoPrincipal(produto) {
+  const variacao = produto?.variacoes?.[0];
+  const preco = variacao?.precoVenda ?? variacao?.preco;
+  if (preco == null) return null;
+  return typeof preco === 'string' ? parseFloat(preco) : preco;
+}
+
+// ProductCard memoizado — só re-renderiza se o produto mudar
+const ProductCard = memo(({ product, index }) => {
+  const preco = useMemo(() => {
+    const variacao = product?.variacoes?.[0];
+    const p = variacao?.precoVenda ?? variacao?.preco;
+    if (p == null) return null;
+    return typeof p === 'string' ? parseFloat(p) : p;
+  }, [product]);
+
+  const productPath = getProductPath(product);
+  const badge = getCardBadge(index);
+  const social = getSocialProof(index);
+
+  // Imagens responsivas: thumb para mobile, medium para desktop
+  const img = product?.variacoes?.[0]?.imagens?.[0];
+  const thumbSrc  = getProductImageSrc(product, 'thumb');
+  const mediumSrc = img ? getMediumSrc(img) : thumbSrc;
+
+  return (
+    <Link
+      className="product-card"
+      to={productPath}
+      style={{ textDecoration: 'none', color: 'inherit' }}
+    >
+      <div className="product-image-wrapper">
+        <img
+          src={thumbSrc}
+          srcSet={mediumSrc !== thumbSrc ? `${thumbSrc} 400w, ${mediumSrc} 800w` : undefined}
+          sizes="(max-width: 768px) 50vw, 300px"
+          alt={product?.variacoes?.[0]?.imagens?.[0]?.altText || product?.nome || 'Produto Menina Dourada'}
+          className="product-image"
+          width="400"
+          height="400"
+          loading={index < 4 ? 'eager' : 'lazy'}
+          fetchpriority={index === 0 ? 'high' : 'auto'}
+          decoding={index < 4 ? 'sync' : 'async'}
+        />
+        {badge && <span className={`product-badge ${badge.cls}`}>{badge.label}</span>}
+        <div className="product-overlay">
+          <span className="product-quick-view" aria-label="Ver detalhes">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div className="product-info">
+        <div className="product-info-text">
+          <h3 className="product-name">{product?.nome}</h3>
+          <p className="product-category">{product?.variacoes?.[0]?.cor || 'Cor única'}</p>
+        </div>
+        {social && <p className="product-social-proof">{social}</p>}
+        <div className="product-price-add">
+          <div className="product-price-block">
+            <div className="product-price-row">
+              <span className="product-price-symbol">R$</span>
+              <span className="product-price-value">
+                {preco != null ? Number(preco).toFixed(2).replace('.', ',') : '—'}
+              </span>
+            </div>
+          </div>
+          <button className="add-to-cart-btn" onClick={(e) => e.stopPropagation()}>
+            Ver produto
+          </button>
+        </div>
+      </div>
+    </Link>
+  );
+});
 
 function normalizeResponse(raw) {
   let payload = raw;
@@ -178,7 +262,13 @@ const ProductGrid = ({ addToCart }) => {
         setProducts(norm.items);
         setCurrentPage(0);
         setHasMore(norm.totalPages > 1);
-        loadAllProducts();
+        // Adia o fetch de todos os produtos para depois do LCP — não compete com render inicial
+        const scheduleAll = () => loadAllProducts();
+        if (typeof requestIdleCallback !== 'undefined') {
+          requestIdleCallback(scheduleAll, { timeout: 3000 });
+        } else {
+          setTimeout(scheduleAll, 1000);
+        }
       } catch (err) {
         if (err?.name === 'CanceledError' || err?.name === 'AbortError') return;
         console.error('Erro ao buscar produtos:', err);
@@ -208,16 +298,6 @@ const ProductGrid = ({ addToCart }) => {
       setLoadingMore(false);
     }
   };
-
-  const getPrecoPrincipal = (produto) => {
-    const variacao = produto?.variacoes?.[0];
-    const preco = variacao?.precoVenda ?? variacao?.preco;
-    if (preco == null) return null;
-    return typeof preco === 'string' ? parseFloat(preco) : preco;
-  };
-
-  const getImagemPrincipal = (produto) => getProductImageSrc(produto, 'thumb');
-  const getId = (p) => p?._id?.timestamp || p?.id || crypto.randomUUID();
 
   const getProductCategory = (product) => {
     const nome = product?.nome?.toLowerCase() || '';
@@ -288,7 +368,6 @@ const ProductGrid = ({ addToCart }) => {
   }, [sourceProducts, categoryFilter, colorFilter, sortOrder]);
 
   const showLoadMore = !isFilterActive && hasMore && !loading;
-  const currentSortLabel = SORT_OPTIONS.find(o => o.value === sortOrder)?.label || 'Ordenar';
 
   return (
     <section id="shop" className="product-grid-section" ref={sectionRef}>
@@ -359,7 +438,7 @@ const ProductGrid = ({ addToCart }) => {
                 title="Todas"
               />
               {availableColors.map(color => {
-                const hex = getColorHex(color);
+                const hex = getColorHexCached(color);
                 const isGradient = hex.includes('gradient');
                 return (
                   <button
@@ -391,75 +470,16 @@ const ProductGrid = ({ addToCart }) => {
           </p>
         ) : (
           <div className="products-grid">
-            {filteredAndSortedProducts.map((product, index) => {
-              const preco = getPrecoPrincipal(product);
-              const productPath = getProductPath(product);
-              const badge = getCardBadge(index);
-              const social = getSocialProof(index);
-              return (
-                <Link
-                  key={getId(product)}
-                  className="product-card"
-                  to={productPath}
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  <div className="product-image-wrapper">
-                    <img
-                      src={getImagemPrincipal(product)}
-                      alt={product?.variacoes?.[0]?.imagens?.[0]?.altText || product?.nome || 'Produto Menina Dourada'}
-                      className="product-image"
-                      loading={index < 4 ? 'eager' : 'lazy'}
-                    />
-                    {/* Badge de conversão */}
-                    {badge && (
-                      <span className={`product-badge ${badge.cls}`}>{badge.label}</span>
-                    )}
-                    {/* Overlay quick-view (desktop) */}
-                    <div className="product-overlay">
-                      <span className="product-quick-view" aria-label="Ver detalhes">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="product-info">
-                    <div className="product-info-text">
-                      <h3 className="product-name">{product?.nome}</h3>
-                      <p className="product-category">{product?.variacoes?.[0]?.cor || 'Cor única'}</p>
-                    </div>
-
-                    {/* Prova social */}
-                    {social && (
-                      <p className="product-social-proof">{social}</p>
-                    )}
-
-                    <div className="product-price-add">
-                      <div className="product-price-block">
-                        <div className="product-price-row">
-                          <span className="product-price-symbol">R$</span>
-                          <span className="product-price-value">
-                            {preco != null
-                              ? Number(preco).toFixed(2).replace('.', ',')
-                              : '—'}
-                          </span>
-                        </div>
-                      </div>
-                      <button
-                        className="add-to-cart-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
-                        Ver produto
-                      </button>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+            {filteredAndSortedProducts.map((product, index) => (
+              <ProductCard
+                key={getStableId(product)}
+                product={product}
+                index={index}
+              />
+            ))}
+            {loadingMore && Array.from({ length: 4 }).map((_, i) => (
+              <ProductCardSkeleton key={`skeleton-more-${i}`} />
+            ))}
           </div>
         )}
 
@@ -493,4 +513,4 @@ const ProductGrid = ({ addToCart }) => {
   );
 };
 
-export default ProductGrid;
+export default memo(ProductGrid);

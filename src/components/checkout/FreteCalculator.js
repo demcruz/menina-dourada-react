@@ -214,10 +214,14 @@ const FreteCalculator = ({
                     <div className="frete-opcao-header">
                       <div className="frete-opcao-info">
                         {logo && (
-                          <img 
-                            src={logo} 
-                            alt={opcao.key} 
+                          <img
+                            src={logo}
+                            alt={opcao.key}
                             className="frete-opcao-logo"
+                            width="48"
+                            height="24"
+                            loading="lazy"
+                            decoding="async"
                             onError={(e) => { e.target.style.display = 'none'; }}
                           />
                         )}

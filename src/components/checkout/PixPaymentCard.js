@@ -59,10 +59,14 @@ const PixPaymentCard = ({
       <div className="pix-card-qr-section">
         {pixQrCode.encodedImage && (
           <div className="pix-card-qr-wrapper">
-            <img 
-              src={pixQrCode.encodedImage} 
-              alt="QR Code PIX" 
+            <img
+              src={pixQrCode.encodedImage}
+              alt="QR Code PIX"
               className="pix-card-qr-image"
+              width="200"
+              height="200"
+              loading="eager"
+              decoding="sync"
             />
           </div>
         )}

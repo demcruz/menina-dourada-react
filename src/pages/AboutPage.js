@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/AboutPage.css';
 import AdvancedSEO from '../seo/AdvancedSEO';
 import { organizationSchema, breadcrumbSchema } from '../seo/schema';
+import { BUSINESS } from '../config/business';
 
 const AboutPage = () => {
   return (
@@ -152,7 +153,7 @@ const AboutPage = () => {
               
               <div className="contact-item">
                 <h3>📧 E-mail</h3>
-                <p><strong>comercialmeninadourada@gmail.com</strong></p>
+                <p><strong>{BUSINESS.email}</strong></p>
                 <p>Respondemos em até 24 horas</p>
               </div>
               
@@ -208,7 +209,6 @@ const AboutPage = () => {
                   e promovem autoestima e confiança.
                 </p>
               </div>
-              
               <div className="mission-item">
                 <h3>👁️ Visão</h3>
                 <p>
@@ -216,7 +216,6 @@ const AboutPage = () => {
                   design exclusivo e atendimento excepcional.
                 </p>
               </div>
-              
               <div className="mission-item">
                 <h3>💎 Valores</h3>
                 <ul>
@@ -227,6 +226,21 @@ const AboutPage = () => {
                 </ul>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Informações Legais */}
+        <section className="about-section">
+          <h2 className="section-title">Informações da Empresa</h2>
+          <div className="section-content">
+            <ul>
+              <li><strong>Razão Social:</strong> {BUSINESS.legalName}</li>
+              <li><strong>CNPJ:</strong> {BUSINESS.cnpj}</li>
+              <li><strong>Localização:</strong> {BUSINESS.location}</li>
+              <li><strong>E-mail:</strong> <a href={`mailto:${BUSINESS.email}`} style={{ color: 'var(--cta-gold-end)' }}>{BUSINESS.email}</a></li>
+              <li><strong>WhatsApp:</strong> {BUSINESS.phone}</li>
+              <li><strong>Horário de atendimento:</strong> {BUSINESS.supportHours}</li>
+            </ul>
           </div>
         </section>
 

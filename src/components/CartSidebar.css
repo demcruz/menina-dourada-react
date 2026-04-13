@@ -173,7 +173,7 @@
 
 .cart-item-variant {
     font-size: 0.75rem;
-    color: #888;
+    color: #555;
 }
 
 .cart-item-remove {
@@ -265,7 +265,7 @@
     align-items: center;
     margin-bottom: 0.5rem;
     font-size: 0.875rem;
-    color: #666;
+    color: #444;
 }
 
 .cart-shipping-calc {

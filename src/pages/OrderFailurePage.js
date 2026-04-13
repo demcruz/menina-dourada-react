@@ -28,7 +28,7 @@ const OrderFailurePage = () => {
             {preferenceId && <p className="order-detail">ID da Preferência: <strong>{preferenceId}</strong></p>}
             <p className="order-status-message">Por favor, verifique os dados do seu pagamento e tente novamente.</p>
             <Link to="/checkout" className="order-status-button">Tentar Novamente</Link>
-            <Link to="/contact" className="order-status-link">Precisa de Ajuda? Entre em Contato</Link>
+            <Link to="/contato" className="order-status-link">Precisa de Ajuda? Entre em Contato</Link>
         </div>
     );
 };

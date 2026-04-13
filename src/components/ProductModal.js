@@ -284,6 +284,10 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                                 alt={altText}
                                 className={isZoomed ? 'zoomed' : ''}
                                 style={isZoomed ? { transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` } : {}}
+                                width="600"
+                                height="600"
+                                loading="eager"
+                                fetchpriority="high"
                             />
                             <div className="modal-zoom-icon">
                                 <i className={`fas ${isZoomed ? 'fa-search-minus' : 'fa-search-plus'}`}></i>
@@ -301,7 +305,7 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
                                         tabIndex="0"
                                         aria-label={`Imagem ${index + 1}`}
                                     >
-                                        <img src={getThumbSrc(img)} alt={img.altText || product?.nome || `Foto ${index + 1}`} loading="lazy" />
+                                        <img src={getThumbSrc(img)} alt={img.altText || product?.nome || `Foto ${index + 1}`} width="80" height="80" loading="lazy" decoding="async" />
                                     </div>
                                 ))}
                             </div>

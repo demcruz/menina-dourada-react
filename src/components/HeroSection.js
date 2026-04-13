@@ -1,9 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { getProducts as fetchProductsFromApi } from '../api/axiosInstance';
 import { formatBRL } from '../utils/price';
 import { getProductPath } from '../seo/productUrl';
 import { getProductImageSrc } from '../utils/productImage';
+
+// Memoized para evitar re-render quando o pai re-renderiza
+const HighlightCard = memo(({ product, price, id }) => (
+  <Link
+    key={id}
+    to={getProductPath(product)}
+    className="featured-highlight-card"
+  >
+    <div className="featured-highlight-img-wrap">
+      <img
+        src={getProductImageSrc(product, 'thumb')}
+        alt={product?.nome || 'Produto'}
+        width="400"
+        height="400"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div className="featured-highlight-info">
+      <p className="featured-highlight-name">{product?.nome}</p>
+      {price != null && (
+        <p className="featured-highlight-price">
+          {formatBRL(price, { withSymbol: true })}
+        </p>
+      )}
+    </div>
+  </Link>
+));
 
 const HeroSection = () => {
   const [featured, setFeatured] = useState([]);
@@ -36,7 +64,22 @@ const HeroSection = () => {
 
   return (
     <>
-      <section id="home" className="hero-section">
+      {/* Hero: usa <picture> com WebP para LCP otimizado */}
+      <section id="home" className="hero-section hero-section--img">
+        <picture>
+          <source srcSet="/hero-bg.webp" type="image/webp" />
+          <img
+            src="/hero-bg.jpg"
+            alt=""
+            aria-hidden="true"
+            className="hero-bg-img"
+            width="1200"
+            height="600"
+            fetchpriority="high"
+            decoding="sync"
+            loading="eager"
+          />
+        </picture>
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <h1 className="hero-title">Brilhe na Coleção 2026</h1>
@@ -48,7 +91,7 @@ const HeroSection = () => {
               Ver Coleção 2026
             </Link>
             <p className="hero-trust-signal">
-              🚚 Frete grátis a partir de R$ 350 | 💎 Qualidade premium
+              🚚 Frete grátis acima de R$ 250 | 💎 Qualidade premium
             </p>
           </div>
         </div>
@@ -63,28 +106,7 @@ const HeroSection = () => {
                 const price = getPrice(product);
                 const id = product?._id?.timestamp || product?.id;
                 return (
-                  <Link
-                    key={id}
-                    to={getProductPath(product)}
-                    className="featured-highlight-card"
-                  >
-                    <div className="featured-highlight-img-wrap">
-                      <img
-                        src={getProductImageSrc(product, 'thumb')}
-                        alt={product?.nome || 'Produto'}
-                      />
-                    </div>
-                    <div className="featured-highlight-info">
-                      <p className="featured-highlight-name">
-                        {product?.nome}
-                      </p>
-                      {price != null && (
-                        <p className="featured-highlight-price">
-                          {formatBRL(price, { withSymbol: true })}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
+                  <HighlightCard key={id} product={product} price={price} id={id} />
                 );
               })}
             </div>

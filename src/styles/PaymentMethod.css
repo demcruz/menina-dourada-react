@@ -71,16 +71,16 @@
 
 .payment-method-desc {
   font-size: 0.75rem;
-  color: #8B7355;
+  color: #5A4A3A;
 }
 
 .payment-method-badge {
   font-size: 0.625rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #BFA14A;
-  background: rgba(191, 161, 74, 0.1);
+  color: #7A5C1E;
+  background: rgba(191, 161, 74, 0.15);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   white-space: nowrap;
