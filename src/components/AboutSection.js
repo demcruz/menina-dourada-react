@@ -45,17 +45,17 @@ const AboutSection = () => {
 
                         <div className="about-values-grid md:space-x-4">
                             <div className="value-card">
-                                <i className="fas fa-award value-icon"></i>
+                                <span className="value-icon" aria-hidden="true">🏆</span>
                                 <h4 className="value-title">Premium</h4>
                                 <p className="value-description">Materiais selecionados</p>
                             </div>
                             <div className="value-card">
-                                <i className="fas fa-heart value-icon"></i>
+                                <span className="value-icon" aria-hidden="true">💛</span>
                                 <h4 className="value-title">Confiança</h4>
                                 <p className="value-description">Realça sua beleza</p>
                             </div>
                             <div className="value-card">
-                                <i className="fas fa-shipping-fast value-icon"></i>
+                                <span className="value-icon" aria-hidden="true">🚚</span>
                                 <h4 className="value-title">Entrega</h4>
                                 <p className="value-description">Rápida e segura</p>
                             </div>

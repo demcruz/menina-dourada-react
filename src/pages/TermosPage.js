@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AdvancedSEO from '../seo/AdvancedSEO';
-import { webPageSchema } from '../seo/schema';
+import { webPageSchema, breadcrumbSchema } from '../seo/schema';
 import { BUSINESS } from '../config/business';
 import '../styles/InstitucionalPage.css';
 
@@ -12,10 +12,21 @@ const TermosPage = () => (
       description="Termos e condições de uso da loja Menina Dourada. Regras de compra, pagamento, entrega e responsabilidades."
       url="https://meninadourada.shop/termos"
       canonical="https://meninadourada.shop/termos"
-      jsonLd={webPageSchema('Termos de Uso', 'https://meninadourada.shop/termos')}
+      jsonLd={[
+        webPageSchema('Termos de Uso', 'https://meninadourada.shop/termos'),
+        breadcrumbSchema([
+          { name: 'Home', url: 'https://meninadourada.shop/' },
+          { name: 'Termos de Uso', url: 'https://meninadourada.shop/termos' },
+        ]),
+      ]}
     />
 
     <div className="inst-page">
+      <nav aria-label="Breadcrumb" style={{ fontSize: '0.85rem', padding: '1rem 0 0', color: '#888', maxWidth: 800, margin: '0 auto' }}>
+        <Link to="/" style={{ color: '#888', textDecoration: 'none' }}>Home</Link>
+        <span style={{ margin: '0 0.4rem' }}>&gt;</span>
+        <span style={{ color: '#555' }}>Termos de Uso</span>
+      </nav>
       <div className="inst-hero">
         <span className="inst-hero-icon">📋</span>
         <h1>Termos de Uso</h1>

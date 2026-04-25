@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import {
   defaultTitle,
   defaultDescription,
@@ -39,6 +39,7 @@ export default function AdvancedSEO({
       <meta property="og:description" content={d} />
       <meta property="og:image" content={img} />
       <meta property="og:url" content={u} />
+      <meta property="og:locale" content="pt_BR" />
       <meta property="og:site_name" content="Menina Dourada" />
 
       <meta name="twitter:card" content="summary_large_image" />

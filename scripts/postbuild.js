@@ -25,6 +25,8 @@ const STATIC_URLS = [
   '/contato',
   '/politica-de-frete',
   '/trocas-e-devolucoes',
+  '/privacidade',
+  '/termos',
 ];
 
 const PRELOAD_MARKER = '<!-- __PRELOADED_PRODUCTS_INJECT__ -->';
@@ -71,7 +73,15 @@ async function main() {
   pkg.reactSnap = { ...pkg.reactSnap, include: allUrls };
   fs.writeFileSync(PKG_PATH, JSON.stringify(pkg, null, 2), 'utf8');
 
-  // 5. Executa react-snap — falha o build se o snap falhar criticamente
+  // 5. Executa PurgeCSS para remover CSS não utilizado (antes do react-snap)
+  console.log('\n[postbuild] Executando PurgeCSS...');
+  try {
+    execSync('node scripts/purge-css.js', { stdio: 'inherit' });
+  } catch {
+    console.warn('[postbuild] Aviso: PurgeCSS falhou. Continuando sem purge.');
+  }
+
+  // 6. Executa react-snap — falha o build se o snap falhar criticamente
   try {
     execSync('npx react-snap', { stdio: 'inherit' });
   } catch (err) {
@@ -84,7 +94,7 @@ async function main() {
     process.exit(1);
   }
 
-  // 6. Remove o __PRELOADED_PRODUCTS__ do index.html raiz (não expor catálogo em produção)
+  // 7. Remove o __PRELOADED_PRODUCTS__ do index.html raiz (não expor catálogo em produção)
   // As páginas de produto pré-renderizadas já têm o HTML estático — não precisam mais do script.
   // Usa regex sem depender do marker (que pode ser removido pelo minificador do react-snap).
   if (fs.existsSync(INDEX_HTML)) {
@@ -94,11 +104,11 @@ async function main() {
     console.log('[postbuild] __PRELOADED_PRODUCTS__ removido do index.html raiz.');
   }
 
-  // 7. Restaura o package.json original
+  // 8. Restaura o package.json original
   pkg.reactSnap = { ...pkg.reactSnap, include: originalInclude };
   fs.writeFileSync(PKG_PATH, JSON.stringify(pkg, null, 2), 'utf8');
 
-  // 8. Limpa arquivos temporários
+  // 9. Limpa arquivos temporários
   try { fs.unlinkSync(URLS_FILE); } catch { /* ok */ }
   try { fs.unlinkSync(path.join(__dirname, 'product-data.json')); } catch { /* ok */ }
 

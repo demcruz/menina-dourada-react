@@ -25,3 +25,7 @@ yarn-error.log*
 # arquivos temporários gerados pelo postbuild
 scripts/product-urls.json
 scripts/product-data.json
+
+# relatórios Lighthouse e diagnóstico
+*.report.html
+reports/

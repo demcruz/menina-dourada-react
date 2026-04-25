@@ -3,6 +3,8 @@
 .newsletter-wrapper {
     background: var(--lighter-sand, #FAEDDF);
     padding: 2.5rem 1.5rem;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 400px;
 }
 
 .newsletter-container {

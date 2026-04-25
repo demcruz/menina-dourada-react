@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AdvancedSEO from '../seo/AdvancedSEO';
-import { webPageSchema } from '../seo/schema';
+import { webPageSchema, breadcrumbSchema } from '../seo/schema';
 import { BUSINESS } from '../config/business';
 import '../styles/InstitucionalPage.css';
 
@@ -22,10 +22,21 @@ const ContatoPage = () => {
         description="Entre em contato com a Menina Dourada por WhatsApp ou e-mail. Atendimento de segunda a sexta, das 9h às 18h."
         url="https://meninadourada.shop/contato"
         canonical="https://meninadourada.shop/contato"
-        jsonLd={webPageSchema('Contato', 'https://meninadourada.shop/contato')}
+        jsonLd={[
+          webPageSchema('Contato', 'https://meninadourada.shop/contato'),
+          breadcrumbSchema([
+            { name: 'Home', url: 'https://meninadourada.shop/' },
+            { name: 'Contato', url: 'https://meninadourada.shop/contato' },
+          ]),
+        ]}
       />
 
       <div className="inst-page">
+        <nav aria-label="Breadcrumb" style={{ fontSize: '0.85rem', padding: '1rem 0 0', color: '#888', maxWidth: 800, margin: '0 auto' }}>
+          <Link to="/" style={{ color: '#888', textDecoration: 'none' }}>Home</Link>
+          <span style={{ margin: '0 0.4rem' }}>&gt;</span>
+          <span style={{ color: '#555' }}>Contato</span>
+        </nav>
         <div className="inst-hero">
           <span className="inst-hero-icon">💛</span>
           <h1>Fale com a Menina Dourada</h1>

@@ -64,9 +64,10 @@ const HeroSection = () => {
 
   return (
     <>
-      {/* Hero: usa <picture> com WebP para LCP otimizado */}
+      {/* Hero: usa <picture> com WebP responsivo para LCP otimizado */}
       <section id="home" className="hero-section hero-section--img">
         <picture>
+          <source srcSet="/hero-bg-mobile.webp" type="image/webp" media="(max-width: 768px)" />
           <source srcSet="/hero-bg.webp" type="image/webp" />
           <img
             src="/hero-bg.jpg"
@@ -75,7 +76,7 @@ const HeroSection = () => {
             className="hero-bg-img"
             width="1200"
             height="600"
-            fetchpriority="high"
+            fetchPriority="high"
             decoding="sync"
             loading="eager"
           />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AdvancedSEO from '../seo/AdvancedSEO';
-import { webPageSchema } from '../seo/schema';
+import { webPageSchema, breadcrumbSchema } from '../seo/schema';
 import { BUSINESS } from '../config/business';
 import '../styles/InstitucionalPage.css';
 
@@ -12,10 +12,21 @@ const PrivacidadePage = () => (
       description="Saiba como a Menina Dourada coleta, usa e protege seus dados pessoais conforme a LGPD (Lei 13.709/2018)."
       url="https://meninadourada.shop/privacidade"
       canonical="https://meninadourada.shop/privacidade"
-      jsonLd={webPageSchema('Política de Privacidade', 'https://meninadourada.shop/privacidade')}
+      jsonLd={[
+        webPageSchema('Política de Privacidade', 'https://meninadourada.shop/privacidade'),
+        breadcrumbSchema([
+          { name: 'Home', url: 'https://meninadourada.shop/' },
+          { name: 'Privacidade', url: 'https://meninadourada.shop/privacidade' },
+        ]),
+      ]}
     />
 
     <div className="inst-page">
+      <nav aria-label="Breadcrumb" style={{ fontSize: '0.85rem', padding: '1rem 0 0', color: '#888', maxWidth: 800, margin: '0 auto' }}>
+        <Link to="/" style={{ color: '#888', textDecoration: 'none' }}>Home</Link>
+        <span style={{ margin: '0 0.4rem' }}>&gt;</span>
+        <span style={{ color: '#555' }}>Privacidade</span>
+      </nav>
       <div className="inst-hero">
         <span className="inst-hero-icon">🔒</span>
         <h1>Política de Privacidade</h1>

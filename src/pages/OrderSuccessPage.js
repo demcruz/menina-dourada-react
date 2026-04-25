@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaCheckCircle, FaShoppingBag, FaClipboardList } from 'react-icons/fa';
 import './OrderSuccessPage.css';
 import AdvancedSEO from '../seo/AdvancedSEO';
+
+const MERCHANT_ID = 5746534315;
+
+// Calcula data estimada de entrega: +10 dias úteis (seg-sex) a partir de hoje
+function getEstimatedDelivery(fromDate) {
+  const date = fromDate ? new Date(fromDate) : new Date();
+  let businessDays = 0;
+  while (businessDays < 10) {
+    date.setDate(date.getDate() + 1);
+    const day = date.getDay();
+    if (day !== 0 && day !== 6) businessDays++;
+  }
+  return date.toISOString().split('T')[0]; // YYYY-MM-DD
+}
 
 const formatCurrency = (value) =>
   (Number(value) || 0).toLocaleString('pt-BR', {
@@ -35,6 +49,42 @@ const OrderSuccessPage = () => {
 
   const hasData = Boolean(paymentId);
   const totalQuantity = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+
+  // Google Customer Reviews — opt-in snippet
+  // Disparado uma vez após a confirmação do pedido
+  useEffect(() => {
+    if (!hasData || !deliveryInfo.email) return;
+
+    const estimatedDelivery = getEstimatedDelivery(confirmedAt);
+
+    const renderSurvey = () => {
+      if (!window.gapi) return;
+      window.gapi.load('surveyoptin', () => {
+        window.gapi.surveyoptin.render({
+          merchant_id:             MERCHANT_ID,
+          order_id:                paymentId,
+          email:                   deliveryInfo.email,
+          delivery_country:        'BR',
+          estimated_delivery_date: estimatedDelivery,
+        });
+      });
+    };
+
+    // Define o callback ANTES de injetar o script para evitar race condition
+    window.renderOptIn = renderSurvey;
+
+    if (!document.getElementById('google-survey-optin')) {
+      const script = document.createElement('script');
+      script.id  = 'google-survey-optin';
+      script.src = 'https://apis.google.com/js/platform.js?onload=renderOptIn';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    } else {
+      // Script já carregado — chama direto
+      renderSurvey();
+    }
+  }, [hasData, paymentId, deliveryInfo.email, confirmedAt]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!hasData) {
     return (

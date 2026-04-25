@@ -1,18 +1,21 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { trackPageView } from './utils/analytics';
-import { websiteSchema, organizationSchema, clothingStoreSchema } from './seo/schema';
+import { websiteSchema, organizationSchema, clothingStoreSchema, breadcrumbSchema } from './seo/schema';
 
 // Componentes globais — carregados imediatamente (presentes em todas as páginas)
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import CartSidebar from './components/CartSidebar';
-import LGPDModal from './components/LGPDModal';
-import ContactWidget from './components/ContactWidget';
 import SEO from './components/SEO';
 import LoadingSpinner from './components/LoadingSpinner';
 // AdvancedSEO usa react-helmet e precisa ser síncrono para não causar flash de meta tags
 import AdvancedSEO from './seo/AdvancedSEO';
+
+// Componentes não-críticos — lazy-loaded para reduzir bundle inicial (P4, P5)
+const CartSidebar  = lazy(() => import('./components/CartSidebar'));
+const LGPDModal    = lazy(() => import('./components/LGPDModal'));
+const ContactWidget = lazy(() => import('./components/ContactWidget'));
 
 // Lazy-loaded — cada rota vira um chunk separado no bundle
 const HeroSection          = lazy(() => import('./components/HeroSection'));
@@ -108,6 +111,7 @@ function App() {
   );
 
   return (
+    <HelmetProvider>
     <Router>
       <div className="bg-sand-50 text-sand-800">
         <ScrollToTop />
@@ -144,6 +148,10 @@ function App() {
                   description="Compre biquínis, maiôs, cangas e acessórios na Menina Dourada. Entrega para todo o Brasil."
                   url="https://meninadourada.shop/produtos"
                   canonical="https://meninadourada.shop/produtos"
+                  jsonLd={breadcrumbSchema([
+                    { name: 'Home', url: 'https://meninadourada.shop/' },
+                    { name: 'Produtos', url: 'https://meninadourada.shop/produtos' },
+                  ])}
                 />
                 <ProductGrid addToCart={addToCart} />
               </>
@@ -205,6 +213,7 @@ function App() {
         <ContactWidget />
       </div>
     </Router>
+    </HelmetProvider>
   );
 }
 

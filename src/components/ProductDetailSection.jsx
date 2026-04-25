@@ -239,16 +239,22 @@ const ProductDetailSection = ({ product, addToCart }) => {
         >
           <img
             src={imagem || '/placeholder.jpg'}
+            srcSet={imagem ? `${getThumbSrc(currentVariation?.imagens?.[selectedImageIndex])} 400w, ${imagem} 800w` : undefined}
+            sizes="(max-width: 768px) 100vw, 50vw"
             alt={altText}
             className={isZoomed ? 'zoomed' : ''}
             style={isZoomed ? { transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` } : {}}
             width="600"
             height="600"
-            fetchpriority="high"
+            fetchPriority="high"
             decoding="sync"
           />
           <div className="pdp-zoom-icon">
-            <i className={`fas ${isZoomed ? 'fa-search-minus' : 'fa-search-plus'}`}></i>
+            {isZoomed ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            )}
           </div>
         </div>
 

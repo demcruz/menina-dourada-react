@@ -2,31 +2,7 @@
 <html lang="pt-BR">
 
 <head>
-  <!-- Google Analytics — carregado com delay de 3s para não bloquear LCP -->
-  <script>
-    function loadGA() {
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KKHZWCHSSN';
-      document.head.appendChild(s);
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      window.gtag = gtag;
-      gtag('js', new Date());
-      gtag('config', 'G-KKHZWCHSSN', { send_page_view: true });
-    }
-    // Carrega após interação do usuário OU após 3s — o que vier primeiro
-    var _gaLoaded = false;
-    function _loadGAOnce() {
-      if (_gaLoaded) return;
-      _gaLoaded = true;
-      loadGA();
-    }
-    setTimeout(_loadGAOnce, 3000);
-    ['click','scroll','keydown','touchstart'].forEach(function(e) {
-      document.addEventListener(e, _loadGAOnce, { once: true, passive: true });
-    });
-  </script>
+  <!-- Analytics carregado via src/lib/loadThirdParty.js (requestIdleCallback) -->
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,12 +13,8 @@
 
   <!-- Security Headers (fallback — CloudFront headers têm precedência) -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https: wss:;" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-
-  <link rel="canonical" href="https://meninadourada.shop/" />
-  <link rel="alternate" hreflang="pt-BR" href="https://meninadourada.shop/" />
 
   <!-- Favicons -->
   <link rel="icon" href="/favicon.ico">
@@ -51,27 +23,18 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
 
-  <!-- DNS prefetch / preconnect — apenas domínios críticos -->
-  <link rel="dns-prefetch" href="https://api.meninadourada.shop">
+  <!-- Preconnect — máximo 2 (API + CDN de imagens). Fontes agora são self-hosted. -->
   <link rel="preconnect" href="https://api.meninadourada.shop" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.meninadourada.shop" crossorigin>
+  <!-- dns-prefetch para domínios secundários -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.gstatic.com">
+  <link rel="dns-prefetch" href="https://apis.google.com">
 
-  <!-- Fontes: apenas pesos essenciais, carregamento assíncrono -->
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&display=swap"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&display=swap">
-  </noscript>
-
-  <!-- Font Awesome: carregamento diferido — não bloqueia render -->
-  <link rel="preload" as="style"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  </noscript>
+  <!-- Fontes self-hosted — elimina dependência de fonts.googleapis.com -->
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/raleway-400-600-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/playfair-700-latin.woff2" crossorigin>
 
   <!-- CSS crítico inline (above-the-fold) — evita FOUC antes do bundle carregar -->
   <style>
@@ -81,6 +44,7 @@
     /* Hero com <img> como LCP element */
     .hero-section--img{position:relative;height:70vh;min-height:420px;max-height:600px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#1a0a00}
     .hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
+    .hero-section--img picture{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3));z-index:1}
     .hero-content{position:relative;z-index:2;padding:2rem 1rem;max-width:650px;margin:0 auto}
     .hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.375rem,5vw,3.25rem);font-weight:700;color:#fff;margin:0 0 .75rem;text-shadow:2px 2px 8px rgba(0,0,0,.7);line-height:1.15}
@@ -103,8 +67,9 @@
     @media(min-width:1024px){.products-grid{grid-template-columns:repeat(4,1fr)}}
   </style>
 
-  <!-- Preload da imagem hero (LCP element) — WebP para browsers modernos -->
-  <link rel="preload" as="image" href="/hero-bg.webp" type="image/webp" fetchpriority="high" />
+  <!-- Preload da imagem hero (LCP) — mobile recebe imagem menor, desktop a padrão -->
+  <link rel="preload" as="image" href="/hero-bg-mobile.webp" type="image/webp" fetchpriority="high" media="(max-width: 768px)" />
+  <link rel="preload" as="image" href="/hero-bg.webp" type="image/webp" fetchpriority="high" media="(min-width: 769px)" />
 
   <title>Menina Dourada Swim | Biquínis, Maiôs e Moda Praia</title>
   <meta name="description" content="Menina Dourada Swim é a loja oficial de moda praia feminina: biquínis, maiôs, cangas e acessórios. Envio para todo o Brasil e pagamento via PIX." />
@@ -138,17 +103,32 @@
     "logo": "https://meninadourada.shop/android-chrome-512x512.png",
     "image": "https://meninadourada.shop/android-chrome-512x512.png",
     "description": "Loja oficial da Menina Dourada Swim. Moda praia feminina: biquínis, maiôs, cangas e acessórios com entrega para todo o Brasil.",
-    "telephone": "+55 21 99804-3352",
+    "telephone": "+55 21 97313-7347",
+    "email": "comercialmeninadourada@gmail.com",
     "priceRange": "R$",
     "currenciesAccepted": "BRL",
     "areaServed": "BR",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Rio de Janeiro",
+      "addressRegion": "RJ",
+      "addressCountry": "BR"
+    },
     "brand": {
       "@type": "Brand",
       "name": "Menina Dourada Swim"
     },
     "sameAs": [
       "https://www.instagram.com/meninadouradaloja"
-    ]
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+55 21 97313-7347",
+      "email": "comercialmeninadourada@gmail.com",
+      "contactType": "customer service",
+      "availableLanguage": "Portuguese",
+      "areaServed": "BR"
+    }
   }
   </script>
 </head>

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /checkout
+Disallow: /checkout/
+Disallow: /checkout/*
 
 Sitemap: https://meninadourada.shop/sitemap.xml

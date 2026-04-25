@@ -86,6 +86,26 @@ const ROUTE_META = {
     description: 'Seu pagamento não foi aprovado. Tente novamente ou fale conosco.',
     robots: 'noindex, nofollow',
   },
+  '/privacidade': {
+    title: 'Política de Privacidade | Menina Dourada',
+    description: 'Saiba como a Menina Dourada coleta, usa e protege seus dados pessoais conforme a LGPD.',
+  },
+  '/termos': {
+    title: 'Termos de Uso | Menina Dourada',
+    description: 'Termos e condições de uso da loja Menina Dourada. Regras de compra, pagamento e entrega.',
+  },
+  '/cookies': {
+    title: 'Política de Privacidade | Menina Dourada',
+    description: 'Saiba como a Menina Dourada coleta, usa e protege seus dados pessoais conforme a LGPD.',
+    canonical: `${SITE_URL}/privacidade`,
+    robots: 'noindex, follow',
+  },
+  '/lgpd': {
+    title: 'Política de Privacidade | Menina Dourada',
+    description: 'Saiba como a Menina Dourada coleta, usa e protege seus dados pessoais conforme a LGPD.',
+    canonical: `${SITE_URL}/privacidade`,
+    robots: 'noindex, follow',
+  },
 };
 
 const normalizePathname = (pathname) => {

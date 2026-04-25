@@ -5,7 +5,10 @@ import { getProductPath } from '../seo/productUrl';
 import { getProductImageSrc, getMediumSrc } from '../utils/productImage';
 
 const PRODUCTS_PER_PAGE = 9;
-const LOAD_MORE_DELAY = 300; // reduzido de 1500ms — delay artificial penalizava TBT
+
+// Colunas por breakpoint — usado para calcular linhas completas
+const COLS_DESKTOP = 4;
+const INITIAL_ROWS = 2; // linhas iniciais visíveis
 
 const CATEGORY_CHIPS = [
   { value: 'todos',      emoji: '🔥', label: 'Todos' },
@@ -146,7 +149,7 @@ const ProductCard = memo(({ product, index }) => {
           width="400"
           height="400"
           loading={index < 4 ? 'eager' : 'lazy'}
-          fetchpriority={index === 0 ? 'high' : 'auto'}
+          fetchPriority={index === 0 ? 'high' : 'auto'}
           decoding={index < 4 ? 'sync' : 'async'}
         />
         {badge && <span className={`product-badge ${badge.cls}`}>{badge.label}</span>}
@@ -201,13 +204,12 @@ const ProductGrid = ({ addToCart }) => {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
 
   const [categoryFilter, setCategoryFilter] = useState('todos');
   const [colorFilter, setColorFilter] = useState('todas');
   const [sortOrder, setSortOrder] = useState('vendidos');
   const [sortOpen, setSortOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const didFetchRef = useRef(false);
   const sectionRef = useRef(null);
@@ -260,8 +262,6 @@ const ProductGrid = ({ addToCart }) => {
         const resp = await fetchProductsFromApi(0, PRODUCTS_PER_PAGE, { signal });
         const norm = normalizeResponse(resp);
         setProducts(norm.items);
-        setCurrentPage(0);
-        setHasMore(norm.totalPages > 1);
         // Adia o fetch de todos os produtos para depois do LCP — não compete com render inicial
         const scheduleAll = () => loadAllProducts();
         if (typeof requestIdleCallback !== 'undefined') {
@@ -280,24 +280,6 @@ const ProductGrid = ({ addToCart }) => {
     loadProducts();
     return () => controller.abort();
   }, [loadAllProducts]);
-
-  const handleLoadMore = async () => {
-    if (loadingMore || !hasMore) return;
-    setLoadingMore(true);
-    await new Promise(resolve => setTimeout(resolve, LOAD_MORE_DELAY));
-    try {
-      const nextPage = currentPage + 1;
-      const resp = await fetchProductsFromApi(nextPage, PRODUCTS_PER_PAGE);
-      const norm = normalizeResponse(resp);
-      setProducts(prev => [...prev, ...norm.items]);
-      setCurrentPage(nextPage);
-      setHasMore(nextPage < norm.totalPages - 1);
-    } catch (err) {
-      console.error('Erro ao carregar mais produtos:', err);
-    } finally {
-      setLoadingMore(false);
-    }
-  };
 
   const getProductCategory = (product) => {
     const nome = product?.nome?.toLowerCase() || '';
@@ -337,7 +319,10 @@ const ProductGrid = ({ addToCart }) => {
   }, [allProducts, products]);
 
   const isFilterActive = categoryFilter !== 'todos' || colorFilter !== 'todas';
-  const sourceProducts = isFilterActive ? allProducts : products;
+  // Quando expandido, usa allProducts (catálogo completo) se disponível
+  const sourceProducts = isFilterActive
+    ? allProducts
+    : (expanded && allProducts.length > 0) ? allProducts : products;
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...sourceProducts];
@@ -367,7 +352,31 @@ const ProductGrid = ({ addToCart }) => {
     return result;
   }, [sourceProducts, categoryFilter, colorFilter, sortOrder]);
 
-  const showLoadMore = !isFilterActive && hasMore && !loading;
+  // Calcula quantos produtos mostrar em linhas completas
+  const initialCount = COLS_DESKTOP * INITIAL_ROWS; // 8 produtos iniciais
+  const totalFiltered = filteredAndSortedProducts.length;
+
+  // Quando expandido ou com filtro ativo, mostra tudo
+  // Quando não expandido, mostra apenas linhas completas até initialCount
+  const visibleProducts = useMemo(() => {
+    if (isFilterActive || expanded) return filteredAndSortedProducts;
+    if (totalFiltered <= initialCount) return filteredAndSortedProducts;
+    return filteredAndSortedProducts.slice(0, initialCount);
+  }, [filteredAndSortedProducts, isFilterActive, expanded, totalFiltered, initialCount]);
+
+  // Mostra botão "Ver mais" quando há produtos escondidos
+  const showExpandButton = !isFilterActive && !expanded && totalFiltered > initialCount;
+
+  // Handler: expande e força carregamento de todos se ainda não carregou
+  const handleExpand = useCallback(async () => {
+    setExpanded(true);
+    // Se allProducts ainda não carregou, força o carregamento agora
+    if (allProducts.length === 0) {
+      setLoadingMore(true);
+      await loadAllProducts();
+      setLoadingMore(false);
+    }
+  }, [allProducts.length, loadAllProducts]);
 
   return (
     <section id="shop" className="product-grid-section" ref={sectionRef}>
@@ -470,22 +479,22 @@ const ProductGrid = ({ addToCart }) => {
           </p>
         ) : (
           <div className="products-grid">
-            {filteredAndSortedProducts.map((product, index) => (
+            {visibleProducts.map((product, index) => (
               <ProductCard
                 key={getStableId(product)}
                 product={product}
                 index={index}
               />
             ))}
-            {loadingMore && Array.from({ length: 4 }).map((_, i) => (
+            {loadingMore && Array.from({ length: COLS_DESKTOP }).map((_, i) => (
               <ProductCardSkeleton key={`skeleton-more-${i}`} />
             ))}
           </div>
         )}
 
-        {showLoadMore && (
+        {showExpandButton && (
           <div className="load-more-container">
-            <button className="load-more-btn" onClick={handleLoadMore} disabled={loadingMore}>
+            <button className="load-more-btn" onClick={handleExpand} disabled={loadingMore}>
               {loadingMore ? (
                 <>
                   <span className="load-more-spinner"></span>
@@ -503,7 +512,7 @@ const ProductGrid = ({ addToCart }) => {
           </div>
         )}
 
-        {!isFilterActive && !hasMore && products.length > PRODUCTS_PER_PAGE && (
+        {expanded && totalFiltered > initialCount && (
           <div className="no-more-products">
             <span>✨ Você viu todos os produtos ✨</span>
           </div>

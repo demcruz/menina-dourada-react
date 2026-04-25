@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AdvancedSEO from '../seo/AdvancedSEO';
-import { webPageSchema } from '../seo/schema';
+import { webPageSchema, breadcrumbSchema } from '../seo/schema';
 import '../styles/InstitucionalPage.css';
 
 const TrocasDevolucoesPage = () => (
@@ -11,10 +11,21 @@ const TrocasDevolucoesPage = () => (
       description="Política de trocas e devoluções da Menina Dourada. Devolução em até 7 dias e troca em até 30 dias após o recebimento."
       url="https://meninadourada.shop/trocas-e-devolucoes"
       canonical="https://meninadourada.shop/trocas-e-devolucoes"
-      jsonLd={webPageSchema('Trocas e Devoluções', 'https://meninadourada.shop/trocas-e-devolucoes')}
+      jsonLd={[
+        webPageSchema('Trocas e Devoluções', 'https://meninadourada.shop/trocas-e-devolucoes'),
+        breadcrumbSchema([
+          { name: 'Home', url: 'https://meninadourada.shop/' },
+          { name: 'Trocas e Devoluções', url: 'https://meninadourada.shop/trocas-e-devolucoes' },
+        ]),
+      ]}
     />
 
     <div className="inst-page">
+      <nav aria-label="Breadcrumb" style={{ fontSize: '0.85rem', padding: '1rem 0 0', color: '#888', maxWidth: 800, margin: '0 auto' }}>
+        <Link to="/" style={{ color: '#888', textDecoration: 'none' }}>Home</Link>
+        <span style={{ margin: '0 0.4rem' }}>&gt;</span>
+        <span style={{ color: '#555' }}>Trocas e Devoluções</span>
+      </nav>
       <div className="inst-hero">
         <span className="inst-hero-icon">🔄</span>
         <h1>Trocas e Devoluções</h1>
@@ -80,14 +91,14 @@ const TrocasDevolucoesPage = () => (
             <span>contato@meninadourada.shop</span>
           </a>
           <a
-            href="https://wa.me/5521998043352"
+            href="https://wa.me/5521973137347"
             target="_blank"
             rel="noopener noreferrer"
             className="inst-contact-card whatsapp"
           >
             <span className="inst-contact-icon">💬</span>
             <strong>WhatsApp</strong>
-            <span>(21) 99804-3352</span>
+            <span>(21) 97313-7347</span>
           </a>
         </div>
       </div>

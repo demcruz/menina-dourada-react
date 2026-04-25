@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/AboutPage.css';
 import AdvancedSEO from '../seo/AdvancedSEO';
 import { organizationSchema, breadcrumbSchema } from '../seo/schema';
@@ -7,6 +8,11 @@ import { BUSINESS } from '../config/business';
 const AboutPage = () => {
   return (
     <div className="about-page">
+      <nav aria-label="Breadcrumb" style={{ fontSize: '0.85rem', padding: '1rem 1rem 0', color: '#888', maxWidth: 1200, margin: '0 auto' }}>
+        <Link to="/" style={{ color: '#888', textDecoration: 'none' }}>Home</Link>
+        <span style={{ margin: '0 0.4rem' }}>&gt;</span>
+        <span style={{ color: '#555' }}>Sobre</span>
+      </nav>
       <AdvancedSEO
         title="Sobre a Menina Dourada | Moda Praia Feminina"
         description="Conheça a história da Menina Dourada, marca brasileira de moda praia feminina. Biquínis, maiôs, cangas e acessórios com entrega para todo o Brasil."
@@ -139,10 +145,10 @@ const AboutPage = () => {
             <div className="contact-grid">
               <div className="contact-item">
                 <h3>📱 WhatsApp</h3>
-                <p><strong>(21) 99804-3352</strong></p>
+                <p><strong>(21) 97313-7347</strong></p>
                 <p>Segunda a Sexta: 9h às 18h<br/>Sábado: 9h às 14h</p>
                 <a 
-                  href="https://wa.me/5521998043352?text=Olá! Gostaria de saber mais sobre os produtos da Menina Dourada" 
+                  href="https://wa.me/5521973137347?text=Olá! Gostaria de saber mais sobre os produtos da Menina Dourada" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="contact-button"

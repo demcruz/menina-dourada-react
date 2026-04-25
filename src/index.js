@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import { reportWebVitals } from './webVitals';
+import { initThirdPartyScripts } from './lib/loadThirdParty';
 
 const rootElement = document.getElementById('root');
 
@@ -33,3 +34,6 @@ if (hasPrerenderedContent) {
 
 // Coleta Web Vitals após o render — não bloqueia nada
 reportWebVitals();
+
+// Scripts de terceiros (GA) — carregados via requestIdleCallback
+initThirdPartyScripts();
