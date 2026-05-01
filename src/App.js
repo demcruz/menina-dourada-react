@@ -33,6 +33,7 @@ const PoliticaFretePage    = lazy(() => import('./pages/PoliticaFretePage'));
 const TrocasDevolucoesPage = lazy(() => import('./pages/TrocasDevolucoesPage'));
 const PrivacidadePage      = lazy(() => import('./pages/PrivacidadePage'));
 const TermosPage           = lazy(() => import('./pages/TermosPage'));
+const NotFoundPage         = lazy(() => import('./pages/NotFoundPage'));
 
 const PageFallback = () => (
   <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -188,12 +189,8 @@ function App() {
             <Route path="/lgpd"    element={<Navigate to="/privacidade" replace />} />
             <Route path="/cookies" element={<Navigate to="/privacidade" replace />} />
 
-            {/* 404 */}
-            <Route path="*" element={
-              <div style={{ padding: '4rem', textAlign: 'center' }}>
-                404: Página não encontrada
-              </div>
-            } />
+            {/* 404 — noindex para não poluir o Google */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
         </main>

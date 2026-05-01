@@ -319,10 +319,18 @@ const ProductGrid = ({ addToCart }) => {
   }, [allProducts, products]);
 
   const isFilterActive = categoryFilter !== 'todos' || colorFilter !== 'todas';
-  // Quando expandido, usa allProducts (catálogo completo) se disponível
-  const sourceProducts = isFilterActive
-    ? allProducts
-    : (expanded && allProducts.length > 0) ? allProducts : products;
+  // Usa allProducts quando disponível; caso contrário, usa a primeira página (products)
+  const hasAllProducts = allProducts.length > 0;
+  const sourceProducts = hasAllProducts ? allProducts
+    : (isFilterActive || expanded) ? products
+    : products;
+
+  // Quando um filtro é ativado e allProducts ainda não carregou, força o carregamento
+  useEffect(() => {
+    if (isFilterActive && allProducts.length === 0 && !loading) {
+      loadAllProducts();
+    }
+  }, [isFilterActive, allProducts.length, loading, loadAllProducts]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...sourceProducts];

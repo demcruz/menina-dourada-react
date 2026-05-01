@@ -57,15 +57,19 @@ const OrderSuccessPage = () => {
 
     const estimatedDelivery = getEstimatedDelivery(confirmedAt);
 
+    // Configurar idioma pt-BR para o módulo do Google
+    window.___gcfg = { lang: 'pt-BR' };
+
     const renderSurvey = () => {
       if (!window.gapi) return;
       window.gapi.load('surveyoptin', () => {
         window.gapi.surveyoptin.render({
           merchant_id:             MERCHANT_ID,
-          order_id:                paymentId,
+          order_id:                String(paymentId),
           email:                   deliveryInfo.email,
           delivery_country:        'BR',
           estimated_delivery_date: estimatedDelivery,
+          opt_in_style:            'BOTTOM_TRAY',
         });
       });
     };
@@ -79,7 +83,7 @@ const OrderSuccessPage = () => {
       script.src = 'https://apis.google.com/js/platform.js?onload=renderOptIn';
       script.async = true;
       script.defer = true;
-      document.head.appendChild(script);
+      document.body.appendChild(script);
     } else {
       // Script já carregado — chama direto
       renderSurvey();
